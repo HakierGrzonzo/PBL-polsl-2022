@@ -3,6 +3,7 @@ from fastapi_users import FastAPIUsers
 from .user_manager import get_user_manager
 from .models import User, UserCreate, UserDB, UserUpdate
 from .auth import auth_backend
+from .measurments import MeasurmentRouter
 
 fastapi_users = FastAPIUsers(
     get_user_manager,
@@ -37,5 +38,11 @@ app.include_router(
     fastapi_users.get_users_router(),
     prefix="/users",
     tags=["users"],
+)
+
+app.include_router(
+    MeasurmentRouter(fastapi_users).get_router(),
+    prefix="/data",
+    tags=["data"]
 )
 

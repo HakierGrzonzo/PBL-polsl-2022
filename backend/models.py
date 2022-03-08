@@ -24,9 +24,6 @@ class UserUpdate(models.BaseUserUpdate):
 class UserDB(User, models.BaseUserDB):
     pass
 
-class Tag(BaseModel):
-    name: str
-
 class Location(BaseModel):
     string: str
     time: datetime
@@ -45,19 +42,19 @@ class _protoMeasurment(BaseModel):
     notes: str
     description: str
     title: str
-    author: UUID4
-    tags: list[Tag]
+    tags: list[str]
 
 class Measurment(_protoMeasurment):
     measurment_id: UUID4
     photo: Optional[FileRefrence]
     recording: Optional[FileRefrence]
     other_files: Optional[list[FileRefrence]]
+    author: User
 
-class CreateMeasurment(BaseModel):
-    photo: Optional[FileEntry]
-    recording: Optional[FileEntry]
-    other_files: Optional[list[FileEntry]]
+class CreateMeasurment(_protoMeasurment):
+    photo: Optional[UUID4]
+    recording: Optional[UUID4]
+    other_files: Optional[list[UUID4]]
 
 
 class UpdateMeasurment(_protoMeasurment):
