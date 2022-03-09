@@ -17,10 +17,13 @@ fastapi_users = FastAPIUsers(
 app = FastAPI()
 
 from .database import engine, Base
+
+
 @app.on_event("startup")
 async def startup_event():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -41,8 +44,5 @@ app.include_router(
 )
 
 app.include_router(
-    MeasurmentRouter(fastapi_users).get_router(),
-    prefix="/data",
-    tags=["data"]
+    MeasurmentRouter(fastapi_users).get_router(), prefix="/data", tags=["data"]
 )
-

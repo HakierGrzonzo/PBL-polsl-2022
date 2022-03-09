@@ -9,6 +9,7 @@ from fastapi_users.authentication.strategy.db import BaseAccessToken
 class AccessToken(BaseAccessToken):
     pass
 
+
 class User(models.BaseUser):
     pass
 
@@ -24,9 +25,11 @@ class UserUpdate(models.BaseUserUpdate):
 class UserDB(User, models.BaseUserDB):
     pass
 
+
 class Location(BaseModel):
     string: str
     time: datetime
+
 
 class FileEntry(BaseModel):
     file_id: UUID4
@@ -34,8 +37,10 @@ class FileEntry(BaseModel):
     mime: str
     owner: UUID4
 
+
 class FileRefrence(FileEntry):
     link: str
+
 
 class _protoMeasurment(BaseModel):
     location: Location
@@ -44,12 +49,14 @@ class _protoMeasurment(BaseModel):
     title: str
     tags: list[str]
 
+
 class Measurment(_protoMeasurment):
     measurment_id: UUID4
     photo: Optional[FileRefrence]
     recording: Optional[FileRefrence]
     other_files: Optional[list[FileRefrence]]
     author: User
+
 
 class CreateMeasurment(_protoMeasurment):
     photo: Optional[UUID4]
@@ -62,5 +69,3 @@ class UpdateMeasurment(_protoMeasurment):
     photo: Optional[UUID4]
     recording: Optional[UUID4]
     other_files: Optional[list[UUID4]]
-
-

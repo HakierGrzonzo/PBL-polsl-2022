@@ -9,24 +9,25 @@ from .database import get_async_session, Measurments, UserTable
 
 from fastapi.routing import APIRouter
 
-class MeasurmentRouter():
+
+class MeasurmentRouter:
     def __init__(self, fastapi_users: FastAPIUsers):
         self.fastapi_users = fastapi_users
 
     async def get_all_measurments(self, session: AsyncSession) -> list[Measurment]:
-        result = await session.execute(
-                select(Measurments).join(UserTable)
-        )
+        result = await session.execute(select(Measurments).join(UserTable))
         return result.scalars().all()
 
-    async def create_new_measurment(self, session: AsyncSession, data: CreateMeasurment, current_user: User) -> Measurment:
+    async def create_new_measurment(
+        self, session: AsyncSession, data: CreateMeasurment, current_user: User
+    ) -> Measurment:
         new_measurment = Measurments(
-                location_string = data.location.string,
-                location_time = data.location.time,
-                notes = data.notes,
-                description = data.description,
-                title = data.title,
-                author_id = current_user.id
+            location_string=data.location.string,
+            location_time=data.location.time,
+            notes=data.notes,
+            description=data.description,
+            title=data.title,
+            author_id=current_user.id,
         )
         session.add(new_measurment)
         return new_measurment
@@ -40,10 +41,11 @@ class MeasurmentRouter():
 
         @router.post("/create", response_model=Measurment)
         async def add_measurment(
-                measurment: CreateMeasurment, 
-                session: AsyncSession = Depends(get_async_session),
-                user: User = Depends(self.fastapi_users.current_user())):
+            measurment: CreateMeasurment,
+            session: AsyncSession = Depends(get_async_session),
+            user: User = Depends(self.fastapi_users.current_user()),
+        ):
             new_measurment = await self.create_new_measurment(session, measurment, user)
             return new_measurment
 
-        return router 
+        return router

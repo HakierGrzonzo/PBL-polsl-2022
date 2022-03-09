@@ -16,7 +16,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql.sqltypes import Integer
 from .models import UserDB, AccessToken
 
-DATABASE_URL = 'postgresql+asyncpg://postgres:1234@127.0.0.1:5432/postgres'
+DATABASE_URL = "postgresql+asyncpg://postgres:1234@127.0.0.1:5432/postgres"
 Base: DeclarativeMeta = declarative_base()
 
 
@@ -24,8 +24,10 @@ class UserTable(Base, SQLAlchemyBaseUserTable):
     measurments = relationship("Measurments")
     pass
 
+
 class AccessTokenTable(SQLAlchemyBaseAccessTokenTable, Base):
     pass
+
 
 class Measurments(Base):
     __tablename__ = "Measurments"
@@ -35,7 +37,7 @@ class Measurments(Base):
     notes = Column(String(1024))
     description = Column(String(2048))
     title = Column(String(512))
-    author_id = Column(UUID, ForeignKey('user.id'), index=True)
+    author_id = Column(UUID, ForeignKey("user.id"), index=True)
 
 
 engine = create_async_engine(DATABASE_URL)
@@ -55,6 +57,6 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(UserDB, session, UserTable)
 
+
 async def get_access_token_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyAccessTokenDatabase(AccessToken, session, AccessTokenTable)
-

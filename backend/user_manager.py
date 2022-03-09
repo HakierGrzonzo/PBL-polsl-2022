@@ -24,9 +24,8 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
                 reason="Password should be at least 8 characters"
             )
         if user.email in password:
-            raise InvalidPasswordException(
-                reason="Password should not contain e-mail"
-            )
+            raise InvalidPasswordException(reason="Password should not contain e-mail")
+
     async def on_after_register(self, user: UserDB, request: Optional[Request] = None):
         print(f"User {user.id} has registered.")
 
@@ -43,4 +42,3 @@ class UserManager(BaseUserManager[UserCreate, UserDB]):
 
 async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)
-
