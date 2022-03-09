@@ -21,7 +21,7 @@ Base: DeclarativeMeta = declarative_base()
 
 
 class UserTable(Base, SQLAlchemyBaseUserTable):
-    measurments = relationship("Measurments")
+    measurements = relationship("Measurements")
     pass
 
 
@@ -29,15 +29,16 @@ class AccessTokenTable(SQLAlchemyBaseAccessTokenTable, Base):
     pass
 
 
-class Measurments(Base):
-    __tablename__ = "Measurments"
-    id = Column(UUID, primary_key=True, index=True)
+class Measurements(Base):
+    __tablename__ = "Measurements"
+    id = Column(Integer, primary_key=True, index=True)
     location_string = Column(String(255))
     location_time = Column(DateTime())
     notes = Column(String(1024))
     description = Column(String(2048))
     title = Column(String(512))
-    author_id = Column(UUID, ForeignKey("user.id"), index=True)
+    author_id = Column(UUID(as_uuid=True), ForeignKey("user.id"), index=True)
+    tags = Column(String(1024))
 
 
 engine = create_async_engine(DATABASE_URL)

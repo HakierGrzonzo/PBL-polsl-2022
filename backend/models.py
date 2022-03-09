@@ -42,7 +42,7 @@ class FileRefrence(FileEntry):
     link: str
 
 
-class _protoMeasurment(BaseModel):
+class _protoMeasurement(BaseModel):
     location: Location
     notes: str
     description: str
@@ -50,22 +50,19 @@ class _protoMeasurment(BaseModel):
     tags: list[str]
 
 
-class Measurment(_protoMeasurment):
-    measurment_id: UUID4
+class Measurement(_protoMeasurement):
+    measurement_id: int
     photo: Optional[FileRefrence]
     recording: Optional[FileRefrence]
     other_files: Optional[list[FileRefrence]]
-    author: User
 
 
-class CreateMeasurment(_protoMeasurment):
-    photo: Optional[UUID4]
-    recording: Optional[UUID4]
-    other_files: Optional[list[UUID4]]
+class CreateMeasurement(_protoMeasurement):
+    pass
 
 
-class UpdateMeasurment(_protoMeasurment):
-    measurment_id: UUID4
+class UpdateMeasurement(_protoMeasurement):
+    measurement_id: int
     photo: Optional[UUID4]
     recording: Optional[UUID4]
     other_files: Optional[list[UUID4]]
