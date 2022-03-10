@@ -3,7 +3,7 @@ from fastapi.param_functions import Depends
 from fastapi_users.fastapi_users import FastAPIUsers
 from sqlalchemy.sql import select
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from .models import Location, Measurement, CreateMeasurement, User
+from .models import Location, Measurement, CreateMeasurement, User, UpdateMeasurement
 from .database import get_async_session, Measurements
 from fastapi.routing import APIRouter
 
@@ -22,9 +22,36 @@ class MeasurementRouter:
             tags=source.tags.split(", "),
         )
 
+    def _check_tags(self, to_check: Measurement | CreateMeasurement):
+        if "," in "".join(to_check.tags):
+            raise HTTPException(status_code=422, detail="No commas allowed in tags!")
+
     async def get_all_measurements(self, session: AsyncSession) -> list[Measurement]:
         result = await session.execute(select(Measurements))
         return [self._table_to_model(x) for x in result.scalars().all()]
+
+    async def update_measurements(
+        self,
+        session: AsyncSession,
+        edit_id: int,
+        new_data: UpdateMeasurement,
+        current_user: User,
+    ) -> Measurement:
+        old = await session.execute(
+            select(Measurements).filter(Measurements.id == edit_id)
+        )
+        old = old.scalars().all()
+        if len(old) != 1:
+            print(old)
+            raise HTTPException(
+                status_code=404, detail="Measurement with given id does not exist!"
+            )
+        target = old[0]
+        if target.author_id != current_user.id:
+            raise HTTPException(
+                status_code=403, detail="You do not own this measurement!"
+            )
+        print(target.__dict__)
 
     async def get_my_measurements(
         self, session: AsyncSession, current_user: User
@@ -68,6 +95,16 @@ class MeasurementRouter:
         ):
             """Returns Measurements for the current user"""
             return await self.get_my_measurements(session, user)
+        
+        @router.patch("/{id}", response_model=Measurement)
+        async def edit_measurement(
+            id: int,
+            new_data: UpdateMeasurement,
+            session: AsyncSession = Depends(get_async_session),
+            user: User = Depends(self.fastapi_users.current_user()),
+            ) -> Measurement:
+            self._check_tags(new_data)
+            return await self.update_measurements(session, id, new_data, user)
 
         @router.post("/create", response_model=Measurement)
         async def add_measurement(
@@ -80,10 +117,7 @@ class MeasurementRouter:
 
             Tags must not contain `,`
             """
-            if "," in "".join(measurement.tags):
-                raise HTTPException(
-                    status_code=422, detail="`,` in tags is not allowed"
-                )
+            self._check_tags(measurement)
             try:
                 new_measurement = await self.create_new_measurement(
                     session, measurement, user
