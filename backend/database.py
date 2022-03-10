@@ -14,7 +14,7 @@ from sqlalchemy.sql.schema import Column, ForeignKey
 from sqlalchemy import String, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql.sqltypes import Integer
-from .models import UserDB, AccessToken
+from .models import Measurement, UserDB, AccessToken
 
 DATABASE_URL = "postgresql+asyncpg://postgres:1234@127.0.0.1:5432/postgres"
 Base: DeclarativeMeta = declarative_base()
@@ -22,12 +22,20 @@ Base: DeclarativeMeta = declarative_base()
 
 class UserTable(Base, SQLAlchemyBaseUserTable):
     measurements = relationship("Measurements")
+    files = relationship("Files")
     pass
 
 
 class AccessTokenTable(SQLAlchemyBaseAccessTokenTable, Base):
     pass
 
+class Files(Base):
+    __tablename__ = "Files"
+    id = Column(UUID(as_uuid=True), primary_key=True)
+    author_id = Column(UUID(as_uuid=True), ForeignKey("user.id"), index=True)
+    mime = Column(String(64))
+    original_name = Column(String(256))
+    measurement_id = Column(Integer, ForeignKey("Measurements.id"), index=True)
 
 class Measurements(Base):
     __tablename__ = "Measurements"
@@ -39,7 +47,9 @@ class Measurements(Base):
     title = Column(String(512))
     author_id = Column(UUID(as_uuid=True), ForeignKey("user.id"), index=True)
     tags = Column(String(1024))
-
+    photo_file = Column(UUID(as_uuid=True), ForeignKey("Files.id"))
+    recording_file = Column(UUID(as_uuid=True), ForeignKey("Files.id"))
+    files = relationship("Files", foreign_keys=[Files.measurement_id])
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)

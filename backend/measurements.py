@@ -3,7 +3,6 @@ from fastapi.param_functions import Depends
 from fastapi_users.fastapi_users import FastAPIUsers
 from sqlalchemy.sql import select
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy.sql.expression import except_
 from .models import Location, Measurement, CreateMeasurement, User, UpdateMeasurement
 from .database import get_async_session, Measurements
 from fastapi.routing import APIRouter
@@ -23,7 +22,9 @@ class MeasurementRouter:
             tags=source.tags.split(", "),
         )
 
-    def _check_tags(self, to_check: Measurement | CreateMeasurement | UpdateMeasurement):
+    def _check_tags(
+        self, to_check: Measurement | CreateMeasurement | UpdateMeasurement
+    ):
         if "," in "".join(to_check.tags):
             raise HTTPException(status_code=422, detail="No commas allowed in tags!")
 
@@ -60,7 +61,6 @@ class MeasurementRouter:
         target.location_string = new_data.location.string
         target.location_time = new_data.location.time.replace(tzinfo=None)
         return self._table_to_model(target)
-        
 
     async def get_my_measurements(
         self, session: AsyncSession, current_user: User
@@ -104,14 +104,14 @@ class MeasurementRouter:
         ):
             """Returns Measurements for the current user"""
             return await self.get_my_measurements(session, user)
-        
+
         @router.patch("/{id}", response_model=Measurement)
         async def edit_measurement(
             id: int,
             new_data: UpdateMeasurement,
             session: AsyncSession = Depends(get_async_session),
             user: User = Depends(self.fastapi_users.current_user()),
-            ) -> Measurement:
+        ) -> Measurement:
             self._check_tags(new_data)
             try:
                 res = await self.update_measurements(session, id, new_data, user)
