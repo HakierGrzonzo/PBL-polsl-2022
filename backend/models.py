@@ -62,7 +62,6 @@ class CreateMeasurement(_protoMeasurement):
 
 
 class UpdateMeasurement(_protoMeasurement):
-    measurement_id: int
     photo: Optional[UUID4]
     recording: Optional[UUID4]
     other_files: Optional[list[UUID4]]

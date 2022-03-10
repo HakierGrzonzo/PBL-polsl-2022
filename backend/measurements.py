@@ -3,6 +3,7 @@ from fastapi.param_functions import Depends
 from fastapi_users.fastapi_users import FastAPIUsers
 from sqlalchemy.sql import select
 from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.sql.expression import except_
 from .models import Location, Measurement, CreateMeasurement, User, UpdateMeasurement
 from .database import get_async_session, Measurements
 from fastapi.routing import APIRouter
@@ -22,7 +23,7 @@ class MeasurementRouter:
             tags=source.tags.split(", "),
         )
 
-    def _check_tags(self, to_check: Measurement | CreateMeasurement):
+    def _check_tags(self, to_check: Measurement | CreateMeasurement | UpdateMeasurement):
         if "," in "".join(to_check.tags):
             raise HTTPException(status_code=422, detail="No commas allowed in tags!")
 
@@ -52,6 +53,14 @@ class MeasurementRouter:
                 status_code=403, detail="You do not own this measurement!"
             )
         print(target.__dict__)
+        target.title = new_data.title
+        target.notes = new_data.notes
+        target.description = new_data.description
+        target.tags = ", ".join(new_data.tags)
+        target.location_string = new_data.location.string
+        target.location_time = new_data.location.time.replace(tzinfo=None)
+        return self._table_to_model(target)
+        
 
     async def get_my_measurements(
         self, session: AsyncSession, current_user: User
@@ -104,7 +113,14 @@ class MeasurementRouter:
             user: User = Depends(self.fastapi_users.current_user()),
             ) -> Measurement:
             self._check_tags(new_data)
-            return await self.update_measurements(session, id, new_data, user)
+            try:
+                res = await self.update_measurements(session, id, new_data, user)
+                await session.commit()
+                return res
+            except:
+                raise HTTPException(
+                    status_code=500, detail="Failed to save to database"
+                )
 
         @router.post("/create", response_model=Measurement)
         async def add_measurement(
