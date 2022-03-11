@@ -2,6 +2,18 @@
 
 ## Backend
 
+Link do bazy dannych ustawiamy jako zmienną środowiskową `DATABASE`, na przykład:
+
+```bash
+export DATABASE=postgresql+asyncpg://postgres:1234@127.0.0.1:5432/pbl
+```
+
+lub dla powłoki `fish`:
+
+```bash
+set -x DATABASE postgresql+asyncpg://postgres:1234@127.0.0.1:5432/pbl
+```
+
 Backend hostujemy za pomocą: 
 
 `uvicorn backend:app --reload`

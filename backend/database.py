@@ -15,8 +15,10 @@ from sqlalchemy import String, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql.sqltypes import Integer
 from .models import Measurement, UserDB, AccessToken
+from os import environ
 
-DATABASE_URL = "postgresql+asyncpg://postgres:1234@127.0.0.1:5432/postgres"
+#DATABASE_URL = "postgresql+asyncpg://postgres:1234@127.0.0.1:5432/postgres"
+DATABASE_URL = environ["DATABASE"]
 Base: DeclarativeMeta = declarative_base()
 
 
@@ -32,10 +34,10 @@ class AccessTokenTable(SQLAlchemyBaseAccessTokenTable, Base):
 class Files(Base):
     __tablename__ = "Files"
     id = Column(UUID(as_uuid=True), primary_key=True)
-    author_id = Column(UUID(as_uuid=True), ForeignKey("user.id"), index=True)
+    author_id = Column(UUID(as_uuid=True), ForeignKey("user.id", use_alter=True), index=True)
     mime = Column(String(64))
     original_name = Column(String(256))
-    measurement_id = Column(Integer, ForeignKey("Measurements.id"), index=True)
+    measurement_id = Column(Integer, ForeignKey("Measurements.id", use_alter=True), index=True)
 
 class Measurements(Base):
     __tablename__ = "Measurements"

@@ -122,7 +122,7 @@ class MeasurementRouter:
                     status_code=500, detail="Failed to save to database"
                 )
 
-        @router.post("/create", response_model=Measurement)
+        @router.post("/create", response_model=Measurement, status_code=201)
         async def add_measurement(
             measurement: CreateMeasurement,
             session: AsyncSession = Depends(get_async_session),

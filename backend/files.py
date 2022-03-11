@@ -49,7 +49,7 @@ class FileRouter:
         ) -> list[FileRefrence]:
             return await self.get_my_files(session, user)
 
-        @router.post("/upload", response_model=FileRefrence)
+        @router.post("/upload", response_model=FileRefrence, status_code=201)
         async def upload_new_file(
             uploaded_file: UploadFile = File(...),
             session: AsyncSession = Depends(get_async_session),
