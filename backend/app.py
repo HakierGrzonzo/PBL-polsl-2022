@@ -52,5 +52,5 @@ FILE_PREFIX = "/api/files"
 app.include_router(
     FileRouter(fastapi_users, FILE_PREFIX).get_router(),
     prefix=FILE_PREFIX,
-    tags=["files"]
+    tags=["files"],
 )

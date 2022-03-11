@@ -1,4 +1,5 @@
 from typing import AsyncGenerator
+from uuid import uuid4
 
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
@@ -17,7 +18,7 @@ from sqlalchemy.sql.sqltypes import Integer
 from .models import Measurement, UserDB, AccessToken
 from os import environ
 
-#DATABASE_URL = "postgresql+asyncpg://postgres:1234@127.0.0.1:5432/postgres"
+# DATABASE_URL = "postgresql+asyncpg://postgres:1234@127.0.0.1:5432/postgres"
 DATABASE_URL = environ["DATABASE"]
 Base: DeclarativeMeta = declarative_base()
 
@@ -31,13 +32,19 @@ class UserTable(Base, SQLAlchemyBaseUserTable):
 class AccessTokenTable(SQLAlchemyBaseAccessTokenTable, Base):
     pass
 
+
 class Files(Base):
     __tablename__ = "Files"
-    id = Column(UUID(as_uuid=True), primary_key=True)
-    author_id = Column(UUID(as_uuid=True), ForeignKey("user.id", use_alter=True), index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    author_id = Column(
+        UUID(as_uuid=True), ForeignKey("user.id", use_alter=True), index=True
+    )
     mime = Column(String(64))
     original_name = Column(String(256))
-    measurement_id = Column(Integer, ForeignKey("Measurements.id", use_alter=True), index=True)
+    measurement_id = Column(
+        Integer, ForeignKey("Measurements.id", use_alter=True), index=True
+    )
+
 
 class Measurements(Base):
     __tablename__ = "Measurements"
@@ -52,6 +59,7 @@ class Measurements(Base):
     photo_file = Column(UUID(as_uuid=True), ForeignKey("Files.id"))
     recording_file = Column(UUID(as_uuid=True), ForeignKey("Files.id"))
     files = relationship("Files", foreign_keys=[Files.measurement_id])
+
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
