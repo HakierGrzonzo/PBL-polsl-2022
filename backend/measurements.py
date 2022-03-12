@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from .models import Location, Measurement, CreateMeasurement, User, UpdateMeasurement
 from .database import get_async_session, Measurements
 from fastapi.routing import APIRouter
+from .errors import errors, ErrorModel, get_error
 
 
 class MeasurementRouter:
@@ -26,7 +27,7 @@ class MeasurementRouter:
         self, to_check: Measurement | CreateMeasurement | UpdateMeasurement
     ):
         if "," in "".join(to_check.tags):
-            raise HTTPException(status_code=422, detail="No commas allowed in tags!")
+            raise HTTPException(status_code=422, detail=errors.COMMA_ERROR)
 
     async def get_all_measurements(self, session: AsyncSession) -> list[Measurement]:
         result = await session.execute(select(Measurements))
@@ -45,14 +46,10 @@ class MeasurementRouter:
         old = old.scalars().all()
         if len(old) != 1:
             print(old)
-            raise HTTPException(
-                status_code=404, detail="Measurement with given id does not exist!"
-            )
+            raise HTTPException(status_code=404, detail=errors.ID_ERROR)
         target = old[0]
         if target.author_id != current_user.id:
-            raise HTTPException(
-                status_code=403, detail="You do not own this measurement!"
-            )
+            raise HTTPException(status_code=403, detail=errors.OWNER_ERROR)
         print(target.__dict__)
         target.title = new_data.title
         target.notes = new_data.notes
@@ -105,7 +102,46 @@ class MeasurementRouter:
             """Returns Measurements for the current user"""
             return await self.get_my_measurements(session, user)
 
-        @router.patch("/{id}", response_model=Measurement)
+        @router.patch(
+            "/{id}",
+            response_model=Measurement,
+            responses={
+                403: {
+                    "model": ErrorModel,
+                    "content": {
+                        "application/json": {
+                            "examples": {1: get_error(errors.OWNER_ERROR)}
+                        }
+                    },
+                },
+                404: {
+                    "model": ErrorModel,
+                    "content": {
+                        "application/json": {
+                            "examples": {1: get_error(errors.ID_ERROR)}
+                        }
+                    },
+                },
+                421: {
+                    "model": ErrorModel,
+                    "content": {
+                        "application/json": {
+                            "examples": {
+                                1: get_error(errors.COMMA_ERROR),
+                            }
+                        }
+                    },
+                },
+                500: {
+                    "model": ErrorModel,
+                    "content": {
+                        "application/json": {
+                            "examples": {1: get_error(errors.DB_ERROR)}
+                        }
+                    },
+                },
+            },
+        )
         async def edit_measurement(
             id: int,
             new_data: UpdateMeasurement,
@@ -118,11 +154,31 @@ class MeasurementRouter:
                 await session.commit()
                 return res
             except:
-                raise HTTPException(
-                    status_code=500, detail="Failed to save to database"
-                )
+                raise HTTPException(status_code=500, detail=errors.DB_ERROR)
 
-        @router.post("/create", response_model=Measurement, status_code=201)
+        @router.post(
+            "/create",
+            response_model=Measurement,
+            status_code=201,
+            responses={
+                421: {
+                    "model": ErrorModel,
+                    "content": {
+                        "application/json": {
+                            "examples": {1: get_error(errors.COMMA_ERROR)}
+                        }
+                    },
+                },
+                500: {
+                    "model": ErrorModel,
+                    "content": {
+                        "application/json": {
+                            "examples": {1: get_error(errors.DB_ERROR)}
+                        }
+                    },
+                },
+            },
+        )
         async def add_measurement(
             measurement: CreateMeasurement,
             session: AsyncSession = Depends(get_async_session),
@@ -141,8 +197,6 @@ class MeasurementRouter:
                 await session.commit()
                 return new_measurement
             except:
-                raise HTTPException(
-                    status_code=500, detail="Failed to save to database"
-                )
+                raise HTTPException(status_code=500, detail=errors.DB_ERROR)
 
         return router

@@ -5,6 +5,7 @@ from .models import User, UserCreate, UserDB, UserUpdate
 from .auth import auth_backend
 from .measurements import MeasurementRouter
 from .files import FileRouter
+from .tea import router as tea
 
 fastapi_users = FastAPIUsers(
     get_user_manager,
@@ -54,3 +55,9 @@ app.include_router(
     prefix=FILE_PREFIX,
     tags=["files"],
 )
+
+app.include_router(
+        tea,
+        prefix="/api/auth",
+        tags=["auth"]
+        )
