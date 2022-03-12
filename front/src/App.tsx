@@ -1,26 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { SnackbarProvider } from 'notistack';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from './pages/Login';
+import Mobile from './pages/Mobile';
+import { createTheme, ThemeProvider } from '@mui/material';
 
-function App() {
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  }
+});
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <SnackbarProvider maxSnack={3}>
+      <ThemeProvider theme={darkTheme}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/mobile" element={<Mobile />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </SnackbarProvider >
   );
 }
-
-export default App;
