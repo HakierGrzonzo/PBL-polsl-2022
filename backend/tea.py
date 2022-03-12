@@ -71,6 +71,9 @@ from fastapi.responses import HTMLResponse
 
 router = APIRouter()
 
+
 @router.get("/", status_code=418, response_class=HTMLResponse)
 def tea():
-    return "<p>{}</p>".format(pastas[randint(0, len(pastas) - 1)].strip().replace("\n", "</br>"))
+    return "<p>{}</p>".format(
+        pastas[randint(0, len(pastas) - 1)].strip().replace("\n", "</br>")
+    )
