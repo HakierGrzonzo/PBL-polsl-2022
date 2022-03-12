@@ -10,6 +10,7 @@ class errors:
     VALLIDATION_ERROR = "Validation Error"
     DB_ERROR = "Failed to save to database"
     ID_ERROR = "Measurement id does not exist!"
+    FILE_ERROR = "Requested file does not exist or does not have any associated measurement"
     OWNER_ERROR = "You do not own this object!"
 
 
