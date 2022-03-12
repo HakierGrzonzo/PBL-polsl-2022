@@ -44,6 +44,7 @@ class Files(Base):
     measurement_id = Column(
         Integer, ForeignKey("Measurements.id", use_alter=True), index=True
     )
+    author = relationship("Measurements", back_populates="files")
 
 
 class Measurements(Base):
@@ -56,9 +57,7 @@ class Measurements(Base):
     title = Column(String(512))
     author_id = Column(UUID(as_uuid=True), ForeignKey("user.id"), index=True)
     tags = Column(String(1024))
-    photo_file = Column(UUID(as_uuid=True), ForeignKey("Files.id"))
-    recording_file = Column(UUID(as_uuid=True), ForeignKey("Files.id"))
-    files = relationship("Files", foreign_keys=[Files.measurement_id])
+    files = relationship("Files", foreign_keys=[Files.measurement_id], lazy="joined")
 
 
 engine = create_async_engine(DATABASE_URL)

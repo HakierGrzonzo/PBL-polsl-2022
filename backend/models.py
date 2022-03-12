@@ -35,6 +35,7 @@ class FileEntry(BaseModel):
     file_id: UUID4
     original_name: str
     mime: str
+    measurement: int
     owner: UUID4
 
 
@@ -52,9 +53,7 @@ class _protoMeasurement(BaseModel):
 
 class Measurement(_protoMeasurement):
     measurement_id: int
-    photo: Optional[FileRefrence]
-    recording: Optional[FileRefrence]
-    other_files: Optional[list[FileRefrence]]
+    files: list[FileRefrence]
 
 
 class CreateMeasurement(_protoMeasurement):
@@ -62,6 +61,4 @@ class CreateMeasurement(_protoMeasurement):
 
 
 class UpdateMeasurement(_protoMeasurement):
-    photo: Optional[UUID4]
-    recording: Optional[UUID4]
-    other_files: Optional[list[UUID4]]
+    pass

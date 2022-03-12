@@ -1,3 +1,4 @@
+from uuid import uuid4
 import aiofiles
 from fastapi import HTTPException, File
 from fastapi.datastructures import UploadFile
@@ -7,7 +8,7 @@ from sqlalchemy.sql import select
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.responses import FileResponse
 from typing import Tuple
-from .models import FileRefrence, User
+from .models import FileRefrence, Measurement, User
 from .database import get_async_session, Files
 from fastapi.routing import APIRouter
 from os import environ
@@ -29,6 +30,7 @@ class FileRouter:
             mime=source.mime,
             original_name=source.original_name,
             link="{}/file/{}".format(self.prefix, source.id),
+            measurement=source.measurement_id
         )
 
     async def get_all_files(self, session: AsyncSession):
@@ -75,6 +77,7 @@ class FileRouter:
 
         @router.post("/upload", status_code=201, response_model=FileRefrence)
         async def upload_new_file(
+            measurement_id: int,
             uploaded_file: UploadFile = File(...),
             session: AsyncSession = Depends(get_async_session),
             user: User = Depends(self.fastapi_users.current_user()),
@@ -84,6 +87,7 @@ class FileRouter:
                     original_name=uploaded_file.filename,
                     mime=uploaded_file.content_type,
                     author_id=user.id,
+                    measurement_id=measurement_id
                 )
                 file_refrence = await self.insert_file_to_db(session, user, file_entry)
                 async with aiofiles.open(

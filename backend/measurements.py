@@ -3,15 +3,23 @@ from fastapi.param_functions import Depends
 from fastapi_users.fastapi_users import FastAPIUsers
 from sqlalchemy.sql import select
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from .models import Location, Measurement, CreateMeasurement, User, UpdateMeasurement
+from .models import (
+    Location,
+    Measurement,
+    CreateMeasurement,
+    User,
+    UpdateMeasurement,
+    FileRefrence,
+)
 from .database import get_async_session, Measurements
 from fastapi.routing import APIRouter
 from .errors import errors, ErrorModel, get_error
 
 
 class MeasurementRouter:
-    def __init__(self, fastapi_users: FastAPIUsers):
+    def __init__(self, fastapi_users: FastAPIUsers, file_prefix: str):
         self.fastapi_users = fastapi_users
+        self.file_prefix = file_prefix
 
     def _table_to_model(self, source: Measurements) -> Measurement:
         return Measurement(
@@ -21,6 +29,19 @@ class MeasurementRouter:
             description=source.description,
             title=source.title,
             tags=source.tags.split(", "),
+            files=list(
+                [
+                    FileRefrence(
+                        file_id=x.id,
+                        owner=x.author_id,
+                        mime=x.mime,
+                        original_name=x.original_name,
+                        link="{}/file/{}".format(self.file_prefix, x.id),
+                        measurement=x.measurement_id,
+                    )
+                    for x in source.files
+                ]
+            ),
         )
 
     def _check_tags(
@@ -31,7 +52,7 @@ class MeasurementRouter:
 
     async def get_all_measurements(self, session: AsyncSession) -> list[Measurement]:
         result = await session.execute(select(Measurements))
-        return [self._table_to_model(x) for x in result.scalars().all()]
+        return [self._table_to_model(x) for x in result.unique().scalars().all()]
 
     async def update_measurements(
         self,
@@ -65,7 +86,7 @@ class MeasurementRouter:
         result = await session.execute(
             select(Measurements).filter(Measurements.author_id == current_user.id)
         )
-        return [self._table_to_model(x) for x in result.scalars().all()]
+        return [self._table_to_model(x) for x in result.unique().scalars().all()]
 
     async def create_new_measurement(
         self, session: AsyncSession, data: CreateMeasurement, current_user: User
@@ -196,7 +217,8 @@ class MeasurementRouter:
                 )
                 await session.commit()
                 return new_measurement
-            except:
+            except Exception as e:
+                raise e
                 raise HTTPException(status_code=500, detail=errors.DB_ERROR)
 
         return router

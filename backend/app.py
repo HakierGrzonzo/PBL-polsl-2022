@@ -45,19 +45,18 @@ app.include_router(
     tags=["users"],
 )
 
+FILE_PREFIX = "/api/files"
+
 app.include_router(
-    MeasurementRouter(fastapi_users).get_router(), prefix="/api/data", tags=["data"]
+    MeasurementRouter(fastapi_users, FILE_PREFIX).get_router(),
+    prefix="/api/data",
+    tags=["data"],
 )
 
-FILE_PREFIX = "/api/files"
 app.include_router(
     FileRouter(fastapi_users, FILE_PREFIX).get_router(),
     prefix=FILE_PREFIX,
     tags=["files"],
 )
 
-app.include_router(
-        tea,
-        prefix="/api/auth",
-        tags=["auth"]
-        )
+app.include_router(tea, prefix="/api/auth", tags=["auth"])
