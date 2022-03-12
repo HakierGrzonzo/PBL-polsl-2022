@@ -16,7 +16,7 @@ fastapi_users = FastAPIUsers(
     UserDB,
 )
 
-app = FastAPI()
+app = FastAPI(title="PBL backend boogalloo", version="0.9.0")
 
 from .database import engine, Base
 
