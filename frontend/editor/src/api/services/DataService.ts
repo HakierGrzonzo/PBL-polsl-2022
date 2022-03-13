@@ -39,15 +39,15 @@ export class DataService {
 
     /**
      * Edit Measurement
-     * @param id
-     * @param requestBody
+     * @param id 
+     * @param requestBody 
      * @returns Measurement Successful Response
      * @throws ApiError
      */
     public static editMeasurementApiDataIdPatch(
-        id: number,
-        requestBody: UpdateMeasurement,
-    ): CancelablePromise<Measurement> {
+id: number,
+requestBody: UpdateMeasurement,
+): CancelablePromise<Measurement> {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/api/data/{id}',
@@ -69,15 +69,15 @@ export class DataService {
     /**
      * Add Measurement
      * Create new Measurement.
-     *
-     * Tags must not contain `,`
-     * @param requestBody
+ *
+ * Tags must not contain `,`
+     * @param requestBody 
      * @returns Measurement Successful Response
      * @throws ApiError
      */
     public static addMeasurementApiDataCreatePost(
-        requestBody: CreateMeasurement,
-    ): CancelablePromise<Measurement> {
+requestBody: CreateMeasurement,
+): CancelablePromise<Measurement> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/data/create',

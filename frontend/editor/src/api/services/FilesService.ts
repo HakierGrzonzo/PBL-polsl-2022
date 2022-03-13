@@ -25,8 +25,8 @@ export class FilesService {
     /**
      * Upload New File
      * Upload a file and associate it with a measurement.
-     * @param measurementId
-     * @param formData
+     * @param measurementId 
+     * @param formData 
      * @returns FileRefrence Successful Response
      * @throws ApiError
      */
@@ -64,17 +64,17 @@ export class FilesService {
     /**
      * Return File
      * Returns file for a given id.
-     *
-     * File must have an associated measurement.
-     *
-     * - isDownload = False: if `True` then the file will be sent as
-     * an attachment
-     * - id: id of file to return
-     * - optimized = True: returns compressed version, if applicable. **MIME
-     * will most likely differ!**
-     * @param id
-     * @param isDownload
-     * @param optimized
+ *
+ * File must have an associated measurement.
+ *
+ * - isDownload = False: if `True` then the file will be sent as
+ * an attachment
+ * - id: id of file to return
+ * - optimized = True: returns compressed version, if applicable. **MIME
+ * will most likely differ!**
+     * @param id 
+     * @param isDownload 
+     * @param optimized 
      * @returns any Successful Response
      * @throws ApiError
      */
@@ -102,8 +102,8 @@ export class FilesService {
 
     /**
      * Delete File
-     * @param id
-     * @returns void
+     * @param id 
+     * @returns void 
      * @throws ApiError
      */
     public static deleteFileApiFilesDeleteIdDelete(

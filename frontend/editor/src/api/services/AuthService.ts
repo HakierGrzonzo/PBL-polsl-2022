@@ -11,13 +11,13 @@ export class AuthService {
 
     /**
      * Auth:Cookie.Login
-     * @param formData
+     * @param formData 
      * @returns any Successful Response
      * @throws ApiError
      */
     public static authCookieLoginApiAuthLoginPost(
-        formData: Body_auth_cookie_login_api_auth_login_post,
-    ): CancelablePromise<any> {
+formData: Body_auth_cookie_login_api_auth_login_post,
+): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/auth/login',
@@ -47,7 +47,7 @@ export class AuthService {
 
     /**
      * Tea
-     * @returns void
+     * @returns void 
      * @throws ApiError
      */
     public static teaApiAuthGet(): CancelablePromise<void> {

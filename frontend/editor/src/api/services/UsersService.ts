@@ -27,7 +27,7 @@ export class UsersService {
 
     /**
      * Users:Patch Current User
-     * @param requestBody
+     * @param requestBody 
      * @returns User Successful Response
      * @throws ApiError
      */
@@ -49,7 +49,7 @@ export class UsersService {
 
     /**
      * Users:User
-     * @param id
+     * @param id 
      * @returns User Successful Response
      * @throws ApiError
      */
@@ -73,8 +73,8 @@ export class UsersService {
 
     /**
      * Users:Delete User
-     * @param id
-     * @returns void
+     * @param id 
+     * @returns void 
      * @throws ApiError
      */
     public static usersDeleteUserApiUsersIdDelete(
@@ -97,8 +97,8 @@ export class UsersService {
 
     /**
      * Users:Patch User
-     * @param id
-     * @param requestBody
+     * @param id 
+     * @param requestBody 
      * @returns User Successful Response
      * @throws ApiError
      */

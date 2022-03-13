@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, TextField, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import { AuthService } from '../api/services/AuthService';
 
 export default function Login() {
     const { enqueueSnackbar } = useSnackbar();
@@ -13,6 +14,15 @@ export default function Login() {
         }
         enqueueSnackbar('This is a success message!', {
             variant: 'success',
+        });
+        let formData = {
+            username: e.target.elements.username.value,
+            password: e.target.elements.password.value,
+        }
+        AuthService.authCookieLoginApiAuthLoginPost(formData).then(res => {
+            console.log(res);
+        }).catch(err => {
+            console.log(err);
         });
         // go to /editor/mobile
         //window.location.href = '/editor/mobile'; with refresh 

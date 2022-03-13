@@ -12,7 +12,7 @@ export class LocalService {
 
     /**
      * Register:Register
-     * @param requestBody
+     * @param requestBody 
      * @returns User Successful Response
      * @throws ApiError
      */

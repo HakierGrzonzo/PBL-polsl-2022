@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type backend__errors__ErrorModel = {
-    detail: string;
+export type Location = {
+    string: string;
+    time: string;
 };
