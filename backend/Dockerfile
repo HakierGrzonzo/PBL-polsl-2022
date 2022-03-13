@@ -9,10 +9,9 @@ EXPOSE 80
 ENV FILE_PATH /files
 VOLUME /files
 
-#RUN pacman -Syu --noconfirm python python-pip base-devel
 
 RUN pip install --upgrade pip
-COPY ./backend/requirements.txt .
+COPY ./requirements.txt .
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 COPY ./backend_runner.sh .

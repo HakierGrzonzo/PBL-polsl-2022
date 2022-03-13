@@ -1,8 +1,7 @@
 services:
   backend:
     build:
-      dockerfile: Dockerfile.backend
-      context: .
+      context: ./backend/
     volumes:
       - "./files:/files"
     ports:
@@ -18,6 +17,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=pbl
+    volumes:
+      - "./db:/var/lib/postgresql/data/"
 
   pgadmin:
     container_name: pgadmin
