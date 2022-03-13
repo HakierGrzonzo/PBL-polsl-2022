@@ -2,10 +2,15 @@ import { Autocomplete, Button, TextField, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 
+interface Localization {
+    latitude: number;
+    longitude: number;
+}
 
 export default function Mobile() {
     const { enqueueSnackbar } = useSnackbar();
     const [chosenTags, setChosenTags] = useState<any[]>();
+    const [previousLocalization, setPreviousLocalization] = useState<Localization>();
 
     function handleSubmit(e: any) {
         e.preventDefault();
@@ -32,6 +37,11 @@ export default function Mobile() {
             });
         });
     }
+
+    function report() {
+        console.log(previousLocalization);
+    }
+
     return (
         <form className='flex-col p-8 text-center min-h-screen justify-evenly flex max-w-lg m-auto' onSubmit={handleSubmit}>
             <Typography variant='h4' className='mb-4'>
@@ -87,6 +97,7 @@ export default function Mobile() {
                 )}
             />
             <Button type="submit" variant="contained" id="submit" >submit</Button>
+            <Button type="button" variant="contained" color='error' id="report" onClick={report} >report bad localization</Button>
             <br />
         </form>
     );
