@@ -32,9 +32,11 @@ export default function Mobile() {
             let latitude = position.coords.latitude;
             let longitude = position.coords.longitude;
             console.log(latitude, longitude);
-            enqueueSnackbar(`This is your localization: Latitude: ${latitude} Longitude: ${longitude}`, {
-                variant: 'info',
-            });
+            if (latitude && longitude && window) {
+                setPreviousLocalization({ latitude, longitude });
+                // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
+                window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, '_blank'); // for google maps
+            }
         });
     }
 
