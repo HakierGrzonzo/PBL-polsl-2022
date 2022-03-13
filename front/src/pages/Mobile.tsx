@@ -7,7 +7,6 @@ export default function Mobile() {
     const { enqueueSnackbar } = useSnackbar();
     const [chosenTags, setChosenTags] = useState<any[]>();
 
-
     function handleSubmit(e: any) {
         e.preventDefault();
         if (!e.target.elements.title.value) {
@@ -21,7 +20,8 @@ export default function Mobile() {
         console.log(new Date().toLocaleString(),
             e.target.elements.title.value,
             e.target.elements.description.value,
-            e.target.elements.notes.value,
+            e.target.elements.image.files[0],
+            e.target.elements.file.files[0],
             chosenTags);
         navigator.geolocation.getCurrentPosition((position) => {
             let latitude = position.coords.latitude;
@@ -50,11 +50,24 @@ export default function Mobile() {
                 className='w-full'
             />
             <TextField
-                id="notes"
-                label="notes"
+                id="image"
+                type={'file'}
                 margin="normal"
                 className='w-full'
+                variant='outlined'
+                inputProps={{ accept: 'image/*' }}
             />
+            <input
+                accept="image/*"
+                style={{ display: 'none' }}
+                id="file"
+                type="file"
+            />
+            <label htmlFor="file">
+                <Button component="span">
+                    Image
+                </Button>
+            </label>
             <Autocomplete
                 multiple
                 id="tags-autocomplete"
