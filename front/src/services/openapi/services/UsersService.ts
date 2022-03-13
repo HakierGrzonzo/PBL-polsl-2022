@@ -15,10 +15,10 @@ export class UsersService {
      * @returns User Successful Response
      * @throws ApiError
      */
-    public static usersCurrentUserUsersMeGet(): CancelablePromise<User> {
+    public static usersCurrentUserApiUsersMeGet(): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/users/me',
+            url: '/api/users/me',
             errors: {
                 401: `Missing token or inactive user.`,
             },
@@ -31,12 +31,12 @@ export class UsersService {
      * @returns User Successful Response
      * @throws ApiError
      */
-    public static usersPatchCurrentUserUsersMePatch(
+    public static usersPatchCurrentUserApiUsersMePatch(
         requestBody: UserUpdate,
     ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/users/me',
+            url: '/api/users/me',
             body: requestBody,
             mediaType: 'application/json',
             errors: {
@@ -53,12 +53,12 @@ export class UsersService {
      * @returns User Successful Response
      * @throws ApiError
      */
-    public static usersUserUsersIdGet(
+    public static usersUserApiUsersIdGet(
         id: string,
     ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/users/{id}',
+            url: '/api/users/{id}',
             path: {
                 'id': id,
             },
@@ -77,12 +77,12 @@ export class UsersService {
      * @returns void
      * @throws ApiError
      */
-    public static usersDeleteUserUsersIdDelete(
+    public static usersDeleteUserApiUsersIdDelete(
         id: string,
     ): CancelablePromise<void> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/users/{id}',
+            url: '/api/users/{id}',
             path: {
                 'id': id,
             },
@@ -102,13 +102,13 @@ export class UsersService {
      * @returns User Successful Response
      * @throws ApiError
      */
-    public static usersPatchUserUsersIdPatch(
+    public static usersPatchUserApiUsersIdPatch(
         id: string,
         requestBody: UserUpdate,
     ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'PATCH',
-            url: '/users/{id}',
+            url: '/api/users/{id}',
             path: {
                 'id': id,
             },

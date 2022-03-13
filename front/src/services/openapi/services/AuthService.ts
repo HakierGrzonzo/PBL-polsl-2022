@@ -2,8 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Body_auth_cookie_login_api_auth_login_post } from '../models/Body_auth_cookie_login_api_auth_login_post';
-import type { User } from '../models/User';
-import type { UserCreate } from '../models/UserCreate';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -48,22 +46,16 @@ export class AuthService {
     }
 
     /**
-     * Register:Register
-     * @param requestBody
-     * @returns User Successful Response
+     * Tea
+     * @returns void
      * @throws ApiError
      */
-    public static registerRegisterLocalRegisterRegisterPost(
-        requestBody: UserCreate,
-    ): CancelablePromise<User> {
+    public static teaApiAuthGet(): CancelablePromise<void> {
         return __request(OpenAPI, {
-            method: 'POST',
-            url: '/local/register/register',
-            body: requestBody,
-            mediaType: 'application/json',
+            method: 'GET',
+            url: '/api/auth/',
             errors: {
-                400: `Bad Request`,
-                422: `Validation Error`,
+                418: `Successful Response`,
             },
         });
     }
