@@ -18,8 +18,8 @@ export default function App() {
       <ThemeProvider theme={darkTheme}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/mobile" element={<Mobile />} />
+            <Route path="/editor/" element={<Login />} />
+            <Route path="/editor/mobile" element={<Mobile />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

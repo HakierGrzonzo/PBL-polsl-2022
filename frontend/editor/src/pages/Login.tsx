@@ -14,9 +14,9 @@ export default function Login() {
         enqueueSnackbar('This is a success message!', {
             variant: 'success',
         });
-        // go to /mobile
-        //window.location.href = '/mobile'; with refresh 
-        window.history.pushState({}, '', '/mobile');
+        // go to /editor/mobile
+        //window.location.href = '/editor/mobile'; with refresh 
+        window.history.pushState({}, '', '/editor/mobile');
         window.dispatchEvent(new PopStateEvent('popstate'));
     }
     return (

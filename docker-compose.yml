@@ -1,13 +1,21 @@
 services:
+  nginx:
+    build: ./frontend/
+    depends_on:
+      - backend
+    ports:
+      - "8000:80"
+
   backend:
     build:
       context: ./backend/
     volumes:
       - "./files:/files"
-    ports:
-      - "8000:80"
     environment:
       - "DATABASE=postgresql+asyncpg://postgres:postgres@db:5432/pbl"
+    # this port should be only used for documentation!
+    ports:
+      - "8002:80"
     depends_on:
       - db
 
