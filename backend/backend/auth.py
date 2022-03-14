@@ -18,10 +18,10 @@ def get_database_strategy(
 from fastapi_users.authentication import CookieTransport
 
 cookie_transport = CookieTransport(
-    cookie_max_age=3600,
+    cookie_max_age=36000,
     cookie_name="ciasteczkowy_potwor",
     cookie_httponly=True,
-    cookie_samesite="none",
+    cookie_samesite="strict",
 )
 
 auth_backend = AuthenticationBackend(
