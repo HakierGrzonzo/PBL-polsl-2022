@@ -12,22 +12,22 @@ export default function Login() {
             enqueueSnackbar('Please fill in all fields', { variant: 'error' });
             return;
         }
-        enqueueSnackbar('This is a success message!', {
-            variant: 'success',
-        });
         let formData = {
             username: e.target.elements.username.value,
             password: e.target.elements.password.value,
         }
         AuthService.authCookieLoginApiAuthLoginPost(formData).then(res => {
-            console.log(res);
+            enqueueSnackbar('Login successfully!', {
+                variant: 'success',
+            });
+            // go to /editor/mobile
+            //window.location.href = '/editor/mobile'; with refresh 
+            window.history.pushState({}, '', '/editor/mobile');
+            window.dispatchEvent(new PopStateEvent('popstate'));
         }).catch(err => {
+            enqueueSnackbar('We have problem with login', { variant: 'error' });
             console.log(err);
         });
-        // go to /editor/mobile
-        //window.location.href = '/editor/mobile'; with refresh 
-        window.history.pushState({}, '', '/editor/mobile');
-        window.dispatchEvent(new PopStateEvent('popstate'));
     }
     return (
         <form className='flex-col p-8 text-center min-h-screen justify-evenly flex max-w-lg m-auto' onSubmit={handleSubmit}>
