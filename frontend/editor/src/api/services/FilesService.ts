@@ -31,9 +31,9 @@ export class FilesService {
      * @throws ApiError
      */
     public static uploadNewFileApiFilesPost(
-        measurementId: number,
-        formData: Body_upload_new_file_api_files__post,
-    ): CancelablePromise<FileRefrence> {
+measurementId: number,
+formData: Body_upload_new_file_api_files__post,
+): CancelablePromise<FileRefrence> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/files/',
@@ -79,10 +79,10 @@ export class FilesService {
      * @throws ApiError
      */
     public static returnFileApiFilesFileIdGet(
-        id: string,
-        isDownload: boolean = false,
-        optimized: boolean = true,
-    ): CancelablePromise<any> {
+id: string,
+isDownload: boolean = false,
+optimized: boolean = true,
+): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/files/file/{id}',
@@ -107,8 +107,8 @@ export class FilesService {
      * @throws ApiError
      */
     public static deleteFileApiFilesDeleteIdDelete(
-        id: string,
-    ): CancelablePromise<void> {
+id: string,
+): CancelablePromise<void> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/files/delete/{id}',

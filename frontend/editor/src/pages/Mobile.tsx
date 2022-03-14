@@ -1,6 +1,7 @@
 import { Autocomplete, Button, TextField, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
+import { CreateMeasurement, DataService, Location } from '../api';
 
 interface Localization {
     latitude: number;
@@ -9,7 +10,7 @@ interface Localization {
 
 export default function Mobile() {
     const { enqueueSnackbar } = useSnackbar();
-    const [chosenTags, setChosenTags] = useState<any[]>();
+    const [chosenTags, setChosenTags] = useState<string[]>();
     const [previousLocalization, setPreviousLocalization] = useState<Localization>();
 
     function handleSubmit(e: any) {
@@ -18,9 +19,6 @@ export default function Mobile() {
             enqueueSnackbar('Please fill title', { variant: 'error' });
             return;
         }
-        enqueueSnackbar('This is a success message!', {
-            variant: 'success',
-        });
 
         console.log(new Date().toLocaleString(),
             e.target.elements.title.value,
@@ -31,11 +29,29 @@ export default function Mobile() {
         navigator.geolocation.getCurrentPosition((position) => {
             let latitude = position.coords.latitude;
             let longitude = position.coords.longitude;
-            console.log(latitude, longitude);
             if (latitude && longitude && window) {
                 setPreviousLocalization({ latitude, longitude });
                 // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
                 window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, '_blank'); // for google maps
+
+                const measurementBody: CreateMeasurement = {
+                    title: e.target.elements.title.value,
+                    description: e.target.elements.description.value,
+                    notes: '',
+                    tags: chosenTags || [],
+                    location: {
+                        latitude,
+                        longitude,
+                        time: new Date().toISOString(),
+                    }
+                };
+                DataService.addMeasurementApiDataCreatePost(measurementBody).then(res => {
+                    enqueueSnackbar('The measurement was added', {
+                        variant: 'success',
+                    });
+                }).catch(err => {
+                    console.log(err);
+                });
             }
         });
     }
@@ -86,9 +102,9 @@ export default function Mobile() {
                 options={tags}
                 getOptionLabel={(option) => option.title}
                 onChange={(event, value) => {
-                    setChosenTags(value);
+                    setChosenTags(value.map((option) => option.title));
                 }}
-                defaultValue={[tags[0]]}
+                // defaultValue={[tags[0]]}
                 filterSelectedOptions
                 renderInput={(params) => (
                     <TextField

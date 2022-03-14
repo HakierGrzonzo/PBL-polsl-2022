@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, TextField, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { AuthService } from '../api/services/AuthService';
+import { AuthService } from '../api';
 
 export default function Login() {
     const { enqueueSnackbar } = useSnackbar();
