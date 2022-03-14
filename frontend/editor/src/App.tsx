@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { SnackbarProvider } from 'notistack';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from './pages/Login';
 import Mobile from './pages/Mobile';
 import { createTheme, ThemeProvider } from '@mui/material';
@@ -20,6 +20,10 @@ export default function App() {
           <Routes>
             <Route path="/editor/" element={<Login />} />
             <Route path="/editor/mobile" element={<Mobile />} />
+            <Route
+              path="*"
+              element={<Navigate to="/editor/" />}
+            />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
