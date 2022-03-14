@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers
-from fastapi.middleware.cors import CORSMiddleware
 from .user_manager import get_user_manager
 from .models import User, UserCreate, UserDB, UserUpdate
 from .auth import auth_backend
@@ -17,19 +16,21 @@ fastapi_users = FastAPIUsers(
     UserDB,
 )
 
-app = FastAPI(title="PBL backend boogalloo", version="0.9.0")
+app = FastAPI(title="PBL backend boogalloo", version="0.9.1")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-    "http://localhost/",
-    "http://localhost:8000/",
-    "*"
-],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+from os import environ
+
+if cors := environ.get("CORS"):
+    from fastapi.middleware.cors import CORSMiddleware
+    urls = cors.split(" ")
+    print("WARN: running with cors for {}".format(", ".join(urls)))
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=urls,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 from .database import engine, Base
 
 

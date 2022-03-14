@@ -13,6 +13,7 @@ services:
       - "./files:/files"
     environment:
       - "DATABASE=postgresql+asyncpg://postgres:postgres@db:5432/pbl"
+      - "CORS=*"
     # this port should be only used for documentation!
     ports:
       - "8002:80"

@@ -1,6 +1,6 @@
 #!/usr/bin/fish
 
-set VERSION "0-9-0"
+set VERSION "0-9-1"
 set FRONTEND "hakiergrzonzo/pbl:v$VERSION-front"
 set BACKEND "hakiergrzonzo/pbl:v$VERSION-back"
 
