@@ -16,7 +16,7 @@ fastapi_users = FastAPIUsers(
     UserDB,
 )
 
-app = FastAPI(title="PBL backend boogalloo", version="0.9.3")
+app = FastAPI(title="PBL backend boogalloo", version="0.9.4")
 
 from os import environ
 
