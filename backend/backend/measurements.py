@@ -24,7 +24,11 @@ class MeasurementRouter:
     def _table_to_model(self, source: Measurements) -> Measurement:
         return Measurement(
             measurement_id=source.id,
-            location=Location(string=source.location_string, time=source.location_time),
+            location=Location(
+                latitude=source.location_latitude or 0,
+                longitude=source.location_longitude or 0,
+                time=source.location_time,
+            ),
             notes=source.notes,
             description=source.description,
             title=source.title,
@@ -64,19 +68,19 @@ class MeasurementRouter:
         old = await session.execute(
             select(Measurements).filter(Measurements.id == edit_id)
         )
-        old = old.scalars().all()
+        old = old.unique().scalars().all()
         if len(old) != 1:
             print(old)
             raise HTTPException(status_code=404, detail=errors.ID_ERROR)
         target = old[0]
         if target.author_id != current_user.id:
             raise HTTPException(status_code=403, detail=errors.OWNER_ERROR)
-        print(target.__dict__)
         target.title = new_data.title
         target.notes = new_data.notes
         target.description = new_data.description
         target.tags = ", ".join(new_data.tags)
-        target.location_string = new_data.location.string
+        target.location_latitude = new_data.location.latitude
+        target.location_longitude = new_data.location.longitude
         target.location_time = new_data.location.time.replace(tzinfo=None)
         return self._table_to_model(target)
 
@@ -92,7 +96,8 @@ class MeasurementRouter:
         self, session: AsyncSession, data: CreateMeasurement, current_user: User
     ) -> Measurement:
         new_measurement = Measurements(
-            location_string=data.location.string,
+            location_longitude=data.location.longitude,
+            location_latitude=data.location.latitude,
             location_time=data.location.time.replace(tzinfo=None),
             notes=data.notes,
             description=data.description,
@@ -174,7 +179,8 @@ class MeasurementRouter:
                 res = await self.update_measurements(session, id, new_data, user)
                 await session.commit()
                 return res
-            except:
+            except Exception as e:
+                print(e)
                 raise HTTPException(status_code=500, detail=errors.DB_ERROR)
 
         @router.post(

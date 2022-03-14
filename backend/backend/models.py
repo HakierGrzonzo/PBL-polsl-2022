@@ -1,7 +1,6 @@
 from fastapi_users import models
 from pydantic import BaseModel
 from pydantic.types import UUID4
-from typing import Optional
 from datetime import datetime
 from fastapi_users.authentication.strategy.db import BaseAccessToken
 
@@ -27,7 +26,8 @@ class UserDB(User, models.BaseUserDB):
 
 
 class Location(BaseModel):
-    string: str
+    latitude: float
+    longitude: float
     time: datetime
 
 

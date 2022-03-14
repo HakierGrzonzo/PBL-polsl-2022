@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import relationship, sessionmaker, declarative_base
 from sqlalchemy.sql.schema import Column, ForeignKey
-from sqlalchemy import String, DateTime
+from sqlalchemy import String, DateTime, Float
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql.sqltypes import Integer
 from .models import Measurement, UserDB, AccessToken
@@ -50,7 +50,8 @@ class Files(Base):
 class Measurements(Base):
     __tablename__ = "Measurements"
     id = Column(Integer, primary_key=True, index=True)
-    location_string = Column(String(255))
+    location_longitude = Column(Float())
+    location_latitude = Column(Float())
     location_time = Column(DateTime())
     notes = Column(String(1024))
     description = Column(String(2048))
