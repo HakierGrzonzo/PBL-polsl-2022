@@ -21,7 +21,7 @@ cookie_transport = CookieTransport(
     cookie_max_age=3600,
     cookie_name="ciasteczkowy_potwor",
     cookie_httponly=True,
-    cookie_samesite="strict",
+    cookie_samesite="none",
 )
 
 auth_backend = AuthenticationBackend(
