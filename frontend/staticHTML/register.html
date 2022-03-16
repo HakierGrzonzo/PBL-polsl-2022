@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <title>Self service PBL</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <h1>PBL - self service registration</h1>
+        <hr>
+        <p>
+            <sup>No css edition</sup><sub>so I can flex</sub>
+        </p>
+        <form>
+            <dl>
+                <dt>
+                    <label for="email">email:</label>
+                </dt>
+                <dd>
+                    <input type="text" name="email" placeholder="user@example.com" id="email-in"/>
+                </dd>
+                <dt>
+                    <label for="password">password:</label>
+                </dt>
+                <dd>
+                    <input type="password" name="password" id="pass1"/>
+                </dd>
+                <dt>
+                    <label for="retype-password">retype password:</label>
+                </dt>
+                <dd>
+                    <input type="password" name="retype-password" id="pass2"/>
+                </dd>
+                <dd>
+                </dd>
+            </dl>
+            <button type="submit">Register</button>
+        </form>
+        <a href="/">Go back</a>
+        <script>
+            const form = document.forms[0]
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const pass = document.getElementById('pass1').value;
+                if (pass !== document.getElementById('pass2').value) {
+                    alert("Passwords do not match!")
+                }
+                if (pass.length < 8) {
+                    alert("Password must be at least 8 chars long!")
+                }
+                fetch('/local/register', {
+                    method: 'POST', 
+                    body: JSON.stringify({
+                        email: document.getElementById('email-in').value,
+                        password: pass,
+                        is_active: true,
+                        is_superuser: false,
+                        is_verified: true,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(res => {alert("Registered succesfully")})
+                    .catch(res => {alert("Failed to register!")})
+            })
+        </script>
+    </body>
+</html>

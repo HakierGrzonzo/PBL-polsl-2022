@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 export type Location = {
-    string: string;
+    latitude: number;
+    longitude: number;
     time: string;
 };

@@ -1,10 +1,17 @@
 services:
+  dev:
+    build: ./dev_proxy
+    depends_on:
+      - backend
+    ports:
+      - "8003:80"
   nginx:
     build: ./frontend/
     depends_on:
       - backend
     ports:
       - "8000:80"
+      - "8080:8080"
 
   backend:
     build:
@@ -13,10 +20,6 @@ services:
       - "./files:/files"
     environment:
       - "DATABASE=postgresql+asyncpg://postgres:postgres@db:5432/pbl"
-      - "CORS=*"
-    # this port should be only used for documentation!
-    ports:
-      - "8002:80"
     depends_on:
       - db
 

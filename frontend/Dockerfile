@@ -25,6 +25,9 @@ RUN apt-get -y update && apt -y install nginx
 EXPOSE 80/tcp
 CMD /usr/sbin/nginx && tail -f /dev/null
 
+RUN mkdir /admin
+COPY ./staticHTML /admin
+
 # let's copy the build
 RUN mkdir /www
 COPY ./nginx.conf /etc/nginx/nginx.conf

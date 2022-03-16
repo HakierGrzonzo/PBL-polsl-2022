@@ -32,8 +32,8 @@ export class UsersService {
      * @throws ApiError
      */
     public static usersPatchCurrentUserApiUsersMePatch(
-        requestBody: UserUpdate,
-    ): CancelablePromise<User> {
+requestBody: UserUpdate,
+): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/api/users/me',
@@ -54,8 +54,8 @@ export class UsersService {
      * @throws ApiError
      */
     public static usersUserApiUsersIdGet(
-        id: string,
-    ): CancelablePromise<User> {
+id: string,
+): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/users/{id}',
@@ -78,8 +78,8 @@ export class UsersService {
      * @throws ApiError
      */
     public static usersDeleteUserApiUsersIdDelete(
-        id: string,
-    ): CancelablePromise<void> {
+id: string,
+): CancelablePromise<void> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/api/users/{id}',
@@ -103,9 +103,9 @@ export class UsersService {
      * @throws ApiError
      */
     public static usersPatchUserApiUsersIdPatch(
-        id: string,
-        requestBody: UserUpdate,
-    ): CancelablePromise<User> {
+id: string,
+requestBody: UserUpdate,
+): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/api/users/{id}',

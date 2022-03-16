@@ -58,6 +58,13 @@ class MeasurementRouter:
         result = await session.execute(select(Measurements))
         return [self._table_to_model(x) for x in result.unique().scalars().all()]
 
+    async def get_one_measurement(self, session: AsyncSession, id: int) -> Measurement:
+        result = await session.execute(select(Measurements).filter(id == Measurements.id))
+        res = result.unique().scalars().all()
+        if len(res) != 1:
+            raise HTTPException(status_code=404, detail=errors.ID_ERROR)
+        return self._table_to_model(res[0])
+
     async def update_measurements(
         self,
         session: AsyncSession,
@@ -175,13 +182,34 @@ class MeasurementRouter:
             user: User = Depends(self.fastapi_users.current_user()),
         ) -> Measurement:
             self._check_tags(new_data)
+            res = await self.update_measurements(session, id, new_data, user)
             try:
-                res = await self.update_measurements(session, id, new_data, user)
                 await session.commit()
                 return res
             except Exception as e:
                 print(e)
                 raise HTTPException(status_code=500, detail=errors.DB_ERROR)
+
+        @router.get(
+            "/{id}",
+            response_model=Measurement,
+            responses={
+                404: {
+                    "model": ErrorModel,
+                    "content": {
+                        "application/json": {
+                            "examples": {1: get_error(errors.ID_ERROR)}
+                        }
+                    },
+                },
+            },
+        )
+        async def get_one_measurement(
+            id: int,
+            session: AsyncSession = Depends(get_async_session),
+        ) -> Measurement:
+            res = await self.get_one_measurement(session, id)
+            return res
 
         @router.post(
             "/create",
@@ -217,14 +245,13 @@ class MeasurementRouter:
             Tags must not contain `,`
             """
             self._check_tags(measurement)
+            new_measurement = await self.create_new_measurement(
+                session, measurement, user
+            )
             try:
-                new_measurement = await self.create_new_measurement(
-                    session, measurement, user
-                )
                 await session.commit()
                 return new_measurement
             except Exception as e:
-                raise e
                 raise HTTPException(status_code=500, detail=errors.DB_ERROR)
 
         return router
