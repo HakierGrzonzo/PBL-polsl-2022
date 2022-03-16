@@ -2,11 +2,7 @@ import { Autocomplete, Button, TextField, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { CreateMeasurement, DataService, Location } from '../api';
-
-interface Localization {
-    latitude: number;
-    longitude: number;
-}
+import AlertDialogSlide from '../components/dialog';
 
 export default function Mobile() {
     const { enqueueSnackbar } = useSnackbar();
@@ -30,10 +26,8 @@ export default function Mobile() {
             let latitude = position.coords.latitude;
             let longitude = position.coords.longitude;
             if (latitude && longitude && window) {
-                setPreviousLocalization({ latitude, longitude });
-                // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
-                window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, '_blank'); // for google maps
-
+                let date = new Date();
+                date.setHours(date.getHours() + 1);
                 const measurementBody: CreateMeasurement = {
                     title: e.target.elements.title.value,
                     description: e.target.elements.description.value,
@@ -42,7 +36,7 @@ export default function Mobile() {
                     location: {
                         latitude,
                         longitude,
-                        time: new Date().toISOString(),
+                        time: date.toISOString()
                     }
                 };
                 DataService.addMeasurementApiDataCreatePost(measurementBody).then(res => {
@@ -88,8 +82,13 @@ export default function Mobile() {
                 label="notes"
                 margin="normal"
                 className='w-full'
-                variant='outlined'
-                inputProps={{ accept: 'image/*' }}
+            />
+            <TextField
+                id="laeq"
+                label="laeq"
+                type={'number'}
+                margin="normal"
+                className='w-full'
             />
             <input
                 accept="image/*"
@@ -121,12 +120,15 @@ export default function Mobile() {
                 )}
             />
             <Button type="submit" variant="contained" id="submit" >submit</Button>
-            <Button type="button" variant="contained" color='error' id="report" onClick={report} >report bad localization</Button>
+            {/* <Button type="button" variant="contained" color='error' id="report" onClick={report} >report bad localization</Button> */}
+            <AlertDialogSlide
+                communicate="are you sure you want to report this measurement?"
+                buttonText="report measurement"
+                callback={report} />
             <br />
         </form>
     );
 }
-
 
 const tags = [
     { title: 'one' },
