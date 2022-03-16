@@ -33,6 +33,7 @@ class MeasurementRouter:
             description=source.description,
             title=source.title,
             tags=source.tags.split(", "),
+            laeq=source.laeq,
             files=list(
                 [
                     FileRefrence(
@@ -89,6 +90,7 @@ class MeasurementRouter:
         target.location_latitude = new_data.location.latitude
         target.location_longitude = new_data.location.longitude
         target.location_time = new_data.location.time.replace(tzinfo=None)
+        target.laeq = new_data.laeq
         return self._table_to_model(target)
 
     async def get_my_measurements(
@@ -109,6 +111,7 @@ class MeasurementRouter:
             notes=data.notes,
             description=data.description,
             title=data.title,
+            laeq=data.laeq,
             author_id=current_user.id,
             tags=", ".join(data.tags),
         )

@@ -52,6 +52,7 @@ class Measurements(Base):
     id = Column(Integer, primary_key=True, index=True)
     location_longitude = Column(Float())
     location_latitude = Column(Float())
+    laeq = Column(Float(), default=0)
     location_time = Column(DateTime())
     notes = Column(String(1024))
     description = Column(String(2048))

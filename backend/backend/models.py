@@ -48,6 +48,7 @@ class _protoMeasurement(BaseModel):
     notes: str
     description: str
     title: str
+    laeq: float
     tags: list[str]
 
 
