@@ -17,3 +17,42 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.measurement{
+  text-align: center;
+  background-color: #1f1f1f;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px;
+  max-width: 90%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.measurements{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.measurement-row{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 14px auto;
+  padding: 0;
+  border-bottom: 1px solid #056e3d;
+}
+
+.page-title{
+  font-size: 4em;
+  margin: 30px;
+  padding: 0;
+  text-align: center;
+  width: 100%;
+}

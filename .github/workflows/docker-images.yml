@@ -1,0 +1,21 @@
+name: Czy ktoś zjebał builda?
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  buildFront:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Frontend
+      run: docker build ./frontend/ --tag pbl-front:$(date +%s)
+  buildBack:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build Backend
+      run: docker build ./backend/ --tag pbl-back:$(date +%s)

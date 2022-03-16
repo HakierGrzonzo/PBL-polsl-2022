@@ -2,16 +2,13 @@ import { Autocomplete, Button, TextField, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { CreateMeasurement, DataService, Location } from '../api';
-
-interface Localization {
-    latitude: number;
-    longitude: number;
-}
+import AlertDialogSlide from '../components/dialog';
+import { tags } from '../interfaces/tags';
 
 export default function Mobile() {
     const { enqueueSnackbar } = useSnackbar();
     const [chosenTags, setChosenTags] = useState<string[]>();
-    const [previousLocalization, setPreviousLocalization] = useState<Localization>();
+    const [previousId, setPreviousId] = useState<number>(0);
 
     function handleSubmit(e: any) {
         e.preventDefault();
@@ -23,33 +20,36 @@ export default function Mobile() {
         console.log(new Date().toLocaleString(),
             e.target.elements.title.value,
             e.target.elements.description.value,
-            e.target.elements.image.files[0],
             e.target.elements.file.files[0],
             chosenTags);
         navigator.geolocation.getCurrentPosition((position) => {
             let latitude = position.coords.latitude;
             let longitude = position.coords.longitude;
             if (latitude && longitude && window) {
-                setPreviousLocalization({ latitude, longitude });
-                // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
-                window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, '_blank'); // for google maps
-
+                let date = new Date();
+                date.setHours(date.getHours() + 1);
                 const measurementBody: CreateMeasurement = {
                     title: e.target.elements.title.value,
                     description: e.target.elements.description.value,
-                    notes: '',
+                    notes: e.target.elements.notes.value,
                     tags: chosenTags || [],
                     location: {
                         latitude,
                         longitude,
-                        time: new Date().toISOString(),
+                        time: date.toISOString()
                     }
                 };
                 DataService.addMeasurementApiDataCreatePost(measurementBody).then(res => {
                     enqueueSnackbar('The measurement was added', {
                         variant: 'success',
                     });
+                    // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
+                    window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, '_blank'); // for google maps
+                    setPreviousId(res.measurement_id);
                 }).catch(err => {
+                    enqueueSnackbar('Ops! We have some error check your internet connection or login again', {
+                        variant: 'error',
+                    });
                     console.log(err);
                 });
             }
@@ -57,7 +57,8 @@ export default function Mobile() {
     }
 
     function report() {
-        console.log(previousLocalization);
+        window.history.pushState({}, '', `/editor/mobile_edit/${previousId}`);
+        window.dispatchEvent(new PopStateEvent('popstate'));
     }
 
     return (
@@ -78,12 +79,17 @@ export default function Mobile() {
                 className='w-full'
             />
             <TextField
-                id="image"
-                type={'file'}
+                id="notes"
+                label="notes"
                 margin="normal"
                 className='w-full'
-                variant='outlined'
-                inputProps={{ accept: 'image/*' }}
+            />
+            <TextField
+                id="laeq"
+                label="laeq"
+                type={'number'}
+                margin="normal"
+                className='w-full'
             />
             <input
                 accept="image/*"
@@ -100,9 +106,9 @@ export default function Mobile() {
                 multiple
                 id="tags-autocomplete"
                 options={tags}
-                getOptionLabel={(option) => option.title}
+                getOptionLabel={(option) => option}
                 onChange={(event, value) => {
-                    setChosenTags(value.map((option) => option.title));
+                    setChosenTags(value.map((option) => option));
                 }}
                 // defaultValue={[tags[0]]}
                 filterSelectedOptions
@@ -115,18 +121,13 @@ export default function Mobile() {
                 )}
             />
             <Button type="submit" variant="contained" id="submit" >submit</Button>
-            <Button type="button" variant="contained" color='error' id="report" onClick={report} >report bad localization</Button>
+            {/* <Button type="button" variant="contained" color='error' id="report" onClick={report} >report bad localization</Button> */}
+            <AlertDialogSlide
+                communicate="are you sure you want to report this measurement?"
+                buttonText="report measurement"
+                callback={report} />
             <br />
         </form>
     );
 }
 
-
-const tags = [
-    { title: 'one' },
-    { title: 'two' },
-    { title: 'three' },
-    { title: 'four' },
-    { title: 'five' },
-    { title: 'six' },
-]
