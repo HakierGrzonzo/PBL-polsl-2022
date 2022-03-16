@@ -19,7 +19,6 @@ export default function Mobile() {
         console.log(new Date().toLocaleString(),
             e.target.elements.title.value,
             e.target.elements.description.value,
-            e.target.elements.image.files[0],
             e.target.elements.file.files[0],
             chosenTags);
         navigator.geolocation.getCurrentPosition((position) => {
