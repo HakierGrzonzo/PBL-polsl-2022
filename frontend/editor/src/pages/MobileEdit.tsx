@@ -27,21 +27,18 @@ export default function MobileEdit() {
             let latitude = position.coords.latitude;
             let longitude = position.coords.longitude;
             if (latitude && longitude && window) {
-                // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
-                window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, '_blank'); // for google maps
-
                 const measurementBody: CreateMeasurement = {
                     title: e.target.elements.title.value,
                     description: e.target.elements.description.value,
-                    notes: '',
+                    notes: e.target.elements.notes.value,
                     tags: chosenTags || [],
                     location: {
                         latitude,
                         longitude,
-                        time: new Date().toISOString(),
+                        time: String(measurement?.location.time)
                     }
                 };
-                DataService.editMeasurementApiDataIdPatch(0, measurementBody).then(res => {
+                DataService.editMeasurementApiDataIdPatch(pathVariable.id, measurementBody).then(res => {
                     enqueueSnackbar('The measurement was edited', {
                         variant: 'success',
                     });
@@ -122,7 +119,7 @@ export default function MobileEdit() {
                         label="time"
                         margin="normal"
                         className='w-full'
-                        contentEditable={false}
+                        disabled={true}
                         defaultValue={measurement.location.time}
                     />
                     <TextField
