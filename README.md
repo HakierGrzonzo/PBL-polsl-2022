@@ -1,3 +1,5 @@
+[![Czy ktoś zjebał builda?](https://github.com/HakierGrzonzo/PBL-polsl-2022/actions/workflows/docker-images.yml/badge.svg?branch=master)](https://github.com/HakierGrzonzo/PBL-polsl-2022/actions/workflows/docker-images.yml)
+
 #TODO
 
 ## Backend
