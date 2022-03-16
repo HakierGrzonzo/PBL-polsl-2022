@@ -33,7 +33,7 @@ class MeasurementRouter:
             description=source.description,
             title=source.title,
             tags=source.tags.split(", "),
-            laeq=source.laeq,
+            laeq=source.laeq or 0,
             files=list(
                 [
                     FileRefrence(
