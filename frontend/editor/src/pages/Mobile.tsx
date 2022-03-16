@@ -56,7 +56,8 @@ export default function Mobile() {
     }
 
     function report() {
-        console.log(previousId);
+        window.history.pushState({}, '', `/editor/mobile_edit/${previousId}`);
+        window.dispatchEvent(new PopStateEvent('popstate'));
     }
 
     return (
@@ -104,9 +105,9 @@ export default function Mobile() {
                 multiple
                 id="tags-autocomplete"
                 options={tags}
-                getOptionLabel={(option) => option.title}
+                getOptionLabel={(option) => option}
                 onChange={(event, value) => {
-                    setChosenTags(value.map((option) => option.title));
+                    setChosenTags(value.map((option) => option));
                 }}
                 // defaultValue={[tags[0]]}
                 filterSelectedOptions
@@ -130,10 +131,9 @@ export default function Mobile() {
 }
 
 const tags = [
-    { title: 'one' },
-    { title: 'two' },
-    { title: 'three' },
-    { title: 'four' },
-    { title: 'five' },
-    { title: 'six' },
+    "tag1",
+    "tag2",
+    "tag3",
+    "tag4",
+    "tag5",
 ]

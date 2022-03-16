@@ -52,8 +52,7 @@ export default function MobileEdit() {
     }
 
     async function fetchData() {
-        const measurements = await DataService.getAllMeasurementsApiDataGet();
-        const mess: Measurement | undefined = measurements.find(m => m.measurement_id === parseInt(pathVariable.id));
+        const mess = await DataService.getOneMeasurmentApiDataIdGet(pathVariable.id);
         if (!mess) {
             enqueueSnackbar('Measurement not found', { variant: 'error' });
             return;

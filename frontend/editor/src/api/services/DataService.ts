@@ -38,6 +38,28 @@ export class DataService {
     }
 
     /**
+     * Get One Measurment
+     * @param id 
+     * @returns Measurement Successful Response
+     * @throws ApiError
+     */
+    public static getOneMeasurmentApiDataIdGet(
+id: number,
+): CancelablePromise<Measurement> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/data/{id}',
+            path: {
+                'id': id,
+            },
+            errors: {
+                404: `Not Found`,
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
      * Edit Measurement
      * @param id 
      * @param requestBody 
