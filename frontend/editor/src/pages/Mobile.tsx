@@ -11,7 +11,7 @@ interface Localization {
 export default function Mobile() {
     const { enqueueSnackbar } = useSnackbar();
     const [chosenTags, setChosenTags] = useState<string[]>();
-    const [previousLocalization, setPreviousLocalization] = useState<Localization>();
+    const [previousId, setPreviousId] = useState<number>(0);
 
     function handleSubmit(e: any) {
         e.preventDefault();
@@ -37,7 +37,7 @@ export default function Mobile() {
                 const measurementBody: CreateMeasurement = {
                     title: e.target.elements.title.value,
                     description: e.target.elements.description.value,
-                    notes: '',
+                    notes: e.target.elements.notes.value,
                     tags: chosenTags || [],
                     location: {
                         latitude,
@@ -49,7 +49,13 @@ export default function Mobile() {
                     enqueueSnackbar('The measurement was added', {
                         variant: 'success',
                     });
+                    // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
+                    window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, '_blank'); // for google maps
+                    setPreviousId(res.measurement_id);
                 }).catch(err => {
+                    enqueueSnackbar('Ops! We have some error check your internet connection or login again', {
+                        variant: 'error',
+                    });
                     console.log(err);
                 });
             }
@@ -57,7 +63,7 @@ export default function Mobile() {
     }
 
     function report() {
-        console.log(previousLocalization);
+        console.log(previousId);
     }
 
     return (
@@ -78,8 +84,8 @@ export default function Mobile() {
                 className='w-full'
             />
             <TextField
-                id="image"
-                type={'file'}
+                id="notes"
+                label="notes"
                 margin="normal"
                 className='w-full'
                 variant='outlined'
