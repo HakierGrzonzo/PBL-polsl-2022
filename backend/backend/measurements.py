@@ -204,7 +204,7 @@ class MeasurementRouter:
                 },
             },
         )
-        async def get_one_measurment(
+        async def get_one_measurement(
             id: int,
             session: AsyncSession = Depends(get_async_session),
         ) -> Measurement:

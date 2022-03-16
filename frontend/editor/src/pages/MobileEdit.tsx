@@ -4,6 +4,7 @@ import { useSnackbar } from 'notistack';
 import { useParams } from "react-router-dom";
 import { CreateMeasurement, DataService, Location, Measurement } from '../api';
 import AlertDialogSlide from '../components/dialog';
+import { tags } from '../interfaces/tags';
 
 export default function MobileEdit() {
     const pathVariable: any = useParams();
@@ -162,10 +163,3 @@ export default function MobileEdit() {
     );
 }
 
-const tags = [
-    "tag1",
-    "tag2",
-    "tag3",
-    "tag4",
-    "tag5",
-]

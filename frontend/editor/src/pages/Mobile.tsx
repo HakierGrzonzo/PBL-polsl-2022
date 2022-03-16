@@ -3,6 +3,7 @@ import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { CreateMeasurement, DataService, Location } from '../api';
 import AlertDialogSlide from '../components/dialog';
+import { tags } from '../interfaces/tags';
 
 export default function Mobile() {
     const { enqueueSnackbar } = useSnackbar();
@@ -130,10 +131,3 @@ export default function Mobile() {
     );
 }
 
-const tags = [
-    "tag1",
-    "tag2",
-    "tag3",
-    "tag4",
-    "tag5",
-]
