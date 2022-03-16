@@ -4,4 +4,4 @@ while !</dev/tcp/db/5432; do
 done
 echo "DB is up!"
 python3 -m alembic upgrade head 
-uvicorn backend:app --host 0.0.0.0 --port 80
+uvicorn backend:app --host 0.0.0.0 --port 80 --proxy-headers

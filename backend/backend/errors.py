@@ -14,6 +14,7 @@ class errors:
     ID_ERROR = "Measurement id does not exist!"
     FILE_ERROR = "Requested file does not exist!"
     OWNER_ERROR = "You do not own this object!"
+    FILES_EXIST = "This measurement has some files associated with it, delete them first!"
 
 
 def get_error(string: str):
