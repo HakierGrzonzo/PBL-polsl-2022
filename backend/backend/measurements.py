@@ -4,6 +4,7 @@ from fastapi_users.fastapi_users import FastAPIUsers
 from sqlalchemy.sql import select, delete
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.responses import Response
+from fastapi_redis_cache import cache
 from .models import (
     Location,
     Measurement,
@@ -146,6 +147,7 @@ class MeasurementRouter:
         router = APIRouter()
 
         @router.get("/", response_model=list[Measurement])
+        @cache(expire=120)
         async def get_all_measurements(
             session: AsyncSession = Depends(get_async_session),
         ):

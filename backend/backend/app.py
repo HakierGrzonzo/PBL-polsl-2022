@@ -1,11 +1,15 @@
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from starlette.requests import Request
+from starlette.responses import Response
 from .user_manager import get_user_manager
 from .models import User, UserCreate, UserDB, UserUpdate
 from .auth import auth_backend
 from .measurements import MeasurementRouter
 from .files import FileRouter
 from .tea import router as tea
+from fastapi_redis_cache import FastApiRedisCache
 
 fastapi_users = FastAPIUsers(
     get_user_manager,
@@ -15,6 +19,7 @@ fastapi_users = FastAPIUsers(
     UserUpdate,
     UserDB,
 )
+
 
 app = FastAPI(title="PBL backend boogalloo", version="0.10.0")
 
@@ -33,9 +38,18 @@ if cors := environ.get("CORS"):
     )
 from .database import engine, Base
 
+REDIS_URL = environ.get("REDIS_URL", "redis://127.0.0.1:6379")
 
 @app.on_event("startup")
 async def startup_event():
+    redis_cache = FastApiRedisCache()
+    print(REDIS_URL)
+    redis_cache.init(
+        host_url=REDIS_URL,
+        prefix="pbl-cache",
+        response_header="X-PBL-Cache",
+        ignore_arg_types=[Request, Response, AsyncSession],
+    )
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
