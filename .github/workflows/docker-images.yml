@@ -11,16 +11,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: borales/actions-yarn@v2.0.0
-      working_directory: ./frontend/editor
+    - name: Get yarn cache
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - uses: actions/cache@v1
       with:
-        cmd: install
-    - uses: borales/actions-yarn@v2.0.0
-      working_directory: ./frontend/editor
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Set up Node
+      uses: actions/setup-node@v2
       with:
-        cmd: lint
+        node-version: 16.x
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+      working-directory: ./frontend/editor
+
+    - name: Lint
+      run: yarn lint
+      working-directory: ./frontend/editor
+      
     - name: Build Frontend
-      run: docker build ./frontend/ --tag pbl-front:$(date +%s)
+      run: yarn build
+      working-directory: ./frontend/editor
   buildBack:
     runs-on: ubuntu-latest
     steps:

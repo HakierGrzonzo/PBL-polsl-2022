@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { useState } from 'react'
 import { Autocomplete, Button, TextField, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { CreateMeasurement, DataService } from '../api'
