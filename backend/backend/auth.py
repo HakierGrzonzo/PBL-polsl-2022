@@ -15,7 +15,7 @@ def get_database_strategy(
     return DatabaseStrategy(access_token_db, lifetime_seconds=3600)
 
 
-from fastapi_users.authentication import CookieTransport
+from fastapi_users.authentication import CookieTransport, BearerTransport
 
 cookie_transport = CookieTransport(
     cookie_max_age=36000,
@@ -24,6 +24,14 @@ cookie_transport = CookieTransport(
     cookie_samesite="strict",
 )
 
-auth_backend = AuthenticationBackend(
+cookie_backend = AuthenticationBackend(
     name="cookie", transport=cookie_transport, get_strategy=get_database_strategy
+)
+
+token_transport = BearerTransport(
+    tokenUrl="/api/jwt/login"
+)
+
+token_backend = AuthenticationBackend(
+    name="jwt", transport=token_transport, get_strategy=get_database_strategy
 )
