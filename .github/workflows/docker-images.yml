@@ -1,8 +1,8 @@
-name: Czy ktoś zjebał builda?
+name: Czy build jest legitny?
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, cicd ]
   pull_request:
     branches: [ master ]
 
@@ -11,6 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - uses: borales/actions-yarn@v2.0.0
+      working_directory: ./frontend/editor
+      with:
+        cmd: install
+    - uses: borales/actions-yarn@v2.0.0
+      working_directory: ./frontend/editor
+      with:
+        cmd: lint
     - name: Build Frontend
       run: docker build ./frontend/ --tag pbl-front:$(date +%s)
   buildBack:
