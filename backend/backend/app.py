@@ -2,14 +2,14 @@ from fastapi import FastAPI
 from fastapi_users import FastAPIUsers
 from .user_manager import get_user_manager
 from .models import User, UserCreate, UserDB, UserUpdate
-from .auth import auth_backend
+from .auth import cookie_backend, token_backend
 from .measurements import MeasurementRouter
 from .files import FileRouter
 from .tea import router as tea
 
 fastapi_users = FastAPIUsers(
     get_user_manager,
-    [auth_backend],
+    [cookie_backend, token_backend],
     User,
     UserCreate,
     UserUpdate,
@@ -41,8 +41,14 @@ async def startup_event():
 
 
 app.include_router(
-    fastapi_users.get_auth_router(auth_backend),
-    prefix="/api/auth",
+    fastapi_users.get_auth_router(cookie_backend),
+    prefix="/api/cookie",
+    tags=["auth"],
+)
+
+app.include_router(
+    fastapi_users.get_auth_router(token_backend),
+    prefix="/api/jwt",
     tags=["auth"],
 )
 
