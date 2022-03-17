@@ -7,7 +7,7 @@ from sqlalchemy.sql import select, delete
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.responses import FileResponse, Response
 from typing import Tuple
-
+from fastapi_redis_cache import cache_one_day, cache
 from .models import FileRefrence, User
 from .database import get_async_session, Files, Measurements
 from fastapi.routing import APIRouter
@@ -81,6 +81,7 @@ class FileRouter:
         router = APIRouter()
 
         @router.get("/", response_model=list[FileRefrence])
+        @cache(expire=120)
         async def get_all_files(
             session: AsyncSession = Depends(get_async_session),
             _: User = Depends(self.fastapi_users.current_user()),
