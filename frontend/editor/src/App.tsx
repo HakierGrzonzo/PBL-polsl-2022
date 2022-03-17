@@ -1,20 +1,20 @@
-import React from 'react';
-import './App.css';
-import { SnackbarProvider } from 'notistack';
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { createTheme, ThemeProvider } from '@mui/material';
-import Login from './pages/Login';
-import Mobile from './pages/Mobile';
-import MobileEdit from './pages/MobileEdit';
-import Pc from './pages/Pc';
+import React from 'react'
+import './App.css'
+import { SnackbarProvider } from 'notistack'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { createTheme, ThemeProvider } from '@mui/material'
+import Login from './pages/Login'
+import Mobile from './pages/Mobile'
+import MobileEdit from './pages/MobileEdit'
+import Pc from './pages/Pc'
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'dark'
   }
-});
+})
 
-export default function App() {
+export default function App () {
   return (
     <SnackbarProvider maxSnack={3}>
       <ThemeProvider theme={darkTheme}>
@@ -32,5 +32,5 @@ export default function App() {
         </BrowserRouter>
       </ThemeProvider>
     </SnackbarProvider >
-  );
+  )
 }

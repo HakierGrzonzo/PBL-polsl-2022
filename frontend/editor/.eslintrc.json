@@ -4,6 +4,7 @@
         "es2021": true
     },
     "extends": [
+        "plugin:react/jsx-runtime",
         "plugin:react/recommended",
         "standard"
     ],
@@ -20,6 +21,21 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "indent": ["error", 4]
+        "indent": ["error", 2],
+        "react/react-in-jsx-scope": 0
+    },
+    "settings": {
+        "react": {
+          "createClass": "createReactClass",
+          "pragma": "React",
+          "fragment": "Fragment",
+          "version": "detect"
+        },
+        "import/extensions": [
+            ".ts",
+            ".tsx",
+            ".js",
+            ".jsx"
+        ]
     }
 }
