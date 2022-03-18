@@ -32,6 +32,7 @@
     "dotenv-expand": "^5.1.0",
     "eslint": "^8.3.0",
     "eslint-config-react-app": "^7.0.0",
+    "eslint-plugin-react": "^7.29.4",
     "eslint-webpack-plugin": "^3.1.1",
     "file-loader": "^6.2.0",
     "fs-extra": "^10.0.0",
@@ -74,7 +75,9 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "lint": "yarn eslint . --ext .tsx,.jsx",
+    "lint-and-fix": "yarn run eslint . --ext .tsx,.jsx --fix"
   },
   "eslintConfig": {
     "extends": [
