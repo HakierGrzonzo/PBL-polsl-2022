@@ -64,7 +64,7 @@ export default function Mobile() {
   return (
     <form className='flex-col p-8 text-center min-h-screen justify-evenly flex max-w-lg m-auto' onSubmit={handleSubmit}>
       <Typography variant='h4' className='mb-4'>
-                Add your location
+        Add your location
       </Typography>
       <TextField
         id="title"
@@ -99,7 +99,7 @@ export default function Mobile() {
       />
       <label htmlFor="file">
         <Button component="span">
-                    Image
+          Image
         </Button>
       </label>
       <Autocomplete

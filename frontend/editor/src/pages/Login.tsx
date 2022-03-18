@@ -32,7 +32,7 @@ export default function Login() {
     <form className='flex-col p-8 text-center min-h-screen justify-evenly flex max-w-lg m-auto'
       onSubmit={handleSubmit}>
       <Typography variant='h4' className='mb-4'>
-                Login
+        Login
       </Typography>
       <TextField
         id="username"
