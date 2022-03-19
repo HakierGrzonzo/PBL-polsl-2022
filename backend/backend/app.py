@@ -27,6 +27,7 @@ from os import environ
 
 if cors := environ.get("CORS"):
     from fastapi.middleware.cors import CORSMiddleware
+
     urls = cors.split(" ")
     print("WARN: running with cors for {}".format(", ".join(urls)))
     app.add_middleware(
@@ -39,6 +40,7 @@ if cors := environ.get("CORS"):
 from .database import engine, Base
 
 REDIS_URL = environ.get("REDIS_URL", "redis://127.0.0.1:6379")
+
 
 @app.on_event("startup")
 async def startup_event():
