@@ -1,33 +1,33 @@
-import { useState } from 'react'
-import { Autocomplete, Button, TextField, Typography } from '@mui/material'
-import { useSnackbar } from 'notistack'
-import { CreateMeasurement, DataService } from '../api'
-import AlertDialogSlide from '../components/dialog'
-import { tags } from '../interfaces/tags'
+import { Autocomplete, Button, TextField, Typography } from "@mui/material";
+import { useSnackbar } from "notistack";
+import { useState } from "react";
+import { CreateMeasurement, DataService, Location } from "../api";
+import AlertDialogSlide from "../components/dialog";
+import { tags } from "../interfaces/tags";
 
-export default function Mobile () {
-  const { enqueueSnackbar } = useSnackbar()
-  const [chosenTags, setChosenTags] = useState<string[]>()
-  const [previousId, setPreviousId] = useState<number>(0)
+export default function Mobile() {
+  const { enqueueSnackbar } = useSnackbar();
+  const [chosenTags, setChosenTags] = useState<string[]>();
+  const [previousId, setPreviousId] = useState<number>(0);
 
-  function handleSubmit (e: any) {
-    e.preventDefault()
+  function handleSubmit(e: any) {
+    e.preventDefault();
     if (!e.target.elements.title.value) {
-      enqueueSnackbar('Please fill title', { variant: 'error' })
-      return
+      enqueueSnackbar("Please fill title", { variant: "error" });
+      return;
     }
 
     console.log(new Date().toLocaleString(),
       e.target.elements.title.value,
       e.target.elements.description.value,
       e.target.elements.file.files[0],
-      chosenTags)
+      chosenTags);
     navigator.geolocation.getCurrentPosition((position) => {
-      const latitude = position.coords.latitude
-      const longitude = position.coords.longitude
+      let latitude = position.coords.latitude;
+      let longitude = position.coords.longitude;
       if (latitude && longitude && window) {
-        const date = new Date()
-        date.setHours(date.getHours() + 1)
+        let date = new Date();
+        date.setHours(date.getHours() + 1);
         const measurementBody: CreateMeasurement = {
           title: e.target.elements.title.value,
           description: e.target.elements.description.value,
@@ -38,33 +38,33 @@ export default function Mobile () {
             longitude,
             time: date.toISOString()
           }
-        }
+        };
         DataService.addMeasurementApiDataCreatePost(measurementBody).then(res => {
-          enqueueSnackbar('The measurement was added', {
-            variant: 'success'
-          })
+          enqueueSnackbar("The measurement was added", {
+            variant: "success",
+          });
           // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
-          window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, '_blank') // for google maps
-          setPreviousId(res.measurement_id)
+          window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, "_blank"); // for google maps
+          setPreviousId(res.measurement_id);
         }).catch(err => {
-          enqueueSnackbar('Ops! We have some error check your internet connection or login again', {
-            variant: 'error'
-          })
-          console.log(err)
-        })
+          enqueueSnackbar("Ops! We have some error check your internet connection or login again", {
+            variant: "error",
+          });
+          console.log(err);
+        });
       }
-    })
+    });
   }
 
-  function report () {
-    window.history.pushState({}, '', `/editor/mobile_edit/${previousId}`)
-    window.dispatchEvent(new PopStateEvent('popstate'))
+  function report() {
+    window.history.pushState({}, "", `/editor/mobile_edit/${previousId}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
   }
 
   return (
     <form className='flex-col p-8 text-center min-h-screen justify-evenly flex max-w-lg m-auto' onSubmit={handleSubmit}>
       <Typography variant='h4' className='mb-4'>
-                Add your location
+        Add your location
       </Typography>
       <TextField
         id="title"
@@ -87,19 +87,19 @@ export default function Mobile () {
       <TextField
         id="laeq"
         label="laeq"
-        type={'number'}
+        type={"number"}
         margin="normal"
         className='w-full'
       />
       <input
         accept="image/*"
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
         id="file"
         type="file"
       />
       <label htmlFor="file">
         <Button component="span">
-                    Image
+          Image
         </Button>
       </label>
       <Autocomplete
@@ -108,7 +108,7 @@ export default function Mobile () {
         options={tags}
         getOptionLabel={(option) => option}
         onChange={(event, value) => {
-          setChosenTags(value.map((option) => option))
+          setChosenTags(value.map((option) => option));
         }}
         // defaultValue={[tags[0]]}
         filterSelectedOptions
@@ -128,5 +128,5 @@ export default function Mobile () {
         callback={report} />
       <br />
     </form>
-  )
+  );
 }
