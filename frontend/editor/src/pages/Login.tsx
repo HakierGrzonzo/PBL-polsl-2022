@@ -15,7 +15,7 @@ export default function Login() {
       username: e.target.elements.username.value,
       password: e.target.elements.password.value,
     };
-    AuthService.authCookieLoginApiAuthLoginPost(formData).then(res => {
+    AuthService.authCookieLoginApiAuthLoginPost(formData).then(_ => {
       enqueueSnackbar("Login successfully!", {
         variant: "success",
       });
@@ -23,9 +23,9 @@ export default function Login() {
       //window.location.href = '/editor/mobile'; with refresh 
       window.history.pushState({}, "", "/editor/mobile");
       window.dispatchEvent(new PopStateEvent("popstate"));
-    }).catch(err => {
+    }).catch(_ => {
       enqueueSnackbar("We have problem with login", { variant: "error" });
-      console.log(err);
+      //console.log(err);
     });
   }
   return (

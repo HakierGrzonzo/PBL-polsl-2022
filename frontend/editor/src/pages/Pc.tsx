@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
-import { Autocomplete, Button, TextField, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useParams } from "react-router-dom";
-import { CreateMeasurement, DataService, Location, Measurement } from "../api";
-import AlertDialogSlide from "../components/dialog";
+import { DataService, Measurement } from "../api";
 
 export default function MobileEdit() {
-  const pathVariable: any = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const [measurements, setMeasurements] = useState<Measurement[]>();
 

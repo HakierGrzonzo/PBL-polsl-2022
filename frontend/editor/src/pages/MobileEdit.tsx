@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { Autocomplete, Button, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
-import { CreateMeasurement, DataService, Location, Measurement } from "../api";
+import { CreateMeasurement, DataService, Measurement } from "../api";
 import AlertDialogSlide from "../components/dialog";
 import { tags } from "../interfaces/tags";
 
 export default function MobileEdit() {
   const pathVariable: any = useParams();
-  console.log(pathVariable.id);
+  // console.log(pathVariable.id);
   const { enqueueSnackbar } = useSnackbar();
   const [chosenTags, setChosenTags] = useState<string[]>();
   const [measurement, setMeasurement] = useState<Measurement>();
@@ -19,10 +19,10 @@ export default function MobileEdit() {
       return;
     }
 
-    console.log(new Date().toLocaleString(),
-      e.target.elements.title.value,
-      e.target.elements.description.value,
-      chosenTags);
+    // console.log(new Date().toLocaleString(),
+    //  e.target.elements.title.value,
+    //  e.target.elements.description.value,
+    //  chosenTags);
     navigator.geolocation.getCurrentPosition((position) => {
       let latitude = position.coords.latitude;
       let longitude = position.coords.longitude;
@@ -38,12 +38,12 @@ export default function MobileEdit() {
             time: String(measurement?.location.time)
           }
         };
-        DataService.editMeasurementApiDataIdPatch(pathVariable.id, measurementBody).then(res => {
+        DataService.editMeasurementApiDataIdPatch(pathVariable.id, measurementBody).then(_ => {
           enqueueSnackbar("The measurement was edited", {
             variant: "success",
           });
-        }).catch(err => {
-          console.log(err);
+        }).catch(_ => {
+          //console.log(err);
         });
       }
     });
@@ -67,7 +67,7 @@ export default function MobileEdit() {
 
 
   function deleteMeasurement() {
-    console.log("deleteMeasurement");
+    //console.log("deleteMeasurement");
   }
 
   return (
