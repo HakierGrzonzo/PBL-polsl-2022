@@ -1,8 +1,8 @@
-name: Czy ktoś zjebał builda?
+name: Frontend lint
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, cicd ]
   pull_request:
     branches: [ master ]
 
@@ -11,11 +11,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Get yarn cache
+      id: yarn-cache
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - uses: actions/cache@v1
+      with:
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Set up Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16.x
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+      working-directory: ./frontend/editor
+
+    - name: Lint
+      run: yarn lint
+      working-directory: ./frontend/editor
+      
     - name: Build Frontend
-      run: docker build ./frontend/ --tag pbl-front:$(date +%s)
-  buildBack:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Build Backend
-      run: docker build ./backend/ --tag pbl-back:$(date +%s)
+      run: yarn build
+      working-directory: ./frontend/editor

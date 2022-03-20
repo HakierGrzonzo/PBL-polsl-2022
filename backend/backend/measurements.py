@@ -57,11 +57,17 @@ class MeasurementRouter:
         if "," in "".join(to_check.tags):
             raise HTTPException(status_code=422, detail=errors.COMMA_ERROR)
 
-    async def get_all_measurements(self, session: AsyncSession) -> list[Measurement]:
+    async def get_all_measurements(
+        self, session: AsyncSession
+    ) -> list[Measurement]:
         result = await session.execute(select(Measurements))
-        return [self._table_to_model(x) for x in result.unique().scalars().all()]
+        return [
+            self._table_to_model(x) for x in result.unique().scalars().all()
+        ]
 
-    async def get_one_measurement(self, session: AsyncSession, id: int) -> Measurement:
+    async def get_one_measurement(
+        self, session: AsyncSession, id: int
+    ) -> Measurement:
         result = await session.execute(
             select(Measurements).filter(id == Measurements.id)
         )
@@ -87,7 +93,9 @@ class MeasurementRouter:
             raise HTTPException(status_code=403, detail=errors.OWNER_ERROR)
         if len(target.files) > 0:
             raise HTTPException(status_code=412, detail=errors.FILES_EXIST)
-        await session.execute(delete(Measurements).where(delete_id == Measurements.id))
+        await session.execute(
+            delete(Measurements).where(delete_id == Measurements.id)
+        )
 
     async def update_measurements(
         self,
@@ -120,9 +128,13 @@ class MeasurementRouter:
         self, session: AsyncSession, current_user: User
     ) -> list[Measurement]:
         result = await session.execute(
-            select(Measurements).filter(Measurements.author_id == current_user.id)
+            select(Measurements).filter(
+                Measurements.author_id == current_user.id
+            )
         )
-        return [self._table_to_model(x) for x in result.unique().scalars().all()]
+        return [
+            self._table_to_model(x) for x in result.unique().scalars().all()
+        ]
 
     async def create_new_measurement(
         self, session: AsyncSession, data: CreateMeasurement, current_user: User

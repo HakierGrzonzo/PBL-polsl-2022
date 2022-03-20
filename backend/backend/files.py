@@ -39,7 +39,9 @@ class FileRouter:
         return [self._table_to_file_refrence(x) for x in result.scalars().all()]
 
     async def get_my_files(self, session: AsyncSession, user: User):
-        result = await session.execute(select(Files).filter(Files.author_id == user.id))
+        result = await session.execute(
+            select(Files).filter(Files.author_id == user.id)
+        )
         return [self._table_to_file_refrence(x) for x in result.scalars().all()]
 
     async def insert_file_to_db(
@@ -59,7 +61,9 @@ class FileRouter:
     async def get_filename_mime(
         self, session: AsyncSession, file_id: UUID4
     ) -> Tuple[str, str]:
-        result = await session.execute(select(Files).filter(Files.id == file_id))
+        result = await session.execute(
+            select(Files).filter(Files.id == file_id)
+        )
         res = result.scalars().all()
         if len(res) == 1:
             return [res[0].mime, res[0].original_name]
@@ -67,7 +71,9 @@ class FileRouter:
             raise HTTPException(status_code=404, detail=errors.FILE_ERROR)
         pass
 
-    async def delete_file(self, session: AsyncSession, user: User, file_id: UUID4):
+    async def delete_file(
+        self, session: AsyncSession, user: User, file_id: UUID4
+    ):
         file = await session.execute(select(Files).filter(file_id == Files.id))
         res = file.scalars().all()
         if len(res) != 1:
@@ -126,7 +132,9 @@ class FileRouter:
                     author_id=user.id,
                     measurement_id=measurement_id,
                 )
-                file_refrence = await self.insert_file_to_db(session, user, file_entry)
+                file_refrence = await self.insert_file_to_db(
+                    session, user, file_entry
+                )
                 async with aiofiles.open(
                     join(FILE_PATH_PREFIX, str(file_refrence.file_id)), "wb"
                 ) as f:

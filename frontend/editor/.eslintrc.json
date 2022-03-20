@@ -1,0 +1,49 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/jsx-runtime",
+        "plugin:react/recommended"
+],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint",
+        "react-hooks"
+    ],
+    "rules": {
+        "indent": ["error", 2],
+        "quotes": ["error", "double"],
+        "semi": ["error", "always"],
+        "no-console": "warn",
+        "no-unused-vars": ["warn", {
+            "argsIgnorePattern": "^_"
+        }],
+        "react/react-in-jsx-scope": "off",
+        "react/jsx-uses-react": "error",
+        "react/no-typos": "warn",
+        "max-len": ["error", { "code": 140 }]
+    },
+    "settings": {
+        "react": {
+          "pragma": "React",
+          "version": "detect",
+          "functionComponents": true
+        },
+        "import/extensions": [
+            ".ts",
+            ".tsx",
+            ".js",
+            ".jsx"
+        ]
+    }
+}

@@ -59,11 +59,15 @@ class Measurements(Base):
     title = Column(String(512))
     author_id = Column(UUID(as_uuid=True), ForeignKey("user.id"), index=True)
     tags = Column(String(1024))
-    files = relationship("Files", foreign_keys=[Files.measurement_id], lazy="joined")
+    files = relationship(
+        "Files", foreign_keys=[Files.measurement_id], lazy="joined"
+    )
 
 
 engine = create_async_engine(DATABASE_URL)
-async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+async_session_maker = sessionmaker(
+    engine, class_=AsyncSession, expire_on_commit=False
+)
 
 
 async def create_db_and_tables():
@@ -80,5 +84,7 @@ async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(UserDB, session, UserTable)
 
 
-async def get_access_token_db(session: AsyncSession = Depends(get_async_session)):
+async def get_access_token_db(
+    session: AsyncSession = Depends(get_async_session),
+):
     yield SQLAlchemyAccessTokenDatabase(AccessToken, session, AccessTokenTable)
