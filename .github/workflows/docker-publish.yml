@@ -39,7 +39,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./frontend/
-            #push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
   backend:
@@ -78,5 +78,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./backend/
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
