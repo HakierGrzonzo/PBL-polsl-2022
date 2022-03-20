@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { CreateMeasurement, DataService, Measurement } from "../api";
 import AlertDialogSlide from "../components/dialog";
 import { tags } from "../interfaces/tags";
+import { getImageLink } from "../utils/fileUtils";
 
 export default function MobileEdit() {
   const pathVariable: any = useParams();
@@ -14,39 +15,31 @@ export default function MobileEdit() {
   const [measurement, setMeasurement] = useState<Measurement>();
   function handleSubmit(e: any) {
     e.preventDefault();
-    if (!e.target.elements.title.value || !e.target.elements.description.value) {
-      enqueueSnackbar("Please fill at least title, latitude and longitude", { variant: "error" });
+    if (!e.target.elements.latitude.value || !e.target.elements.laeq.value || !e.target.elements.longitude.value) {
+      enqueueSnackbar("Please fill at least laeq, latitude and longitude", { variant: "error" });
       return;
     }
 
-    // console.log(new Date().toLocaleString(),
-    //  e.target.elements.title.value,
-    //  e.target.elements.description.value,
-    //  chosenTags);
-    navigator.geolocation.getCurrentPosition((position) => {
-      let latitude = position.coords.latitude;
-      let longitude = position.coords.longitude;
-      if (latitude && longitude && window) {
-        const measurementBody: CreateMeasurement = {
-          title: e.target.elements.title.value,
-          description: e.target.elements.description.value,
-          notes: e.target.elements.notes.value,
-          laeq: e.target.elements.laeq.value || 0,
-          tags: chosenTags || [],
-          location: {
-            latitude,
-            longitude,
-            time: String(measurement?.location.time)
-          }
-        };
-        DataService.editMeasurementApiDataIdPatch(pathVariable.id, measurementBody).then(_ => {
-          enqueueSnackbar("The measurement was edited", {
-            variant: "success",
-          });
-        }).catch(_ => {
-          //console.log(err);
-        });
+    const measurementBody: CreateMeasurement = {
+      title: e.target.elements.title.value,
+      description: e.target.elements.description.value,
+      notes: e.target.elements.notes.value,
+      laeq: e.target.elements.laeq.value || 0,
+      tags: chosenTags || [],
+      location: {
+        latitude: e.target.elements.latitude.value,
+        longitude: e.target.elements.longitude.value,
+        time: String(measurement?.location.time)
       }
+    };
+    DataService.editMeasurementApiDataIdPatch(pathVariable.id, measurementBody).then(_ => {
+      enqueueSnackbar("The measurement was edited", {
+        variant: "success",
+      });
+    }).catch(_ => {
+      enqueueSnackbar("Ops! We have some error with measurement edit check your internet connection or login again", {
+        variant: "error",
+      });
     });
   }
 
@@ -141,6 +134,9 @@ export default function MobileEdit() {
             className='w-full'
             defaultValue={measurement.location.longitude}
           />
+          <figure className='flex flex-col items-center justify-center'>
+            <img src={getImageLink(measurement.files)} alt="measurement" className='w-full h-64' />
+          </figure>
           <Autocomplete
             multiple
             id="tags-autocomplete"

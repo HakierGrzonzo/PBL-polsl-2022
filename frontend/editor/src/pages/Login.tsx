@@ -26,7 +26,6 @@ export default function Login() {
       window.dispatchEvent(new PopStateEvent("popstate"));
     }).catch(_ => {
       enqueueSnackbar("We have problem with login", { variant: "error" });
-      //console.log(err);
     });
   }
 

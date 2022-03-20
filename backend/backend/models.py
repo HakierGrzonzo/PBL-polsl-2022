@@ -39,7 +39,7 @@ class FileEntry(BaseModel):
     owner: UUID4
 
 
-class FileRefrence(FileEntry):
+class FileReference(FileEntry):
     link: str
 
 
@@ -54,7 +54,7 @@ class _protoMeasurement(BaseModel):
 
 class Measurement(_protoMeasurement):
     measurement_id: int
-    files: list[FileRefrence]
+    files: list[FileReference]
 
 
 class CreateMeasurement(_protoMeasurement):
