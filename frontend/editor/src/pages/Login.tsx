@@ -31,7 +31,7 @@ export default function Login() {
   }
 
   return (
-    <form className='flex-col p-8 text-center min-h-screen justify-evenly flex max-w-lg m-auto'
+    <form className='flex-col simple-form text-center min-h-screen justify-evenly flex m-auto'
       onSubmit={handleSubmit}>
       <Typography variant='h4' className='mb-4'>
         Login

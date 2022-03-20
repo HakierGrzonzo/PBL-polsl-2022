@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Autocomplete, Button, TextField, Typography } from "@mui/material";
+import { Autocomplete, Button, CircularProgress, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
 import { CreateMeasurement, DataService, Measurement } from "../api";
@@ -31,7 +31,7 @@ export default function MobileEdit() {
           title: e.target.elements.title.value,
           description: e.target.elements.description.value,
           notes: e.target.elements.notes.value,
-          laeq: e.target.elements.laeq.value,
+          laeq: e.target.elements.laeq.value || 0,
           tags: chosenTags || [],
           location: {
             latitude,
@@ -68,13 +68,23 @@ export default function MobileEdit() {
 
 
   function deleteMeasurement() {
-    //console.log("deleteMeasurement");
+    DataService.deleteMeasurementApiDataIdDelete(pathVariable.id).then(_ => {
+      enqueueSnackbar("The measurement was deleted", {
+        variant: "success",
+      });
+      window.history.pushState({}, "", "/editor/pc");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    }).catch(_ => {
+      enqueueSnackbar("Ops! We have some error check your internet connection or login again", {
+        variant: "error",
+      });
+    });
   }
 
   return (
     <div>
       {!measurement
-        ? <div>Loading...</div>
+        ? <CircularProgress color='info' sx={{ margin: "48vh 0 0 48.5%" }} />
         :
         <form className='flex-col simple-form text-center min-h-screen justify-evenly flex m-auto' onSubmit={handleSubmit}>
           <Typography variant='h4' className='mb-4'>
@@ -105,8 +115,9 @@ export default function MobileEdit() {
             id="laeq"
             label="laeq"
             margin="normal"
+            type={"number"}
             className='w-full'
-            // defaultValue={measurement.laeq}
+            defaultValue={measurement.laeq}
           />
           <TextField
             id="latitude"

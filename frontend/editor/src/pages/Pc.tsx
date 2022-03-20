@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Typography } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { DataService, Measurement } from "../api";
 
@@ -23,7 +23,7 @@ export default function MobileEdit() {
   return (
     <div>
       {!measurements
-        ? <div>Loading...</div>
+        ? <CircularProgress color='info' sx={{ margin: "48vh 0 0 48.5%" }} />
         :
         <div className='measurements'>
           <h1 className='page-title'>measurements</h1>
@@ -66,7 +66,11 @@ export default function MobileEdit() {
                   <div className='w-24' />
                   <Typography variant="body1">{measurement.location.latitude} {measurement.location.longitude}</Typography>
                 </div>
-                <input type="file" name="filefield" multiple />
+                <div className='measurement-row-last'>
+                  <input type="file" name="filefield" multiple />
+                  <Button type="submit" variant="contained" 
+                    href={`/editor/mobile_edit/${measurement.measurement_id}`} target="_blank" >edit</Button>
+                </div>
               </div>
             );
           }

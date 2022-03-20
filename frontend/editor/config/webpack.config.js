@@ -80,7 +80,8 @@ const hasJsxRuntime = (() => {
   try {
     require.resolve('react/jsx-runtime')
     return true
-  } catch (e) {
+  }
+  catch (e) {
     return false
   }
 })()

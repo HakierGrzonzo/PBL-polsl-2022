@@ -32,7 +32,7 @@ export default function Mobile() {
           title: e.target.elements.title.value,
           description: e.target.elements.description.value,
           notes: e.target.elements.notes.value,
-          laeq: e.target.elements.laeq.value,
+          laeq: e.target.elements.laeq.value || 0,
           tags: chosenTags || [],
           location: {
             latitude,
@@ -63,7 +63,7 @@ export default function Mobile() {
   }
 
   return (
-    <form className='flex-col p-8 text-center min-h-screen justify-evenly flex max-w-lg m-auto' onSubmit={handleSubmit}>
+    <form className='flex-col simple-form text-center min-h-screen justify-evenly flex m-auto' onSubmit={handleSubmit}>
       <Typography variant='h4' className='mb-4'>
         Add your location
       </Typography>
