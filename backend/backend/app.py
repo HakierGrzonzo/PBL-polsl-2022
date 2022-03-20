@@ -10,6 +10,9 @@ from .measurements import MeasurementRouter
 from .files import FileRouter
 from .tea import router as tea
 from fastapi_redis_cache import FastApiRedisCache
+from .version import version
+
+__version__ = version
 
 fastapi_users = FastAPIUsers(
     get_user_manager,
@@ -20,8 +23,7 @@ fastapi_users = FastAPIUsers(
     UserDB,
 )
 
-
-app = FastAPI(title="PBL backend boogalloo", version="0.10.0")
+app = FastAPI(title="PBL backend boogalloo", version=version)
 
 from os import environ
 
@@ -45,7 +47,6 @@ REDIS_URL = environ.get("REDIS_URL", "redis://127.0.0.1:6379")
 @app.on_event("startup")
 async def startup_event():
     redis_cache = FastApiRedisCache()
-    print(REDIS_URL)
     redis_cache.init(
         host_url=REDIS_URL,
         prefix="pbl-cache",
