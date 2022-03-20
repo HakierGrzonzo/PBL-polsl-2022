@@ -45,7 +45,6 @@ REDIS_URL = environ.get("REDIS_URL", "redis://127.0.0.1:6379")
 @app.on_event("startup")
 async def startup_event():
     redis_cache = FastApiRedisCache()
-    print(REDIS_URL)
     redis_cache.init(
         host_url=REDIS_URL,
         prefix="pbl-cache",
