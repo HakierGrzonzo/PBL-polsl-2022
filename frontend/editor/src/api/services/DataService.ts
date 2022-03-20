@@ -38,12 +38,12 @@ export class DataService {
     }
 
     /**
-     * Get One Measurment
+     * Get One Measurement
      * @param id 
      * @returns Measurement Successful Response
      * @throws ApiError
      */
-    public static getOneMeasurmentApiDataIdGet(
+    public static getOneMeasurementApiDataIdGet(
 id: number,
 ): CancelablePromise<Measurement> {
         return __request(OpenAPI, {
@@ -55,6 +55,31 @@ id: number,
             errors: {
                 404: `Not Found`,
                 422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Delete Measurement
+     * @param id 
+     * @returns void 
+     * @throws ApiError
+     */
+    public static deleteMeasurementApiDataIdDelete(
+id: number,
+): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/data/{id}',
+            path: {
+                'id': id,
+            },
+            errors: {
+                403: `Forbidden`,
+                404: `Not Found`,
+                412: `Precondition Failed`,
+                422: `Validation Error`,
+                500: `Internal Server Error`,
             },
         });
     }

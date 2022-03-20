@@ -32,6 +32,7 @@ export default function Mobile() {
           title: e.target.elements.title.value,
           description: e.target.elements.description.value,
           notes: e.target.elements.notes.value,
+          laeq: e.target.elements.laeq.value,
           tags: chosenTags || [],
           location: {
             latitude,

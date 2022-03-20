@@ -10,6 +10,7 @@ export type Measurement = {
     notes: string;
     description: string;
     title: string;
+    laeq: number;
     tags: Array<string>;
     measurement_id: number;
     files: Array<FileRefrence>;
