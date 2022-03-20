@@ -1,0 +1,162 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{inputenc}[utf8]
+\usepackage[margin=2cm, headheight=120pt, tmargin=160pt]{geometry}
+\usepackage[polish]{babel}
+
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{fancyhdr}
+\usepackage{mdframed}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage[section]{placeins}
+
+\usepackage{multirow}
+\usepackage[table,xcdraw]{xcolor}
+
+
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\urlstyle{same}
+\graphicspath{ {./ilustracje/} }
+\title{Wyznaczanie wartości przyspieszenia ziemskiego metodą spadku swobodnego}
+\author{Grzegorz Koperwas}
+\date{\today}
+
+
+\usepackage{polski}
+\usepackage[polish]{babel} 
+\usepackage{indentfirst}
+\usepackage{icomma} 
+
+\brokenpenalty=1000
+\clubpenalty=1000
+\widowpenalty=1000    
+
+\renewcommand\thesection{\arabic{section}.}
+\renewcommand\thesubsection{\arabic{section}.\arabic{subsection}.}
+\renewcommand\thesubsubsection{\arabic{subsubsection}.}
+
+
+\newcommand{\stopnie}{\ensuremath{^{\circ}}}
+
+\newcommand{\twierdzonko}[1]{
+    \begin{center}
+    \begin{mdframed}
+    #1
+    \end{mdframed}          
+    \end{center}
+} 
+
+\newcommand{\dwanajeden}[2]{
+\ensuremath \left( \begin{array}{c}
+    #1\\
+    #2
+\end{array} \right)
+}  
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+
+\rfoot{}
+\lfoot{}
+\lhead{}
+\rhead{}
+\chead{
+    \includegraphics[width=\linewidth]{banner.png}
+    \scriptsize{\textbf{Politechnika Śląska jako Centrum Nowoczesnego
+    Kształcenia opartego o badania i innowacje}}
+
+    \scriptsize{\texttt{POWR-03.05.00-00-Z098/17/00foobar}}
+
+    \vspace{1pt}
+    \hrule
+    
+    \begin{flushleft}
+        \begin{tabular}{ r l }
+            Nazwa projektu PBL: & foobar \\
+            Imię i nazwisko studenta: & {{ author_name }} \\
+            Wydział / Kierunek / Specjalność: & Matematyka Stosowana / Informatyka /
+            brak \\
+            Rok akademicki / semestr: & 2021-2022 / 4 \\
+            Opiekun główny projektu: & foobar
+        \end{tabular}
+    \end{flushleft}
+}
+\cfoot{\scriptsize\bfseries Projekt współfinansowany przez Unię Europejską ze środków Europejskiego Funduszu Społecznego}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{1pt}
+
+
+
+\begin{document}
+
+{% for month in data %}
+
+\begin{center}
+    \textbf{Karta ewidencji czasu pracy studenta za miesiąc {{ month.name }} }
+\end{center}
+\vspace{-5mm}
+
+\begin{table}[H]
+\scriptsize
+\begin{tabular}{|cllc|c|}
+\hline
+\rowcolor[HTML]{F1F1CE} 
+\multicolumn{4}{|c|}{\cellcolor[HTML]{F1F1CE}{\color[HTML]{333333} \textbf{Harmonogram czasu pracy}}} &
+  \textbf{Wykonanie} \\ \hline
+\rowcolor[HTML]{F1F1CE} 
+\multicolumn{1}{|c|}{\cellcolor[HTML]{F1F1CE}} &
+  \multicolumn{2}{c|}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}rozkład czasu\\ pracy\end{tabular}}} &
+  \cellcolor[HTML]{F1F1CE} &
+  \cellcolor[HTML]{F1F1CE} \\ \cline{2-3}
+\multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}Dzień\\ miesiąca\end{tabular}}}} &
+  \multicolumn{1}{c|}{\textbf{od}} &
+  \multicolumn{1}{c|}{\textbf{do}} &
+  \multirow{-3}{*}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}Razem\\ liczba\\ godzin\\ pracy\end{tabular}}} &
+  \multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{Zakres czynności}} \\[1.2em] \hline
+{% for commit in month.commits %}
+    \multicolumn{1}{|l|}{ {{commit.day}} } &
+    \multicolumn{1}{l|}{ {{commit.start}} } &
+    \multicolumn{1}{l|}{ {{commit.stop}} } &
+    \multicolumn{1}{l|}{ {{commit.hours}} } &
+    \multicolumn{1}{l|}{ {{commit.msg}} } \\ \hline
+{% endfor %}
+\end{tabular}
+\end{table}
+
+\vfill
+
+\begin{minipage}{4cm}
+............................
+
+\scriptsize{(Data i podpis studenta)}
+\end{minipage}
+\hfill
+\begin{minipage}{4cm}
+................................
+
+\scriptsize{(podpis opiekuna głównego)}
+\end{minipage}
+
+\vspace{5mm}
+
+\clearpage
+
+{% endfor %}
+
+\end{document}
