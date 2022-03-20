@@ -60,7 +60,7 @@ code {
 }
 
 .page-title{
-  font-size: 4em;
+  font-size: 3em;
   margin: 30px;
   padding: 0;
   text-align: center;
@@ -82,6 +82,9 @@ code {
 @media screen and (min-width: 700px) {
   .simple-form{
     max-width: 600px;
+  }
+  .page-title{
+    font-size: 2em;
   }
 }
   

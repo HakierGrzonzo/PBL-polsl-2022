@@ -1,11 +1,37 @@
 import { useState, useEffect } from "react";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { DataService, Measurement } from "../api";
+import { DataService, FilesService, Measurement, Location } from "../api";
 
 export default function MobileEdit() {
   const { enqueueSnackbar } = useSnackbar();
   const [measurements, setMeasurements] = useState<Measurement[]>();
+
+  function showLocalization(localization: Location) {
+    window.open(`https://www.google.com/maps/place/${localization.latitude} ${localization.longitude}`, "_blank");
+  }
+
+  function send(id: number) {
+    const input = document.getElementById(`${id}`) as HTMLInputElement;
+    if(!input || !input.files) {
+      return;
+    }
+
+    for (const file of input.files) {
+      let body = {
+        uploaded_file: file
+      }
+      FilesService.uploadNewFileApiFilesPost(id, body).then(_ => {
+        enqueueSnackbar("The file was added", {
+          variant: "success",
+        });
+      }).catch(_ => {
+        enqueueSnackbar(`Ops! We have some error with file upload check your internet connection or login again`, {
+          variant: "error",
+        });
+      });
+    }      
+  }
 
   async function fetchData() {
     const measures = await DataService.getAllMeasurementsApiDataGet();
@@ -29,7 +55,7 @@ export default function MobileEdit() {
           <h1 className='page-title'>measurements</h1>
           {measurements.map((measurement: Measurement) => {
             return (
-              <div className='measurement' key={measurement.measurement_id}>
+              <div className='measurement' key={measurement.measurement_id} >
                 <div className='measurement-row'>
                   <Typography variant="h6">title:</Typography>
                   <div className='w-24' />
@@ -60,13 +86,17 @@ export default function MobileEdit() {
                   <div className='w-24' />
                   <Typography variant="body1">{measurement.location.time}</Typography>
                 </div>
-                <div className='measurement-row'>
+                <div onClick={() => showLocalization(measurement.location)} className='measurement-row cursor-pointer'>
                   <Typography variant="h6">localization:</Typography>
                   <div className='w-24' />
-                  <Typography variant="body1">{measurement.location.latitude} {measurement.location.longitude}</Typography>
+                  <Typography variant="body1">
+                    {measurement.location.latitude} {measurement.location.longitude}</Typography>
+                </div>
+                <div className='measurement-row'>
+                  <input type="file" name="multipleFiles" multiple id={String(measurement.measurement_id)} />
                 </div>
                 <div className='measurement-row-last'>
-                  <input type="file" name="multipleFiles" multiple />
+                  <Button type="submit" variant="contained" onClick={() => send(measurement.measurement_id)} >send</Button>
                   <Button type="submit" variant="contained" 
                     href={`/editor/mobile_edit/${measurement.measurement_id}`} target="_blank" >edit</Button>
                 </div>

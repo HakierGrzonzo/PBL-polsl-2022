@@ -9,7 +9,6 @@ import { getImageLink } from "../utils/fileUtils";
 
 export default function MobileEdit() {
   const pathVariable: any = useParams();
-  // console.log(pathVariable.id);
   const { enqueueSnackbar } = useSnackbar();
   const [chosenTags, setChosenTags] = useState<string[]>();
   const [measurement, setMeasurement] = useState<Measurement>();
