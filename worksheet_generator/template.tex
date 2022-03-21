@@ -101,7 +101,8 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{1pt}
 
-
+\usepackage{array}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
 
 \begin{document}
 
@@ -113,12 +114,13 @@
 \vspace{-5mm}
 
 \begin{table}[H]
+\centering
 \scriptsize
-\begin{tabular}{|cllc|c|}
+\begin{tabular}{|cllc|L|}
 \hline
 \rowcolor[HTML]{F1F1CE} 
 \multicolumn{4}{|c|}{\cellcolor[HTML]{F1F1CE}{\color[HTML]{333333} \textbf{Harmonogram czasu pracy}}} &
-  \textbf{Wykonanie} \\ \hline
+    \multicolumn{1}{c|}{\textbf{Wykonanie}} \\ \hline
 \rowcolor[HTML]{F1F1CE} 
 \multicolumn{1}{|c|}{\cellcolor[HTML]{F1F1CE}} &
   \multicolumn{2}{c|}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}rozkład czasu\\ pracy\end{tabular}}} &
@@ -128,13 +130,14 @@
   \multicolumn{1}{c|}{\textbf{od}} &
   \multicolumn{1}{c|}{\textbf{do}} &
   \multirow{-3}{*}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}Razem\\ liczba\\ godzin\\ pracy\end{tabular}}} &
-  \multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{Zakres czynności}} \\[1.2em] \hline
+      \multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{Zakres
+    czynności}}} \\[1.2em] \hline
 {% for commit in month.commits %}
     \multicolumn{1}{|l|}{ {{commit.day}} } &
     \multicolumn{1}{l|}{ {{commit.start}} } &
     \multicolumn{1}{l|}{ {{commit.stop}} } &
     \multicolumn{1}{l|}{ {{commit.hours}} } &
-    \multicolumn{1}{l|}{ {{commit.msg}} } \\ \hline
+    {{commit.msg}} \\ \hline
 {% endfor %}
 \end{tabular}
 \end{table}
