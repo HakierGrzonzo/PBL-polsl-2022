@@ -8,4 +8,5 @@
 /dataSources/
 /dataSources.local.xml
 /httpRequests/
+.idea
 /ionic/editor/android
