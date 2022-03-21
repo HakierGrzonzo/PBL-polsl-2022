@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.responses import FileResponse, Response
 from typing import Tuple
 from fastapi_redis_cache import cache_one_day, cache
-from .models import FileRefrence, User
+from .models import FileReference, User
 from .database import get_async_session, Files, Measurements
 from fastapi.routing import APIRouter
 from os import environ, unlink
@@ -24,8 +24,8 @@ class FileRouter:
         self.fastapi_users = fastapi_users
         self.prefix = prefix
 
-    def _table_to_file_refrence(self, source: Files) -> FileRefrence:
-        return FileRefrence(
+    def _table_to_file_refrence(self, source: Files) -> FileReference:
+        return FileReference(
             file_id=source.id,
             owner=source.author_id,
             mime=source.mime,
@@ -46,7 +46,7 @@ class FileRouter:
 
     async def insert_file_to_db(
         self, session: AsyncSession, user: User, file: Files
-    ) -> FileRefrence:
+    ) -> FileReference:
         measurement = await session.execute(
             select(Measurements).filter(Measurements.id == file.measurement_id)
         )
@@ -86,25 +86,25 @@ class FileRouter:
     def get_router(self) -> APIRouter:
         router = APIRouter()
 
-        @router.get("/", response_model=list[FileRefrence])
+        @router.get("/", response_model=list[FileReference])
         @cache(expire=120)
         async def get_all_files(
             session: AsyncSession = Depends(get_async_session),
             _: User = Depends(self.fastapi_users.current_user()),
-        ) -> list[FileRefrence]:
+        ) -> list[FileReference]:
             return await self.get_all_files(session)
 
-        @router.get("/mine", response_model=list[FileRefrence])
+        @router.get("/mine", response_model=list[FileReference])
         async def get_my_files(
             session: AsyncSession = Depends(get_async_session),
             user: User = Depends(self.fastapi_users.current_user()),
-        ) -> list[FileRefrence]:
+        ) -> list[FileReference]:
             return await self.get_my_files(session, user)
 
         @router.post(
             "/",
             status_code=201,
-            response_model=FileRefrence,
+            response_model=FileReference,
             responses={
                 404: {
                     "model": ErrorModel,
@@ -121,7 +121,7 @@ class FileRouter:
             uploaded_file: UploadFile = File(...),
             session: AsyncSession = Depends(get_async_session),
             user: User = Depends(self.fastapi_users.current_user()),
-        ) -> FileRefrence:
+        ) -> FileReference:
             """
             Upload a file and associate it with a measurement.
             """

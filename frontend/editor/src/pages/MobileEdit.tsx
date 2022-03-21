@@ -1,56 +1,49 @@
 import { useState, useEffect } from "react";
-import { Autocomplete, Button, TextField, Typography } from "@mui/material";
+import { Autocomplete, Button, CircularProgress, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
 import { CreateMeasurement, DataService, Measurement } from "../api";
 import AlertDialogSlide from "../components/dialog";
 import { tags } from "../interfaces/tags";
+import { getImageLink } from "../utils/fileUtils";
 
 export default function MobileEdit() {
   const pathVariable: any = useParams();
-  // console.log(pathVariable.id);
   const { enqueueSnackbar } = useSnackbar();
   const [chosenTags, setChosenTags] = useState<string[]>();
   const [measurement, setMeasurement] = useState<Measurement>();
   function handleSubmit(e: any) {
     e.preventDefault();
-    if (!e.target.elements.title.value || !e.target.elements.description.value) {
-      enqueueSnackbar("Please fill at least title, latitude and longitude", { variant: "error" });
+    if (!e.target.elements.latitude.value || !e.target.elements.laeq.value || !e.target.elements.longitude.value) {
+      enqueueSnackbar("Please fill at least laeq, latitude and longitude", { variant: "error" });
       return;
     }
 
-    // console.log(new Date().toLocaleString(),
-    //  e.target.elements.title.value,
-    //  e.target.elements.description.value,
-    //  chosenTags);
-    navigator.geolocation.getCurrentPosition((position) => {
-      let latitude = position.coords.latitude;
-      let longitude = position.coords.longitude;
-      if (latitude && longitude && window) {
-        const measurementBody: CreateMeasurement = {
-          title: e.target.elements.title.value,
-          description: e.target.elements.description.value,
-          notes: e.target.elements.notes.value,
-          tags: chosenTags || [],
-          location: {
-            latitude,
-            longitude,
-            time: String(measurement?.location.time)
-          }
-        };
-        DataService.editMeasurementApiDataIdPatch(pathVariable.id, measurementBody).then(_ => {
-          enqueueSnackbar("The measurement was edited", {
-            variant: "success",
-          });
-        }).catch(_ => {
-          //console.log(err);
-        });
+    const measurementBody: CreateMeasurement = {
+      title: e.target.elements.title.value,
+      description: e.target.elements.description.value,
+      notes: e.target.elements.notes.value,
+      laeq: e.target.elements.laeq.value || 0,
+      tags: chosenTags || [],
+      location: {
+        latitude: e.target.elements.latitude.value,
+        longitude: e.target.elements.longitude.value,
+        time: String(measurement?.location.time)
       }
+    };
+    DataService.editMeasurementApiDataIdPatch(pathVariable.id, measurementBody).then(_ => {
+      enqueueSnackbar("The measurement was edited", {
+        variant: "success",
+      });
+    }).catch(_ => {
+      enqueueSnackbar("Ops! We have some error with measurement edit check your internet connection or login again", {
+        variant: "error",
+      });
     });
   }
 
   async function fetchData() {
-    const mess = await DataService.getOneMeasurmentApiDataIdGet(pathVariable.id);
+    const mess = await DataService.getOneMeasurementApiDataIdGet(pathVariable.id);
     if (!mess) {
       enqueueSnackbar("Measurement not found", { variant: "error" });
       return;
@@ -67,17 +60,27 @@ export default function MobileEdit() {
 
 
   function deleteMeasurement() {
-    //console.log("deleteMeasurement");
+    DataService.deleteMeasurementApiDataIdDelete(pathVariable.id).then(_ => {
+      enqueueSnackbar("The measurement was deleted", {
+        variant: "success",
+      });
+      window.history.pushState({}, "", "/editor/pc");
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    }).catch(_ => {
+      enqueueSnackbar("Ops! We have some error check your internet connection or login again", {
+        variant: "error",
+      });
+    });
   }
 
   return (
     <div>
       {!measurement
-        ? <div>Loading...</div>
+        ? <CircularProgress color='info' sx={{ margin: "48vh 0 0 48.5%" }} />
         :
-        <form className='flex-col p-8 text-center min-h-screen justify-evenly flex max-w-lg m-auto' onSubmit={handleSubmit}>
+        <form className='flex-col simple-form text-center min-h-screen justify-evenly flex m-auto' onSubmit={handleSubmit}>
           <Typography variant='h4' className='mb-4'>
-                        edit your location
+            edit your location
           </Typography>
           <TextField
             id="title"
@@ -104,8 +107,9 @@ export default function MobileEdit() {
             id="laeq"
             label="laeq"
             margin="normal"
+            type={"number"}
             className='w-full'
-            // defaultValue={measurement.laeq}
+            defaultValue={measurement.laeq}
           />
           <TextField
             id="latitude"
@@ -129,6 +133,9 @@ export default function MobileEdit() {
             className='w-full'
             defaultValue={measurement.location.longitude}
           />
+          <figure className='flex flex-col items-center justify-center'>
+            <img src={getImageLink(measurement.files)} alt="measurement" className='w-full h-64' />
+          </figure>
           <Autocomplete
             multiple
             id="tags-autocomplete"

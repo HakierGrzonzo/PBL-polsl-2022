@@ -49,10 +49,42 @@ code {
   border-bottom: 1px solid #056e3d;
 }
 
+.measurement-row-last{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 14px auto;
+  padding: 0;
+}
+
 .page-title{
-  font-size: 4em;
+  font-size: 3em;
   margin: 30px;
   padding: 0;
   text-align: center;
   width: 100%;
 }
+
+.simple-form{
+  max-width: 80%;
+}
+
+.simple-form > * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+}
+
+@media screen and (min-width: 700px) {
+  .simple-form{
+    max-width: 600px;
+  }
+  .page-title{
+    font-size: 2em;
+  }
+}
+  

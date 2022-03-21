@@ -15,7 +15,7 @@ export default function Login() {
       username: e.target.elements.username.value,
       password: e.target.elements.password.value,
     };
-    AuthService.authCookieLoginApiAuthLoginPost(formData).then(_ => {
+    AuthService.authCookieLoginApiCookieLoginPost(formData).then(_ => {
       enqueueSnackbar("Login successfully!", {
         variant: "success",
       });
@@ -25,11 +25,11 @@ export default function Login() {
       window.dispatchEvent(new PopStateEvent("popstate"));
     }).catch(_ => {
       enqueueSnackbar("We have problem with login", { variant: "error" });
-      //console.log(err);
     });
   }
+
   return (
-    <form className='flex-col p-8 text-center min-h-screen justify-evenly flex max-w-lg m-auto'
+    <form className='flex-col simple-form text-center min-h-screen justify-evenly flex m-auto'
       onSubmit={handleSubmit}>
       <Typography variant='h4' className='mb-4'>
         Login

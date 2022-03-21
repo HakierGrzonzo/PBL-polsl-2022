@@ -11,7 +11,7 @@ from .models import (
     CreateMeasurement,
     User,
     UpdateMeasurement,
-    FileRefrence,
+    FileReference,
 )
 from .database import get_async_session, Measurements
 from fastapi.routing import APIRouter
@@ -38,7 +38,7 @@ class MeasurementRouter:
             laeq=source.laeq or 0,
             files=list(
                 [
-                    FileRefrence(
+                    FileReference(
                         file_id=x.id,
                         owner=x.author_id,
                         mime=x.mime,
