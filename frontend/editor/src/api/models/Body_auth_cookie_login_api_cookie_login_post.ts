@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type Body_auth_cookie_login_api_auth_login_post = {
+export type Body_auth_cookie_login_api_cookie_login_post = {
     grant_type?: string;
     username: string;
     password: string;

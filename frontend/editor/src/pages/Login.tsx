@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Button, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { AuthService } from "../api";
@@ -16,7 +15,7 @@ export default function Login() {
       username: e.target.elements.username.value,
       password: e.target.elements.password.value,
     };
-    AuthService.authCookieLoginApiAuthLoginPost(formData).then(_ => {
+    AuthService.authCookieLoginApiCookieLoginPost(formData).then(_ => {
       enqueueSnackbar("Login successfully!", {
         variant: "success",
       });
