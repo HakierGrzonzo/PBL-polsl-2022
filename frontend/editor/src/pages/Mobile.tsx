@@ -1,7 +1,7 @@
 import { Autocomplete, Button, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
-import { CreateMeasurement, DataService } from "../api";
+import { CreateMeasurement, DataService, FilesService } from "../api";
 import AlertDialogSlide from "../components/dialog";
 import { tags } from "../interfaces/tags";
 
@@ -17,11 +17,6 @@ export default function Mobile() {
       return;
     }
 
-    //console.log(new Date().toLocaleString(),
-    //  e.target.elements.title.value,
-    //  e.target.elements.description.value,
-    //  e.target.elements.file.files[0],
-    //  chosenTags);
     navigator.geolocation.getCurrentPosition((position) => {
       let latitude = position.coords.latitude;
       let longitude = position.coords.longitude;
@@ -32,6 +27,7 @@ export default function Mobile() {
           title: e.target.elements.title.value,
           description: e.target.elements.description.value,
           notes: e.target.elements.notes.value,
+          laeq: e.target.elements.laeq.value || 0,
           tags: chosenTags || [],
           location: {
             latitude,
@@ -43,14 +39,25 @@ export default function Mobile() {
           enqueueSnackbar("The measurement was added", {
             variant: "success",
           });
+          let body = {
+            uploaded_file: e.target.elements.file.files[0],
+          }
+          FilesService.uploadNewFileApiFilesPost(res.measurement_id, body).then(_ => {
+            enqueueSnackbar("The file was added", {
+              variant: "success",
+            });
+          }).catch(_ => {
+            enqueueSnackbar(`Ops! We have some error with file upload check your internet connection or login again`, {
+              variant: "error",
+            });
+          });
           // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
           window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, "_blank"); // for google maps
           setPreviousId(res.measurement_id);
         }).catch(_ => {
-          enqueueSnackbar("Ops! We have some error check your internet connection or login again", {
+          enqueueSnackbar("Ops! We have some error with measurement upload check your internet connection or login again", {
             variant: "error",
           });
-          //console.log(err);
         });
       }
     });
@@ -62,7 +69,7 @@ export default function Mobile() {
   }
 
   return (
-    <form className='flex-col p-8 text-center min-h-screen justify-evenly flex max-w-lg m-auto' onSubmit={handleSubmit}>
+    <form className='flex-col simple-form text-center min-h-screen justify-evenly flex m-auto' onSubmit={handleSubmit}>
       <Typography variant='h4' className='mb-4'>
         Add your location
       </Typography>
