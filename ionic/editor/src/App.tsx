@@ -36,6 +36,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 
+
 setupIonicReact();
 
 export default function App (){
@@ -48,10 +49,13 @@ export default function App (){
             <Login />
           </Route>
           <Route exact path="/editor/add">
-            {/*<AddMeasurement />*/}
+            <AddMeasurement />
+          </Route>
+          <Route exact path="/editor/all/">
+            <AllMeasurements />
           </Route>
           <Route exact path="/editor/edit/:id">
-            {/*<EditMeasurement />*/}
+            <EditMeasurement />
           </Route>
           <Route exact path="/">
             <Redirect to="/editor/login" />
@@ -64,11 +68,11 @@ export default function App (){
           </IonTabButton>
           <IonTabButton tab="add" href="/editor/add">
             <IonIcon icon={addCircleOutline} />
-            <IonLabel>add</IonLabel>
+            <IonLabel>add new</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="edit" href="/editor/edit/5">
+          <IonTabButton tab="all" href="/editor/all">
             <IonIcon icon={colorWandOutline} />
-            <IonLabel>edit</IonLabel>
+            <IonLabel>show all</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
