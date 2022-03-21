@@ -1,5 +1,11 @@
 /local/
-/ionic/
 /files/*
 *.pyc
 /db
+
+/shelf/
+/workspace.xml
+/dataSources/
+/dataSources.local.xml
+/httpRequests/
+/ionic/editor/android
