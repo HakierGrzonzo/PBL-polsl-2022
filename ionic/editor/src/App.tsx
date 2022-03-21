@@ -11,7 +11,10 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { addCircleOutline, colorWandOutline, lockClosedOutline } from 'ionicons/icons';
-
+import Login from './pages/Login';
+import AddMeasurement from './pages/AddMeasurement';
+import EditMeasurement from './pages/EditMeasurement';
+import AllMeasurements from './pages/AllMeasurements';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -35,13 +38,14 @@ import './theme/variables.css';
 
 setupIonicReact();
 
-const App: React.FC = () => (
+export default function App (){
+  return(
   <IonApp>
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
           <Route exact path="/editor/login">
-            {/*<Login />*/}
+            <Login />
           </Route>
           <Route exact path="/editor/add">
             {/*<AddMeasurement />*/}
@@ -70,6 +74,6 @@ const App: React.FC = () => (
       </IonTabs>
     </IonReactRouter>
   </IonApp>
-);
+  );
+}
 
-export default App;

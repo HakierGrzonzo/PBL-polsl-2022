@@ -1,0 +1,33 @@
+.login-title{
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    margin: 0 auto;  
+
+}
+
+.login-form > * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.loading{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
