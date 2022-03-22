@@ -133,9 +133,17 @@ export default function MobileEdit() {
             className='w-full'
             defaultValue={measurement.location.longitude}
           />
-          <figure className='flex flex-col items-center justify-center'>
-            <img src={getImageLink(measurement.files)} alt="measurement" className='w-full h-64' />
-          </figure>
+          {getImageLink(measurement.files) ?
+            <figure className='flex flex-col items-center justify-center'>
+              <img src={getImageLink(measurement.files)} alt="measurement" className='w-full h-64' />
+            </figure>
+            :
+            <div className='flex flex-col items-center justify-center'>
+              <Typography variant='h5'>
+                no image
+              </Typography>
+            </div>
+          }
           <Autocomplete
             multiple
             id="tags-autocomplete"

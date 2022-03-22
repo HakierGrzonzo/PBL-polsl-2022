@@ -104,7 +104,7 @@ export default function Mobile() {
         id="file"
         type="file"
       />
-      <label htmlFor="file">
+      <label htmlFor="file" className="image-input">
         <Button component="span">
           Image
         </Button>
@@ -134,9 +134,7 @@ export default function Mobile() {
         buttonText="report measurement"
         callback={report} />
       <br />
-      {window.outerWidth > 800 && 
-      <Button type="submit" variant="contained" id="submit" href="/editor/pc" >back to pc</Button>
-      }
+      
     </form>
   );
 }
