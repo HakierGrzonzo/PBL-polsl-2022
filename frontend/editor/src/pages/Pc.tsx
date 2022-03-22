@@ -93,6 +93,11 @@ export default function MobileEdit() {
                     {measurement.location.latitude} {measurement.location.longitude}</Typography>
                 </div>
                 <div className='measurement-row'>
+                  <Typography variant="h6">files:</Typography>
+                  <div className='w-24' />
+                  <Typography variant="body1">{measurement.files.map(file => file.original_name + ", ")}</Typography>
+                </div>
+                <div className='measurement-row'>
                   <input type="file" name="multipleFiles" multiple id={String(measurement.measurement_id)} />
                 </div>
                 <div className='measurement-row-last'>
