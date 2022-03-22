@@ -21,11 +21,11 @@ export default function MobileEdit() {
       let body = {
         uploaded_file: file
       }
-      FilesService.uploadNewFileApiFilesPost(id, body).then(_ => {
+      FilesService.uploadNewFileApiFilesPost(id, body).then(() => {
         enqueueSnackbar("The file was added", {
           variant: "success",
         });
-      }).catch(_ => {
+      }).catch(() => {
         enqueueSnackbar(`Ops! We have some error with file upload check your internet connection or login again`, {
           variant: "error",
         });
@@ -34,7 +34,7 @@ export default function MobileEdit() {
   }
 
   async function fetchData() {
-    const measures = await DataService.getAllMeasurementsApiDataGet();
+    const measures = await DataService.getUsersMeasurementsApiDataMineGet();
     if (measures.length === 0 || !measures) {
       enqueueSnackbar("Measurement not found", { variant: "error" });
       return;
