@@ -3,3 +3,11 @@
 /files/*
 *.pyc
 /db
+
+/shelf/
+/workspace.xml
+/dataSources/
+/dataSources.local.xml
+/httpRequests/
+.idea
+/ionic/editor/android

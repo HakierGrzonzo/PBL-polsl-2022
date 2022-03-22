@@ -18,7 +18,7 @@ export default function MobileEdit() {
       enqueueSnackbar("Please fill at least laeq, latitude and longitude", { variant: "error" });
       return;
     }
-
+  
     const measurementBody: CreateMeasurement = {
       title: e.target.elements.title.value,
       description: e.target.elements.description.value,
@@ -144,7 +144,7 @@ export default function MobileEdit() {
             onChange={(event, value) => {
               setChosenTags(value.map((option) => option));
             }}
-            defaultValue={measurement.tags}
+            defaultValue={measurement.tags.filter((tag) => tags.includes(tag))}
             filterSelectedOptions
             renderInput={(params) => (
               <TextField
@@ -160,6 +160,9 @@ export default function MobileEdit() {
             communicate="are you sure you want to delete this measurement?"
             buttonText="delete measurement"
             callback={deleteMeasurement} />
+          {window.outerWidth > 800 && 
+            <Button type="submit" variant="contained" id="submit" href="/editor/pc" >back to pc</Button>
+          }
           <br />
         </form>
       }
