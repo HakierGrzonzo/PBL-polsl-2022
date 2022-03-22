@@ -21,8 +21,14 @@ export default function Login() {
       });
       // go to /editor/mobile
       //window.location.href = '/editor/mobile'; with refresh 
-      window.history.pushState({}, "", "/editor/mobile");
-      window.dispatchEvent(new PopStateEvent("popstate"));
+      if(window.outerWidth < 600) {
+        window.history.pushState({}, "", "/editor/mobile");
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      } 
+      else {
+        window.history.pushState({}, "", "/editor/pc");
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      }
     }).catch(() => {
       enqueueSnackbar("We have problem with login", { variant: "error" });
     });
