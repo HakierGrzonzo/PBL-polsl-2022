@@ -3,3 +3,7 @@
 /files/*
 *.pyc
 /db
+*.log
+*.pdf
+*.aux
+*.out
