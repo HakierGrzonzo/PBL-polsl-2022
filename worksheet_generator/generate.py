@@ -1,6 +1,6 @@
 import sys
 import json
-from datetime import datetime
+from datetime import date, timedelta
 from jinja2 import Template
 from collections import defaultdict
 from os import mkdir
@@ -11,50 +11,78 @@ badwords = ["create", "update", "merge", "initial"]
 
 months = ["Marzec", "Kwiecień", "Maj", "Czerwiec"]
 
+start = date(2022, 3, 1)
+end = date(2022, 6, 30)
+
+hours = 320
+
+days = (end - start).days + 1
+
 log = json.load(sys.stdin)
 commits_by_author = defaultdict(lambda: list())
 
 for commit in log:
     name = " ".join(commit["author"].split(" ")[:-1]).strip()
-    if not any(x in commit["message"].lower() for x in badwords):
-        commits_by_author[name].append(commit)
+    commit_msg = commit["message"]
+    commit_msg = commit_msg[0].upper() + commit_msg[1:]
+    if (
+        not any(x in commit_msg.lower() for x in badwords)
+        or commit_msg in commits_by_author[name]
+    ):
+        commits_by_author[name].append(commit_msg)
 
 template = Template(open("template.tex").read())
 
 for author, commits in commits_by_author.items():
-    commits = list(reversed(commits))
-    commits_per_month = len(commits) // len(months)
-    commit_ranges = list(
-        [
-            range(i * commits_per_month, commits_per_month * (i + 1))
-            for i in range(0, 3)
-        ]
-    ) + [range(commits_per_month * 3, len(commits))]
-    data = [
-        {
-            "name": months[i],
-            "commits": [
+    dir_name = author.replace(" ", "_")
+    time_per_commit = list([timedelta(hours=1) for _ in range(0, len(commits))])
+    hours_distributed = len(commits)
+    while hours_distributed < hours:
+        random_index = random.randint(0, len(commits) - 1)
+        time_per_commit[random_index] += timedelta(hours=1)
+        hours_distributed += 1
+    days_to_log = {
+        start + timedelta(days=x): (commit_msg, time)
+        for x, commit_msg, time in zip(
+            sorted(random.sample(range(0, days), len(commits))),
+            reversed(commits),
+            time_per_commit,
+        )
+    }
+    data = []
+    last_month = {"month_id": start.month, "name": months[0], "commits": []}
+    for day in [start + timedelta(days=x) for x in range(0, days)]:
+        if last_month["month_id"] != day.month:
+            data.append(last_month)
+            last_month = {
+                "month_id": day.month,
+                "name": months[day.month - start.month],
+                "commits": [],
+            }
+        if (val := days_to_log.get(day)) is not None:
+            msg, time = val
+            last_month["commits"].append(
                 {
-                    "day": str(day),
+                    "day": day.day,
                     "start": r"\#",
                     "stop": r"\#",
-                    "hours": r"\#",
-                    "msg": commits[j]["message"].replace("_", r"\_"),
+                    "hours": round(time.total_seconds() // 3600),
+                    "msg": msg,
                 }
-                for j, day in zip(
-                    r, sorted(random.sample(range(1, 31), len(r)))
-                )
-            ],
-        }
-        for i, r in enumerate(commit_ranges)
-    ]
-    dir_name = author.replace(" ", "_")
+            )
+        else:
+            last_month["commits"].append(
+                {
+                    "day": day.day,
+                }
+            )
+    data.append(last_month)
     try:
         mkdir(dir_name)
     except:
         pass
-    print(data)
-    subprocess.run(
+    p = subprocess.run(
         ["xelatex", f"-output-directory={dir_name}", "--"],
         input=template.render(author_name=author, data=data).encode(),
+        stdout=subprocess.PIPE,
     )

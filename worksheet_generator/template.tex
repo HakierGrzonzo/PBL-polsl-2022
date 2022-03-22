@@ -1,6 +1,6 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{inputenc}[utf8]
-\usepackage[margin=2cm, headheight=120pt, tmargin=160pt]{geometry}
+\usepackage[margin=2cm, headheight=140pt, tmargin=180pt]{geometry}
 \usepackage[polish]{babel}
 
 \usepackage{titlesec}
@@ -87,8 +87,8 @@
     \hrule
     
     \begin{flushleft}
-        \begin{tabular}{ r l }
-            Nazwa projektu PBL: & foobar \\
+        \begin{tabular}{ r L }
+            Nazwa projektu PBL: & Projektowanie komponentu akustycznego inteligentnego miasta z zastosowaniem koncepcji krajobrazu dźwiękowego i technologii mobilnych \\
             Imię i nazwisko studenta: & {{ author_name }} \\
             Wydział / Kierunek / Specjalność: & Matematyka Stosowana / Informatyka /
             brak \\
@@ -113,9 +113,11 @@
 \end{center}
 \vspace{-5mm}
 
+\vfill
+
 \begin{table}[H]
 \centering
-\scriptsize
+\footnotesize
 \begin{tabular}{|cllc|L|}
 \hline
 \rowcolor[HTML]{F1F1CE} 
@@ -134,8 +136,8 @@
     czynności}}} \\[1.2em] \hline
 {% for commit in month.commits %}
     \multicolumn{1}{|l|}{ {{commit.day}} } &
-    \multicolumn{1}{l|}{ {{commit.start}} } &
-    \multicolumn{1}{l|}{ {{commit.stop}} } &
+    \multicolumn{1}{c|}{ {{commit.start}} } &
+    \multicolumn{1}{c|}{ {{commit.stop}} } &
     \multicolumn{1}{l|}{ {{commit.hours}} } &
     {{commit.msg}} \\ \hline
 {% endfor %}
