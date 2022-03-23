@@ -3,6 +3,10 @@
 /files/*
 *.pyc
 /db
+*.log
+*.pdf
+*.aux
+*.out
 
 /shelf/
 /workspace.xml
