@@ -43,9 +43,6 @@ export default function MobileEdit() {
         });
     }
 
-
-
-
     useEffect(() => {
 
         async function fetchData() {
