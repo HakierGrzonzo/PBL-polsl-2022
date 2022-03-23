@@ -7,3 +7,16 @@ export function getImageLink(files: FileReference[]) {
     return image.link;
   }
 }
+
+export function getFilesTypes(files: FileReference[]) {
+  return files.map(file => file.mime);
+}
+
+export function checkFiContainAllFiles(files: FileReference[]) {
+  if(files.length < 2) {
+    return false;
+  }
+  const filesTypes = getFilesTypes(files).map(file => file.split("/")[0]);
+  return filesTypes.includes("image") && filesTypes.includes("audio") && filesTypes.includes("text");
+}
+

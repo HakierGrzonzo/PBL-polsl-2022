@@ -42,11 +42,11 @@ export default function Mobile() {
           let body = {
             uploaded_file: e.target.elements.file.files[0],
           }
-          FilesService.uploadNewFileApiFilesPost(res.measurement_id, body).then(_ => {
+          FilesService.uploadNewFileApiFilesPost(res.measurement_id, body).then(() => {
             enqueueSnackbar("The file was added", {
               variant: "success",
             });
-          }).catch(_ => {
+          }).catch(() => {
             enqueueSnackbar(`Ops! We have some error with file upload check your internet connection or login again`, {
               variant: "error",
             });
@@ -54,7 +54,7 @@ export default function Mobile() {
           // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
           window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, "_blank"); // for google maps
           setPreviousId(res.measurement_id);
-        }).catch(_ => {
+        }).catch(() => {
           enqueueSnackbar("Ops! We have some error with measurement upload check your internet connection or login again", {
             variant: "error",
           });
@@ -104,7 +104,7 @@ export default function Mobile() {
         id="file"
         type="file"
       />
-      <label htmlFor="file">
+      <label htmlFor="file" className="image-input">
         <Button component="span">
           Image
         </Button>
@@ -134,6 +134,7 @@ export default function Mobile() {
         buttonText="report measurement"
         callback={report} />
       <br />
+      
     </form>
   );
 }

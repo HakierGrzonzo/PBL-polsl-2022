@@ -79,6 +79,10 @@ code {
   margin-bottom: 3vh;
 }
 
+.image-input{
+  margin: 1.5vh auto 0 auto;
+}
+
 @media screen and (min-width: 700px) {
   .simple-form{
     max-width: 600px;

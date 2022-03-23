@@ -1,6 +1,7 @@
 import { Button, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { AuthService } from "../api";
+import mobileCheck from "../utils/mobileCheck";
 
 export default function Login() {
   const { enqueueSnackbar } = useSnackbar();
@@ -15,15 +16,19 @@ export default function Login() {
       username: e.target.elements.username.value,
       password: e.target.elements.password.value,
     };
-    AuthService.authCookieLoginApiCookieLoginPost(formData).then(_ => {
+    AuthService.authCookieLoginApiCookieLoginPost(formData).then(() => {
       enqueueSnackbar("Login successfully!", {
         variant: "success",
       });
-      // go to /editor/mobile
-      //window.location.href = '/editor/mobile'; with refresh 
-      window.history.pushState({}, "", "/editor/mobile");
-      window.dispatchEvent(new PopStateEvent("popstate"));
-    }).catch(_ => {
+      if(mobileCheck()) {
+        window.history.pushState({}, "", "/editor/mobile");
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      } 
+      else {
+        window.history.pushState({}, "", "/editor/pc");
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      }
+    }).catch(() => {
       enqueueSnackbar("We have problem with login", { variant: "error" });
     });
   }
