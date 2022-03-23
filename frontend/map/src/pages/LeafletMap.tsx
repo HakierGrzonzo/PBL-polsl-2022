@@ -20,9 +20,9 @@ export default function LeafletMap() {
     setMeasurements(measures);
   }
   
-    useEffect(() => {
-      fetchData();
-    }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <MapContainer className="fullHeight" center={localization} zoom={13}>
@@ -32,10 +32,10 @@ export default function LeafletMap() {
       />
       {measurements &&
       measurements.map((measurement: Measurement) => {
-            return (
-              <LeafletMarker measurement={measurement} />
-            );
-        })}
+        return (
+          <LeafletMarker measurement={measurement} key={measurement.measurement_id} />
+        );
+      })}
     </MapContainer>
   )
 }

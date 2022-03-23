@@ -14,6 +14,7 @@
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
     "axios": "^0.26.1",
+    "eslint": "^8.11.0",
     "leaflet": "^1.7.1",
     "lodash": "^4.17.21",
     "notistack": "^2.0.3",
@@ -28,7 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "yarn eslint . --ext .tsx,.jsx",
+    "lint-and-fix": "yarn eslint . --ext .tsx,.jsx --fix"
   },
   "eslintConfig": {
     "extends": [
