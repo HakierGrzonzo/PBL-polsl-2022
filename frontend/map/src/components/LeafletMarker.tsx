@@ -6,6 +6,7 @@ import { getImageLink } from '../utils/fileUtils';
 export default function LeafletMarker({measurement}:{measurement:Measurement}) {
   const {location, description, title, laeq, tags, files, measurement_id} = measurement;
   const loc:LatLng = new LatLng(location.latitude, location.longitude);
+  const image = getImageLink(files)
   return(
     <Marker position={loc} key={measurement_id+"M"}>
       <Popup>
@@ -14,9 +15,13 @@ export default function LeafletMarker({measurement}:{measurement:Measurement}) {
           <p>{description}</p>
           <p>{laeq}</p>
           <p>{tags}</p>
-          <figure className='wi'>
-            <img src={`https://pbl.grzegorzkoperwas.site`+getImageLink(files)} alt={title}/>
-          </figure>
+          {( image !== null ?
+            <figure className='wi'>
+              <img src={`${image}?optimized=true`} alt={title}/>
+            </figure>
+            :
+            <p>no image</p>
+          )}
         </div>
       </Popup>
     </Marker>

@@ -6,6 +6,7 @@ export function getImageLink(files: FileReference[]) {
   if (image) {
     return image.link;
   }
+  return null
 }
 
 export function getFilesTypes(files: FileReference[]) {
