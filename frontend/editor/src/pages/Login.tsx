@@ -1,6 +1,7 @@
 import { Button, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { AuthService } from "../api";
+import mobileCheck from "../utils/mobileCheck";
 
 export default function Login() {
   const { enqueueSnackbar } = useSnackbar();
@@ -19,9 +20,7 @@ export default function Login() {
       enqueueSnackbar("Login successfully!", {
         variant: "success",
       });
-      // go to /editor/mobile
-      //window.location.href = '/editor/mobile'; with refresh 
-      if(window.outerWidth < 600) {
+      if(mobileCheck()) {
         window.history.pushState({}, "", "/editor/mobile");
         window.dispatchEvent(new PopStateEvent("popstate"));
       } 
