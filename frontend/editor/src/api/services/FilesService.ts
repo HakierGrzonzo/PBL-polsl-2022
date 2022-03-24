@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Body_upload_new_file_api_files__post } from '../models/Body_upload_new_file_api_files__post';
-import type { FileRefrence } from '../models/FileRefrence';
+import type { FileReference } from '../models/FileReference';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -12,10 +12,10 @@ export class FilesService {
 
     /**
      * Get All Files
-     * @returns FileRefrence Successful Response
+     * @returns FileReference Successful Response
      * @throws ApiError
      */
-    public static getAllFilesApiFilesGet(): CancelablePromise<Array<FileRefrence>> {
+    public static getAllFilesApiFilesGet(): CancelablePromise<Array<FileReference>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/files/',
@@ -27,13 +27,13 @@ export class FilesService {
      * Upload a file and associate it with a measurement.
      * @param measurementId 
      * @param formData 
-     * @returns FileRefrence Successful Response
+     * @returns FileReference Successful Response
      * @throws ApiError
      */
     public static uploadNewFileApiFilesPost(
 measurementId: number,
 formData: Body_upload_new_file_api_files__post,
-): CancelablePromise<FileRefrence> {
+): CancelablePromise<FileReference> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/files/',
@@ -51,10 +51,10 @@ formData: Body_upload_new_file_api_files__post,
 
     /**
      * Get My Files
-     * @returns FileRefrence Successful Response
+     * @returns FileReference Successful Response
      * @throws ApiError
      */
-    public static getMyFilesApiFilesMineGet(): CancelablePromise<Array<FileRefrence>> {
+    public static getMyFilesApiFilesMineGet(): CancelablePromise<Array<FileReference>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/files/mine',

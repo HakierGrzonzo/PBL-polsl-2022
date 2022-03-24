@@ -18,7 +18,7 @@ export default function MobileEdit() {
       enqueueSnackbar("Please fill at least laeq, latitude and longitude", { variant: "error" });
       return;
     }
-
+  
     const measurementBody: CreateMeasurement = {
       title: e.target.elements.title.value,
       description: e.target.elements.description.value,
@@ -133,9 +133,17 @@ export default function MobileEdit() {
             className='w-full'
             defaultValue={measurement.location.longitude}
           />
-          <figure className='flex flex-col items-center justify-center'>
-            <img src={getImageLink(measurement.files)} alt="measurement" className='w-full h-64' />
-          </figure>
+          {getImageLink(measurement.files) ?
+            <figure className='flex flex-col items-center justify-center'>
+              <img src={getImageLink(measurement.files)} alt="measurement" className='w-full h-64' />
+            </figure>
+            :
+            <div className='flex flex-col items-center justify-center'>
+              <Typography variant='h5'>
+                no image
+              </Typography>
+            </div>
+          }
           <Autocomplete
             multiple
             id="tags-autocomplete"
@@ -144,7 +152,7 @@ export default function MobileEdit() {
             onChange={(event, value) => {
               setChosenTags(value.map((option) => option));
             }}
-            defaultValue={measurement.tags}
+            defaultValue={measurement.tags.filter((tag) => tags.includes(tag))}
             filterSelectedOptions
             renderInput={(params) => (
               <TextField
@@ -160,6 +168,9 @@ export default function MobileEdit() {
             communicate="are you sure you want to delete this measurement?"
             buttonText="delete measurement"
             callback={deleteMeasurement} />
+          {window.outerWidth > 800 && 
+            <Button type="submit" variant="contained" id="submit" href="/editor/pc" >back to pc</Button>
+          }
           <br />
         </form>
       }

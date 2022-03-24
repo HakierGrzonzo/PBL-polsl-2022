@@ -1,0 +1,16 @@
+aiofiles==0.8.0
+alembic==1.7.6
+fastapi
+fastapi_users==9.2.5
+fastapi_users_db_sqlalchemy==2.0.4
+asyncpg==0.25.0
+pydantic==1.8.2
+SQLAlchemy==1.4.30
+uvicorn
+psycopg2
+fastapi-redis-cache-hakiergrzonzo==0.2.6
+pytest
+pytest-dependency
+pytest-async-sqlalchemy
+pytest-asyncio
+sqlalchemy_utils

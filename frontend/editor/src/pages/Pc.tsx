@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { DataService, FilesService, Measurement, Location } from "../api";
+import { checkFiContainAllFiles } from "../utils/fileUtils";
+import _ from 'lodash';
 
 export default function MobileEdit() {
   const { enqueueSnackbar } = useSnackbar();
@@ -21,11 +23,11 @@ export default function MobileEdit() {
       let body = {
         uploaded_file: file
       }
-      FilesService.uploadNewFileApiFilesPost(id, body).then(_ => {
+      FilesService.uploadNewFileApiFilesPost(id, body).then(() => {
         enqueueSnackbar("The file was added", {
           variant: "success",
         });
-      }).catch(_ => {
+      }).catch(() => {
         enqueueSnackbar(`Ops! We have some error with file upload check your internet connection or login again`, {
           variant: "error",
         });
@@ -34,7 +36,7 @@ export default function MobileEdit() {
   }
 
   async function fetchData() {
-    const measures = await DataService.getAllMeasurementsApiDataGet();
+    const measures = await DataService.getUsersMeasurementsApiDataMineGet();
     if (measures.length === 0 || !measures) {
       enqueueSnackbar("Measurement not found", { variant: "error" });
       return;
@@ -53,9 +55,12 @@ export default function MobileEdit() {
         :
         <div className='measurements'>
           <h1 className='page-title'>measurements</h1>
-          {measurements.map((measurement: Measurement) => {
+          {_.sortBy(measurements, (m:Measurement) => {
+            return checkFiContainAllFiles(m.files);
+          }).map((measurement: Measurement) => {
             return (
-              <div className='measurement' key={measurement.measurement_id} >
+              <div key={measurement.measurement_id}
+                className={checkFiContainAllFiles(measurement.files) ? "measurement bg-stone-800" : "measurement bg-stone-700" }>
                 <div className='measurement-row'>
                   <Typography variant="h6">title:</Typography>
                   <div className='w-24' />
@@ -91,6 +96,11 @@ export default function MobileEdit() {
                   <div className='w-24' />
                   <Typography variant="body1">
                     {measurement.location.latitude} {measurement.location.longitude}</Typography>
+                </div>
+                <div className='measurement-row'>
+                  <Typography variant="h6">files:</Typography>
+                  <div className='w-24' />
+                  <Typography variant="body1">{measurement.files.map(file => file.mime + ", ")}</Typography>
                 </div>
                 <div className='measurement-row'>
                   <input type="file" name="multipleFiles" multiple id={String(measurement.measurement_id)} />

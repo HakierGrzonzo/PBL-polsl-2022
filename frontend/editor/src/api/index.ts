@@ -7,11 +7,13 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { backend__errors__ErrorModel } from './models/backend__errors__ErrorModel';
-export type { Body_auth_cookie_login_api_auth_login_post } from './models/Body_auth_cookie_login_api_auth_login_post';
+export type { BearerResponse } from './models/BearerResponse';
+export type { Body_auth_cookie_login_api_cookie_login_post } from './models/Body_auth_cookie_login_api_cookie_login_post';
+export type { Body_auth_jwt_login_api_jwt_login_post } from './models/Body_auth_jwt_login_api_jwt_login_post';
 export type { Body_upload_new_file_api_files__post } from './models/Body_upload_new_file_api_files__post';
 export type { CreateMeasurement } from './models/CreateMeasurement';
 export type { fastapi_users__router__common__ErrorModel } from './models/fastapi_users__router__common__ErrorModel';
-export type { FileRefrence } from './models/FileRefrence';
+export type { FileReference } from './models/FileReference';
 export type { HTTPValidationError } from './models/HTTPValidationError';
 export type { Location } from './models/Location';
 export type { Measurement } from './models/Measurement';

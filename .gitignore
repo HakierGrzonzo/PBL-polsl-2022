@@ -1,7 +1,12 @@
 /local/
+/ionic/
 /files/*
 *.pyc
 /db
+*.log
+*.pdf
+*.aux
+*.out
 
 /shelf/
 /workspace.xml
@@ -10,3 +15,4 @@
 /httpRequests/
 .idea
 /ionic/editor/android
+/ionic/editor/ios

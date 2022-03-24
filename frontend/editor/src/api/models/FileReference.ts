@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type FileRefrence = {
+export type FileReference = {
     file_id: string;
     original_name: string;
     mime: string;
