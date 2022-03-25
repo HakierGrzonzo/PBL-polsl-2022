@@ -19,8 +19,8 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-    BASE: 'https://pbl.grzegorzkoperwas.site',
-    VERSION: '0.9.5',
+    BASE: '',
+    VERSION: '0.10-dev-compat',
     WITH_CREDENTIALS: false,
     CREDENTIALS: 'include',
     TOKEN: undefined,

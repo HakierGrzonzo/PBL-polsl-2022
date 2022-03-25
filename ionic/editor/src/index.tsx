@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { OpenAPI } from './api';
+
+OpenAPI.BASE="https://pbl.grzegorzkoperwas.site";
 
 ReactDOM.render(
   <React.StrictMode>

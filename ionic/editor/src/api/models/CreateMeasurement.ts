@@ -9,5 +9,6 @@ export type CreateMeasurement = {
     notes: string;
     description: string;
     title: string;
+    laeq: number;
     tags: Array<string>;
 };
