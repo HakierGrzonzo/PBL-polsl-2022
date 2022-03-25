@@ -1,23 +1,33 @@
-import { IonPage, IonContent, IonList, IonSpinner, IonLabel, IonItemDivider, IonHeader, IonTitle, IonToolbar } from '@ionic/react';
+import { IonPage, IonContent, IonList, IonSpinner, IonLabel, IonItemDivider, IonHeader, IonTitle, IonToolbar, IonButton } from '@ionic/react';
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Measurement, DataService } from '../api';
 import NoData from '../components/NoData';
+import showInfo from '../components/Notification';
 
 export default function AllMeasurements() {
     const [measurements, setMeasurements] = useState<Measurement[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-
+    const location = useLocation();
+    
     useEffect(() => {
         async function fetchData() {
-            DataService.getAllMeasurementsApiDataGet().then(res => {
+            DataService.getUsersMeasurementsApiDataMineGet().then(res => {
                 setMeasurements(res);
                 setIsLoading(false);
             }).catch(err => {
-                console.log(err);
+                showInfo('Ops! We have some error check your internet connection or login again', 'error');
             });
         }
-        fetchData();
-    }, []);
+        if(location.pathname.includes('/all')){
+            fetchData();
+        }
+    }, [location]);
+    
+    function handleClikc(id: number) {
+        window.history.pushState({}, '', `editor/edit/${id}`);
+        window.dispatchEvent(new PopStateEvent('popstate'));
+    }
 
     const renderMeasurements = () => {
         if(measurements.length === 0) {
@@ -32,10 +42,12 @@ export default function AllMeasurements() {
                                 <h2>{measurement.title}</h2>
                                 <h3>{measurement.description}</h3>
                                 <p>{measurement.notes}</p>
+                                <p>{measurement.laeq}</p>
                                 <p>{measurement.tags.join(', ')}</p>
                                 <p>{measurement.location.latitude}</p>
                                 <p>{measurement.location.longitude}</p>
                                 <p>{measurement.location.time}</p>
+                                <IonButton color="primary" onClick={() => handleClikc(measurement.measurement_id)}>Edit</IonButton>
                             </IonLabel>
                     </IonItemDivider>
                     );
