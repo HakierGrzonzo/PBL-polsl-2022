@@ -4,8 +4,11 @@ import showInfo from '../components/Notification';
 import './login.css';
 
 export default function Login() {
-
-    function handleSubmit(e: any) {
+    function allowToster(){
+        present("",1); // this is to allow the toaster to show
+    }
+    const [present, dismiss] = useIonToast();
+    async function handleSubmit(e: any) {
         e.preventDefault();
         if (!e.target.elements.username.value || !e.target.elements.password.value) {
             showInfo('Please fill in all fields', 'warning');

@@ -6,3 +6,9 @@ ionic capacitor add android
 ionic start
 //to run web dev
 ionic serve
+// to build and create android 
+ionic capacitor copy android
+// to build
+ionic build
+//to sync 
+npx cap sync
