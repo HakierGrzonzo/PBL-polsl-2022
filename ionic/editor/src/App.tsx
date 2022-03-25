@@ -9,8 +9,10 @@ import {
   IonTabs,
   setupIonicReact
 } from '@ionic/react';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { IonReactRouter } from '@ionic/react-router';
-import { addCircleOutline, colorWandOutline, lockClosedOutline } from 'ionicons/icons';
+import { addCircleOutline, newspaper, lockClosedOutline } from 'ionicons/icons';
+import { useEffect } from 'react';
 import Login from './pages/Login';
 import AddMeasurement from './pages/AddMeasurement';
 import EditMeasurement from './pages/EditMeasurement';
@@ -37,9 +39,15 @@ import './theme/variables.css';
 
 
 
+
 setupIonicReact();
 
 export default function App (){
+
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return(
   <IonApp>
     <IonReactRouter>
@@ -71,7 +79,7 @@ export default function App (){
             <IonLabel>add new</IonLabel>
           </IonTabButton>
           <IonTabButton tab="all" href="/editor/all">
-            <IonIcon icon={colorWandOutline} />
+            <IonIcon icon={newspaper} />
             <IonLabel>show all</IonLabel>
           </IonTabButton>
         </IonTabBar>
