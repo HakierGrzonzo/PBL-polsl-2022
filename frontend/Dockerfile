@@ -1,4 +1,4 @@
-FROM archlinux:latest AS builder
+FROM archlinux:latest AS edit_builder
 
 RUN pacman -Syu --noconfirm yarn
 
@@ -12,7 +12,19 @@ RUN yarn install
 COPY ./editor /build/
 RUN yarn build
 
+FROM archlinux:latest AS map_builder
 
+RUN pacman -Syu --noconfirm yarn
+
+WORKDIR /build
+# install dependencies
+COPY ./map/package.json /build/
+COPY ./map/yarn.lock /build/
+RUN yarn install
+
+# build app
+COPY ./map /build/
+RUN yarn build
 
 FROM ubuntu
 
@@ -31,5 +43,6 @@ COPY ./staticHTML /admin
 # let's copy the build
 RUN mkdir /www
 COPY ./nginx.conf /etc/nginx/nginx.conf
-COPY --from=builder /build/build /www/editor/
+COPY --from=edit_builder /build/build /www/editor/
+COPY --from=map_builder /build/build /www/map/
 
