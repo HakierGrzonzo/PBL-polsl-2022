@@ -68,12 +68,14 @@ Istnieje uzasadnione przypuszczenie, że Yerba Mate ma wiele wspólnego z sokiem
 from random import randint
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
+from .tasks import hello_queue
 
 router = APIRouter()
 
 
 @router.get("/", status_code=418, response_class=HTMLResponse)
 def tea():
+    hello_queue.send()
     return "<p>{}</p>".format(
         pastas[randint(0, len(pastas) - 1)].strip().replace("\n", "</br>")
     )

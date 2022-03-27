@@ -16,6 +16,7 @@ services:
   backend:
     build:
       context: ./backend/
+      dockerfile: Dockerfile.web
     volumes:
       - "./files:/files"
     environment:
@@ -23,7 +24,20 @@ services:
     depends_on:
       - db
       - redis
+      - worker
   
+  worker:
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile.worker
+    volumes:
+      - "./files:/files"
+    environment:
+      - "DATABASE=postgresql+asyncpg://postgres:postgres@db:5432/pbl"
+    depends_on:
+      - db
+      - redis
+
   redis:
     image: redis
 
