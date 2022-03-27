@@ -10,3 +10,4 @@ uvicorn
 psycopg2
 fastapi-redis-cache-hakiergrzonzo==0.2.6
 dramatiq
+pyowm

@@ -19,6 +19,8 @@ services:
       dockerfile: Dockerfile.web
     volumes:
       - "./files:/files"
+    env_file:
+      - api-keys.env
     environment:
       - "DATABASE=postgresql+asyncpg://postgres:postgres@db:5432/pbl"
     depends_on:
@@ -32,6 +34,8 @@ services:
       dockerfile: Dockerfile.worker
     volumes:
       - "./files:/files"
+    env_file:
+      - api-keys.env
     environment:
       - "DATABASE=postgresql+asyncpg://postgres:postgres@db:5432/pbl"
     depends_on:
