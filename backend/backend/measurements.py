@@ -13,6 +13,7 @@ from .models import (
     User,
     UpdateMeasurement,
     FileReference,
+    Weather,
 )
 from .database import get_async_session, Measurements
 from fastapi.routing import APIRouter
@@ -51,6 +52,13 @@ class MeasurementRouter:
                     for x in source.files
                 ]
             ),
+            weather = Weather(
+                temperature = source.temperature,
+                wind_speed = source.wind_speed,
+                pressure = source.pressure,
+                humidity = source.humidity,
+                status = source.weather_status
+            ) if source.temperature is not None else None
         )
 
     def _check_tags(
