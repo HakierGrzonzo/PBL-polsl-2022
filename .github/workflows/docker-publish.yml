@@ -79,7 +79,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./backend/
-          file: Dockerfile.web
+          file: ./backend/Dockerfile.web
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -119,7 +119,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./backend/
-          file: Dockerfile.worker
+          file: ./backend/Dockerfile.worker
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
