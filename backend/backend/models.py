@@ -1,9 +1,17 @@
+from typing import Optional
 from fastapi_users import models
 from pydantic import BaseModel
 from pydantic.types import UUID4
 from datetime import datetime
 from fastapi_users.authentication.strategy.db import BaseAccessToken
 
+
+class Weather(BaseModel):
+    temperature: float
+    wind_speed: float
+    pressure: float
+    humidity: float
+    status: str
 
 class AccessToken(BaseAccessToken):
     pass
@@ -55,6 +63,7 @@ class _protoMeasurement(BaseModel):
 class Measurement(_protoMeasurement):
     measurement_id: int
     files: list[FileReference]
+    weather: Optional[Weather]
 
 
 class CreateMeasurement(_protoMeasurement):

@@ -5,6 +5,7 @@ from sqlalchemy.sql import select, delete
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.responses import Response
 from fastapi_redis_cache import cache
+from .tasks import on_new_location
 from .models import (
     Location,
     Measurement,
@@ -12,10 +13,12 @@ from .models import (
     User,
     UpdateMeasurement,
     FileReference,
+    Weather,
 )
 from .database import get_async_session, Measurements
 from fastapi.routing import APIRouter
 from .errors import errors, ErrorModel, get_error
+import json
 
 
 class MeasurementRouter:
@@ -49,6 +52,13 @@ class MeasurementRouter:
                     for x in source.files
                 ]
             ),
+            weather = Weather(
+                temperature = source.temperature,
+                wind_speed = source.wind_speed,
+                pressure = source.pressure,
+                humidity = source.humidity,
+                status = source.weather_status
+            ) if source.temperature is not None else None
         )
 
     def _check_tags(
@@ -153,7 +163,9 @@ class MeasurementRouter:
         session.add(new_measurement)
         await session.flush()
         await session.refresh(new_measurement)
-        return self._table_to_model(new_measurement)
+        model = self._table_to_model(new_measurement)
+        on_new_location.send(json.loads(model.json()))
+        return model
 
     def get_router(self):
         router = APIRouter()
