@@ -16,3 +16,5 @@ api-keys.env
 /httpRequests/
 .idea
 /ionic/editor/android
+/ionic/editor/ios
+node_modules

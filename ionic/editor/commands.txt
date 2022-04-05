@@ -1,0 +1,14 @@
+//to create android 
+ionic capacitor open android
+ionic capacitor build android
+ionic capacitor add android
+//to create using creator
+ionic start
+//to run web dev
+ionic serve
+// to build and create android 
+ionic capacitor copy android
+// to build
+ionic build
+//to sync 
+npx cap sync
