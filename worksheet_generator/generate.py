@@ -1,20 +1,23 @@
 import sys
 import json
 from datetime import date, timedelta
+from datetime import time as Time
 from jinja2 import Template
 from collections import defaultdict
 from os import mkdir
 import subprocess
 import random
 
+def format_time_string(hour: int, minutes: int = 0):
+    return Time(hour=hour, minute=minutes).isoformat("minutes")
+
 badwords = ["create", "update", "merge", "initial"]
 
-months = ["Marzec", "Kwiecień", "Maj", "Czerwiec"]
+months = ["Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec"]
 
 start = date(2022, 3, 1)
 end = date(2022, 6, 30)
-
-hours = 320
+celebrations = [date(2022, 5, 3)]
 
 days = (end - start).days + 1
 
@@ -33,18 +36,42 @@ for commit in log:
 
 template = Template(open("template.tex").read())
 
+def get_allowed_days():
+    res = []
+    day = start
+    while day < end:
+        if day.weekday() not in [1, 2] or day in celebrations:
+            res.append(day)
+        day += timedelta(days=1)
+    return res
+
+def get_time_in_meetings():
+    time = 0
+    day = start
+    while day < end:
+        if day in celebrations:
+            pass
+        elif day.weekday() == 1:
+            time += 3
+        elif day.weekday() == 2:
+            time += 1.5
+        day += timedelta(days=1)
+    return time
+
+hours = (320) - get_time_in_meetings()
+
 for author, commits in commits_by_author.items():
     dir_name = author.replace(" ", "_")
     time_per_commit = list([timedelta(hours=1) for _ in range(0, len(commits))])
     hours_distributed = len(commits)
-    while hours_distributed < hours:
+    while hours_distributed < hours :
         random_index = random.randint(0, len(commits) - 1)
         time_per_commit[random_index] += timedelta(hours=1)
         hours_distributed += 1
     days_to_log = {
-        start + timedelta(days=x): (commit_msg, time)
+        x: (commit_msg, time)
         for x, commit_msg, time in zip(
-            sorted(random.sample(range(0, days), len(commits))),
+            sorted(random.sample(get_allowed_days(), len(commits))),
             reversed(commits),
             time_per_commit,
         )
@@ -61,13 +88,37 @@ for author, commits in commits_by_author.items():
             }
         if (val := days_to_log.get(day)) is not None:
             msg, time = val
+            time = round(time.total_seconds() // 3600)
+            start_time = 8
+            if time < 5:
+                start_time = random.randint(8, 11)
             last_month["commits"].append(
                 {
                     "day": day.day,
-                    "start": r"\#",
-                    "stop": r"\#",
-                    "hours": round(time.total_seconds() // 3600),
+                    "start": format_time_string(start_time),
+                    "stop": format_time_string(start_time + time),
+                    "hours": time,
                     "msg": msg,
+                }
+            )
+        elif day.weekday() == 1:
+            last_month["commits"].append(
+                {
+                    "day": day.day,
+                    "start": format_time_string(15),
+                    "stop": format_time_string(18),
+                    "hours": "3",
+                    "msg": "Spotkanie projektowe",
+                }
+            )
+        elif day.weekday() == 2:
+            last_month["commits"].append(
+                {
+                    "day": day.day,
+                    "start": format_time_string(14, 30),
+                    "stop": format_time_string(16),
+                    "hours": "1.5",
+                    "msg": "Spotkanie z doktorem Sobotą",
                 }
             )
         else:
@@ -86,3 +137,4 @@ for author, commits in commits_by_author.items():
         input=template.render(author_name=author, data=data).encode(),
         stdout=subprocess.PIPE,
     )
+    #print(p.stderr.decode())
