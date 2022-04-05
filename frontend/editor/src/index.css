@@ -13,6 +13,15 @@ body * {
   box-sizing: border-box;
 }
 
+.green{
+  background-color: #61ff49b0;
+  border-radius: 15px;
+}
+
+.green * {
+  color: white!important;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
