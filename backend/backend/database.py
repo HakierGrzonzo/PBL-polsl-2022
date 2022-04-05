@@ -14,10 +14,9 @@ from sqlalchemy.sql.schema import Column, ForeignKey
 from sqlalchemy import String, DateTime, Float
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql.sqltypes import Integer
-from .models import Measurement, UserDB, AccessToken
+from .models import UserDB, AccessToken
 from os import environ
 
-# DATABASE_URL = "postgresql+asyncpg://postgres:1234@127.0.0.1:5432/postgres"
 DATABASE_URL = environ["DATABASE"]
 Base: DeclarativeMeta = declarative_base()
 
@@ -61,6 +60,12 @@ class Measurements(Base):
     files = relationship(
         "Files", foreign_keys=[Files.measurement_id], lazy="joined"
     )
+    # weather stuff
+    temperature = Column(Float())
+    wind_speed = Column(Float())
+    pressure = Column(Float())
+    humidity = Column(Float())
+    weather_status = Column(String(128))
 
 
 engine = create_async_engine(DATABASE_URL)

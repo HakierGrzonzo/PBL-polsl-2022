@@ -10,6 +10,10 @@ export default function Mobile() {
   const [chosenTags, setChosenTags] = useState<string[]>();
   const [previousId, setPreviousId] = useState<number>(0);
 
+  function changeColor(){
+    document.querySelector(".image-input")?.classList.add("green");
+  }
+
   function handleSubmit(e: any) {
     e.preventDefault();
     if (!e.target.elements.title.value) {
@@ -27,7 +31,7 @@ export default function Mobile() {
           title: e.target.elements.title.value,
           description: e.target.elements.description.value,
           notes: e.target.elements.notes.value,
-          laeq: e.target.elements.laeq.value || 0,
+          laeq: parseFloat(e.target.elements.laeq.value) || 0,
           tags: chosenTags || [],
           location: {
             latitude,
@@ -94,11 +98,16 @@ export default function Mobile() {
       <TextField
         id="laeq"
         label="laeq"
-        type={"number"}
+        type="number"
         margin="normal"
         className='w-full'
+        defaultValue={1.0}
+        inputProps={{
+          step: "0.00001"
+        }}
       />
-      <input
+      <input 
+        onChange={changeColor}
         accept="image/*"
         style={{ display: "none" }}
         id="file"

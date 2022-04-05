@@ -9,3 +9,5 @@ SQLAlchemy==1.4.30
 uvicorn
 psycopg2
 fastapi-redis-cache-hakiergrzonzo==0.2.6
+dramatiq
+pyowm
