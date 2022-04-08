@@ -43,6 +43,7 @@ class FileEntry(BaseModel):
     file_id: UUID4
     original_name: str
     mime: str
+    optimized_mime: Optional[str]
     measurement: int
     owner: UUID4
 

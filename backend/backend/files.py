@@ -7,7 +7,9 @@ from sqlalchemy.sql import select, delete
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.responses import FileResponse, Response
 from typing import Tuple
-from fastapi_redis_cache import cache_one_day, cache
+from fastapi_redis_cache import cache
+
+from backend.tasks import ffmpeg_compress_audio
 from .models import FileReference, User
 from .database import get_async_session, Files, Measurements
 from fastapi.routing import APIRouter
@@ -32,6 +34,7 @@ class FileRouter:
             original_name=source.original_name,
             link="{}/file/{}".format(self.prefix, source.id),
             measurement=source.measurement_id,
+            optimized_mime=source.optimized_mime
         )
 
     async def get_all_files(self, session: AsyncSession):
@@ -59,17 +62,18 @@ class FileRouter:
         return self._table_to_file_refrence(file)
 
     async def get_filename_mime(
-        self, session: AsyncSession, file_id: UUID4
-    ) -> Tuple[str, str]:
+            self, session: AsyncSession, file_id: UUID4, optimized: bool = False
+    ) -> Tuple[str, str, bool]:
         result = await session.execute(
             select(Files).filter(Files.id == file_id)
         )
         res = result.scalars().all()
         if len(res) == 1:
-            return [res[0].mime, res[0].original_name]
+            if optimized and res[0].optimized_mime is not None:
+                return [res[0].optimized_mime, res[0].optimized_name, True]
+            return [res[0].mime, res[0].original_name, False]
         else:
             raise HTTPException(status_code=404, detail=errors.FILE_ERROR)
-        pass
 
     async def delete_file(
         self, session: AsyncSession, user: User, file_id: UUID4
@@ -141,6 +145,8 @@ class FileRouter:
                     while content := await uploaded_file.read(8192):
                         await f.write(content)
                 await session.commit()
+                if "audio" in uploaded_file.content_type.lower():
+                    ffmpeg_compress_audio.send(str(file_refrence.file_id))
                 return file_refrence
             except Exception as e:
                 raise e
@@ -177,16 +183,17 @@ class FileRouter:
             will most likely differ!**
             """
             try:
-                mime, original_name = await self.get_filename_mime(session, id)
+                mime, original_name, is_optimized = await self.get_filename_mime(session, id, optimized)
                 if isDownload:
                     return FileResponse(
-                        join(FILE_PATH_PREFIX, str(id)),
+                        join(FILE_PATH_PREFIX, str(id) + ("_opt" if is_optimized else "")),
                         media_type=mime,
                         filename=original_name,
                     )
                 else:
                     return FileResponse(
-                        join(FILE_PATH_PREFIX, str(id)), media_type=mime
+                        join(FILE_PATH_PREFIX, str(id) + ("_opt" if is_optimized else "")),
+                        media_type=mime
                     )
             except Exception as e:
                 raise e

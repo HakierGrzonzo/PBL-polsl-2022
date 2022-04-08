@@ -4,7 +4,10 @@ from pyowm import OWM
 from dramatiq.brokers.redis import RedisBroker
 from sqlalchemy.sql.expression import select
 from .utils import run_as_sync
-from .database import get_async_session, Measurements
+from .database import Files, get_async_session, Measurements
+import ffmpeg
+
+FILE_PATH_PREFIX = os.environ["FILE_PATH"]
 
 owm_token = os.environ.get("OPEN_WEATHER_MAP")
 if owm_token:
@@ -50,3 +53,27 @@ async def on_new_location(measurement):
         target.wind_speed = w.weather.wind()["speed"]
         await session.commit()
     print(f"Got weather for {measurement['measurement_id']}")
+
+
+@dramatiq.actor
+@run_as_sync
+async def ffmpeg_compress_audio(audio_uuid):
+    ffmpeg.input(os.path.join(FILE_PATH_PREFIX, audio_uuid)).output(
+        os.path.join(FILE_PATH_PREFIX, audio_uuid + "_opt"),
+        f="Opus",
+        acodec="libopus",
+        audio_bitrate=128 * 1024,
+    ).overwrite_output().run()
+    async for session in get_async_session():
+        f_query = await session.execute(
+            select(Files).filter(Files.id == audio_uuid)
+        )
+        fs = f_query.scalars().all()
+        if len(fs) != 1:
+            raise Exception("Failed to process file, not found in db")
+        f = fs[0]
+        f.optimized_name = f.original_name + ".ogg"
+        f.optimized_mime = "audio/ogg"
+        await session.commit()
+    print(f"Transcoded {audio_uuid} successfully")
+

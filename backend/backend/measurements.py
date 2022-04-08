@@ -48,6 +48,7 @@ class MeasurementRouter:
                         original_name=x.original_name,
                         link="{}/file/{}".format(self.file_prefix, x.id),
                         measurement=x.measurement_id,
+                        optimized_mime=x.optimized_mime,
                     )
                     for x in source.files
                 ]

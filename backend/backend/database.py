@@ -38,7 +38,9 @@ class Files(Base):
         UUID(as_uuid=True), ForeignKey("user.id", use_alter=True), index=True
     )
     mime = Column(String(64))
+    optimized_mime = Column(String(64))
     original_name = Column(String(256))
+    optimized_name = Column(String(256))
     measurement_id = Column(
         Integer, ForeignKey("Measurements.id", use_alter=True), index=True
     )
