@@ -13,13 +13,13 @@ export class AuthService {
 
     /**
      * Auth:Cookie.Login
-     * @param formData 
+     * @param formData
      * @returns any Successful Response
      * @throws ApiError
      */
     public static authCookieLoginApiCookieLoginPost(
-formData: Body_auth_cookie_login_api_cookie_login_post,
-): CancelablePromise<any> {
+        formData: Body_auth_cookie_login_api_cookie_login_post,
+    ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/cookie/login',
@@ -49,13 +49,13 @@ formData: Body_auth_cookie_login_api_cookie_login_post,
 
     /**
      * Auth:Jwt.Login
-     * @param formData 
+     * @param formData
      * @returns BearerResponse Successful Response
      * @throws ApiError
      */
     public static authJwtLoginApiJwtLoginPost(
-formData: Body_auth_jwt_login_api_jwt_login_post,
-): CancelablePromise<BearerResponse> {
+        formData: Body_auth_jwt_login_api_jwt_login_post,
+    ): CancelablePromise<BearerResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/jwt/login',
@@ -85,7 +85,7 @@ formData: Body_auth_jwt_login_api_jwt_login_post,
 
     /**
      * Tea
-     * @returns void 
+     * @returns void
      * @throws ApiError
      */
     public static teaApiAuthGet(): CancelablePromise<void> {

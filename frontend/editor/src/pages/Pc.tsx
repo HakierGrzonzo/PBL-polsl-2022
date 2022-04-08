@@ -100,7 +100,11 @@ export default function MobileEdit() {
                 <div className='measurement-row'>
                   <Typography variant="h6">files:</Typography>
                   <div className='w-24' />
-                  <Typography variant="body1">{measurement.files.map(file => file.mime + ", ")}</Typography>
+                  <Typography variant="body1">{measurement.files.map((file, index, arr) => (
+                    <span key={file.file_id}>
+                      <a title={file?.optimized_mime} href={file.link}>{file.mime}</a>{index < arr.length - 1 ? ", " : ""}
+                    </span>
+                  ))}</Typography>
                 </div>
                 <div className='measurement-row'>
                   <input type="file" name="multipleFiles" multiple id={String(measurement.measurement_id)} />

@@ -12,13 +12,13 @@ export class LocalService {
 
     /**
      * Register:Register
-     * @param requestBody 
+     * @param requestBody
      * @returns User Successful Response
      * @throws ApiError
      */
     public static registerRegisterLocalRegisterPost(
-requestBody: UserCreate,
-): CancelablePromise<User> {
+        requestBody: UserCreate,
+    ): CancelablePromise<User> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/local/register',
