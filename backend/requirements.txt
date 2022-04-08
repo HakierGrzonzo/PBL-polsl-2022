@@ -12,3 +12,4 @@ fastapi-redis-cache-hakiergrzonzo==0.2.6
 dramatiq
 pyowm
 ffmpeg-python
+wand

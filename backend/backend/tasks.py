@@ -6,6 +6,8 @@ from sqlalchemy.sql.expression import select
 from .utils import run_as_sync
 from .database import Files, get_async_session, Measurements
 import ffmpeg
+from wand.image import Image
+
 
 FILE_PATH_PREFIX = os.environ["FILE_PATH"]
 
@@ -65,9 +67,7 @@ async def ffmpeg_compress_audio(audio_uuid):
         audio_bitrate=128 * 1024,
     ).overwrite_output().run()
     async for session in get_async_session():
-        f_query = await session.execute(
-            select(Files).filter(Files.id == audio_uuid)
-        )
+        f_query = await session.execute(select(Files).filter(Files.id == audio_uuid))
         fs = f_query.scalars().all()
         if len(fs) != 1:
             raise Exception("Failed to process file, not found in db")
@@ -77,3 +77,23 @@ async def ffmpeg_compress_audio(audio_uuid):
         await session.commit()
     print(f"Transcoded {audio_uuid} successfully")
 
+
+@dramatiq.actor
+@run_as_sync
+async def magick_compress_picture(picture_uuid):
+    img = Image(filename=os.path.join(FILE_PATH_PREFIX, picture_uuid))
+    img.resize(img.width // 10, img.height // 10)
+    img_webp = img.convert('webp')
+    img_webp.save(filename=os.path.join(FILE_PATH_PREFIX, picture_uuid + "_opt"))
+    async for session in get_async_session():
+        f_query = await session.execute(select(Files).filter(Files.id == picture_uuid))
+        fs = f_query.scalars().all()
+        if len(fs) != 1:
+            raise Exception("Failed to process file, not found in db")
+        f = fs[0]
+        f.optimized_name = f.original_name + (
+            ".webp" if not f.original_name.endswith(".webp") else ""
+        )
+        f.optimized_mime = "image/webp"
+        await session.commit()
+    print(f"Converted {picture_uuid} successfully")

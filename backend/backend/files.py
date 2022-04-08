@@ -9,7 +9,7 @@ from starlette.responses import FileResponse, Response
 from typing import Tuple
 from fastapi_redis_cache import cache
 
-from backend.tasks import ffmpeg_compress_audio
+from backend.tasks import ffmpeg_compress_audio, magick_compress_picture
 from .models import FileReference, User
 from .database import get_async_session, Files, Measurements
 from fastapi.routing import APIRouter
@@ -147,6 +147,8 @@ class FileRouter:
                 await session.commit()
                 if "audio" in uploaded_file.content_type.lower():
                     ffmpeg_compress_audio.send(str(file_refrence.file_id))
+                elif "image" in uploaded_file.content_type.lower():
+                    magick_compress_picture.send(str(file_refrence.file_id))
                 return file_refrence
             except Exception as e:
                 raise e
