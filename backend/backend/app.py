@@ -89,10 +89,16 @@ app.include_router(
     tags=["data"],
 )
 
+file_router = FileRouter(fastapi_users, FILE_PREFIX)
 app.include_router(
-    FileRouter(fastapi_users, FILE_PREFIX).get_router(),
+    file_router.get_router(),
     prefix=FILE_PREFIX,
     tags=["files"],
+)
+app.include_router(
+    file_router.get_admin_router(),
+    prefix="/local",
+    tags=["local", "files"]
 )
 
 app.include_router(tea, prefix="/api/auth", tags=["auth"])

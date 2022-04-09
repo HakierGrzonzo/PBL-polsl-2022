@@ -1,5 +1,6 @@
 /local/
 /ionic/
+/redis/
 /files/*
 *.pyc
 /db

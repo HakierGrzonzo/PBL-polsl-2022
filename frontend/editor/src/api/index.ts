@@ -22,6 +22,7 @@ export type { User } from './models/User';
 export type { UserCreate } from './models/UserCreate';
 export type { UserUpdate } from './models/UserUpdate';
 export type { ValidationError } from './models/ValidationError';
+export type { Weather } from './models/Weather';
 
 export { AuthService } from './services/AuthService';
 export { DataService } from './services/DataService';

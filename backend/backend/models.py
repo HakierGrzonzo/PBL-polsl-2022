@@ -43,6 +43,7 @@ class FileEntry(BaseModel):
     file_id: UUID4
     original_name: str
     mime: str
+    optimized_mime: Optional[str]
     measurement: int
     owner: UUID4
 
@@ -64,6 +65,9 @@ class Measurement(_protoMeasurement):
     measurement_id: int
     files: list[FileReference]
     weather: Optional[Weather]
+
+class AdminPanelMsg(BaseModel):
+    msg: str
 
 
 class CreateMeasurement(_protoMeasurement):

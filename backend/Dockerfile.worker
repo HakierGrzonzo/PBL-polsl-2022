@@ -1,5 +1,5 @@
 FROM python:3.10-bullseye
-RUN apt update -y && apt install ffmpeg -y
+RUN apt update -y && apt install ffmpeg imagemagick -y
 
 WORKDIR /app
 
