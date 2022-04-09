@@ -44,6 +44,9 @@ services:
 
   redis:
     image: redis
+    command: redis-server --save 60 1 --loglevel warning
+    volumes: 
+      - "./redis:/data"
 
   db:
     image: postgres:latest

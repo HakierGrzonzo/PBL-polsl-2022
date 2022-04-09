@@ -66,6 +66,9 @@ class Measurement(_protoMeasurement):
     files: list[FileReference]
     weather: Optional[Weather]
 
+class AdminPanelMsg(BaseModel):
+    msg: str
+
 
 class CreateMeasurement(_protoMeasurement):
     pass

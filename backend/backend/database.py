@@ -7,6 +7,7 @@ from fastapi_users_db_sqlalchemy.access_token import (
     SQLAlchemyAccessTokenDatabase,
     SQLAlchemyBaseAccessTokenTable,
 )
+from sqlalchemy.engine.create import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import relationship, sessionmaker, declarative_base
@@ -75,11 +76,17 @@ async_session_maker = sessionmaker(
     engine, class_=AsyncSession, expire_on_commit=False
 )
 
+sync_engine = create_engine(DATABASE_URL.replace("+asyncpg", ""))
+sync_session_maker = sessionmaker(sync_engine)
+
 
 async def create_db_and_tables():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+def get_sync_session():
+    with sync_session_maker() as session:
+        yield session
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_maker() as session:
