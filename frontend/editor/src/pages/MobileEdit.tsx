@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Autocomplete, Button, CircularProgress, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
-import { CreateMeasurement, DataService, Measurement } from "../api";
+import { CreateMeasurement, DataService, FilesService, Measurement } from "../api";
 import AlertDialogSlide from "../components/dialog";
 import { tags } from "../interfaces/tags";
 import { getImageLink } from "../utils/fileUtils";
@@ -60,6 +60,15 @@ export default function MobileEdit() {
 
 
   function deleteMeasurement() {
+    if(!measurement) {
+      return;
+    }
+    console.log(measurement);
+    for(const file of measurement.files) {
+      FilesService.deleteFileApiFilesDeleteIdDelete(file.file_id).catch(_ => {
+        enqueueSnackbar("we have some problem with deleting files", { variant: "error"});
+      });
+    }
     DataService.deleteMeasurementApiDataIdDelete(pathVariable.id).then(_ => {
       enqueueSnackbar("The measurement was deleted", {
         variant: "success",
@@ -67,7 +76,7 @@ export default function MobileEdit() {
       window.history.pushState({}, "", "/editor/pc");
       window.dispatchEvent(new PopStateEvent("popstate"));
     }).catch(_ => {
-      enqueueSnackbar("Ops! We have some error check your internet connection or login again", {
+      enqueueSnackbar("Please delete file first! Or check your internet connection or login again", {
         variant: "error",
       });
     });
