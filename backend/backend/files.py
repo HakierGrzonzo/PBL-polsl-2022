@@ -197,7 +197,7 @@ class FileRouter:
             except Exception as e:
                 raise e
 
-        @router.delete(
+        @router.get(
             "/delete/{id}",
             status_code=204,
             responses={
