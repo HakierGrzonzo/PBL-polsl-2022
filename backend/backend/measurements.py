@@ -308,7 +308,7 @@ class MeasurementRouter:
                 raise HTTPException(status_code=500, detail=errors.DB_ERROR)
 
         @router.get(
-            "/{id}",
+            "/delete/{id}",
             status_code=204,
             responses={
                 403: {
