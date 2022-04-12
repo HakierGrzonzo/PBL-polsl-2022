@@ -307,7 +307,7 @@ class MeasurementRouter:
                 print(e)
                 raise HTTPException(status_code=500, detail=errors.DB_ERROR)
 
-        @router.delete(
+        @router.get(
             "/{id}",
             status_code=204,
             responses={
