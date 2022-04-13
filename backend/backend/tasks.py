@@ -57,12 +57,16 @@ def on_new_location(measurement):
 
 @dramatiq.actor
 def ffmpeg_compress_audio(audio_uuid):
-    ffmpeg.input(os.path.join(FILE_PATH_PREFIX, audio_uuid)).output(
-        os.path.join(FILE_PATH_PREFIX, audio_uuid + "_opt"),
-        f="adts",
-        acodec="aac",
-        audio_bitrate=128 * 1024,
-    ).overwrite_output().run()
+    try:
+        ffmpeg.input(os.path.join(FILE_PATH_PREFIX, audio_uuid)).output(
+            os.path.join(FILE_PATH_PREFIX, audio_uuid + "_opt"),
+            f="adts",
+            acodec="aac",
+            audio_bitrate=128 * 1024,
+        ).overwrite_output().run()
+    except ffmpeg._run.Error as e:
+        print("[error] - ffmpeg:", e)
+        return
     for session in get_sync_session():
         f_query = session.execute(select(Files).filter(Files.id == audio_uuid))
         fs = f_query.scalars().all()
@@ -82,6 +86,29 @@ def magick_compress_picture(picture_uuid):
     except:
         print(f"Picture {picture_uuid} is unopenable!")
         return
+    if orientation := img.metadata.get("exif:Orientation"):
+        orientation = int(orientation)
+        # https://sirv.com/help/articles/rotate-photos-to-be-upright/
+        # maps mirrored rotations to normal ones
+        mirrored_dict = {
+            2: 1,
+            4: 3,
+            5: 6,
+            7: 8
+        }
+        rotation_dict = {
+            1: 0,
+            3: 180,
+            6: 90,
+            8: 270
+        }
+        # try to get rotation
+        rotation = rotation_dict[mirrored_dict.get(orientation, orientation)]
+        if rotation != 0:
+            # Only rotate if we need to
+            img.rotate(rotation)
+        if orientation in mirrored_dict.keys():
+            img.flop()
     img.resize(img.width // 10, img.height // 10)
     img_webp = img.convert('webp')
     img_webp.save(filename=os.path.join(FILE_PATH_PREFIX, picture_uuid + "_opt"))
