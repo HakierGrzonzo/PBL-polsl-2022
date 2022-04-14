@@ -4,6 +4,7 @@
 
 import type { FileReference } from './FileReference';
 import type { Location } from './Location';
+import type { Weather } from './Weather';
 
 export type Measurement = {
     location: Location;
@@ -14,4 +15,5 @@ export type Measurement = {
     tags: Array<string>;
     measurement_id: number;
     files: Array<FileReference>;
+    weather?: Weather;
 };

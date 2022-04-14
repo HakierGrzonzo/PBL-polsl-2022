@@ -2,8 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type ValidationError = {
-    loc: Array<string>;
+export type AdminPanelMsg = {
     msg: string;
-    type: string;
 };

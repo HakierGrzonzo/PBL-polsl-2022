@@ -39,13 +39,13 @@ export class DataService {
 
     /**
      * Get One Measurement
-     * @param id 
+     * @param id
      * @returns Measurement Successful Response
      * @throws ApiError
      */
     public static getOneMeasurementApiDataIdGet(
-id: number,
-): CancelablePromise<Measurement> {
+        id: number,
+    ): CancelablePromise<Measurement> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/data/{id}',
@@ -60,41 +60,16 @@ id: number,
     }
 
     /**
-     * Delete Measurement
-     * @param id 
-     * @returns void 
-     * @throws ApiError
-     */
-    public static deleteMeasurementApiDataIdDelete(
-id: number,
-): CancelablePromise<void> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/api/data/{id}',
-            path: {
-                'id': id,
-            },
-            errors: {
-                403: `Forbidden`,
-                404: `Not Found`,
-                412: `Precondition Failed`,
-                422: `Validation Error`,
-                500: `Internal Server Error`,
-            },
-        });
-    }
-
-    /**
      * Edit Measurement
-     * @param id 
-     * @param requestBody 
+     * @param id
+     * @param requestBody
      * @returns Measurement Successful Response
      * @throws ApiError
      */
     public static editMeasurementApiDataIdPatch(
-id: number,
-requestBody: UpdateMeasurement,
-): CancelablePromise<Measurement> {
+        id: number,
+        requestBody: UpdateMeasurement,
+    ): CancelablePromise<Measurement> {
         return __request(OpenAPI, {
             method: 'PATCH',
             url: '/api/data/{id}',
@@ -116,15 +91,15 @@ requestBody: UpdateMeasurement,
     /**
      * Add Measurement
      * Create new Measurement.
- *
- * Tags must not contain `,`
-     * @param requestBody 
+     *
+     * Tags must not contain `,`
+     * @param requestBody
      * @returns Measurement Successful Response
      * @throws ApiError
      */
     public static addMeasurementApiDataCreatePost(
-requestBody: CreateMeasurement,
-): CancelablePromise<Measurement> {
+        requestBody: CreateMeasurement,
+    ): CancelablePromise<Measurement> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/data/create',
@@ -132,6 +107,31 @@ requestBody: CreateMeasurement,
             mediaType: 'application/json',
             errors: {
                 421: `Misdirected Request`,
+                422: `Validation Error`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
+     * Delete Measurement
+     * @param id
+     * @returns void
+     * @throws ApiError
+     */
+    public static deleteMeasurementApiDataDeleteIdGet(
+        id: number,
+    ): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/data/delete/{id}',
+            path: {
+                'id': id,
+            },
+            errors: {
+                403: `Forbidden`,
+                404: `Not Found`,
+                412: `Precondition Failed`,
                 422: `Validation Error`,
                 500: `Internal Server Error`,
             },
