@@ -25,7 +25,7 @@ export default function Mobile() {
 
     navigator.geolocation.getCurrentPosition(success, error, {enableHighAccuracy: true });
 
-    function error(error: any) {
+    function error(_error: any) {
       enqueueSnackbar("Ops! We have some error with measurement upload check your internet connection or login again", {
         variant: "error",
       });

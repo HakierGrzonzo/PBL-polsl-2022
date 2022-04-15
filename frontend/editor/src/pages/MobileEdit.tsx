@@ -63,7 +63,6 @@ export default function MobileEdit() {
     if(!measurement) {
       return;
     }
-    console.log(measurement);
     for(const file of measurement.files) {
       await FilesService.deleteFileApiFilesDeleteIdGet(file.file_id).catch((_:any) => {
         enqueueSnackbar("we have some problem with deleting files", { variant: "error"});
