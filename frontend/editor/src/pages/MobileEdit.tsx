@@ -31,11 +31,11 @@ export default function MobileEdit() {
         time: String(measurement?.location.time)
       }
     };
-    DataService.editMeasurementApiDataIdPatch(pathVariable.id, measurementBody).then(_ => {
+    DataService.editMeasurementApiDataIdPatch(pathVariable.id, measurementBody).then((_:any) => {
       enqueueSnackbar("The measurement was edited", {
         variant: "success",
       });
-    }).catch(_ => {
+    }).catch((_:any) => {
       enqueueSnackbar("Ops! We have some error with measurement edit check your internet connection or login again", {
         variant: "error",
       });
@@ -59,23 +59,23 @@ export default function MobileEdit() {
   }, [pathVariable.id]);
 
 
-  function deleteMeasurement() {
+  async function deleteMeasurement() {
     if(!measurement) {
       return;
     }
     console.log(measurement);
     for(const file of measurement.files) {
-      FilesService.deleteFileApiFilesDeleteIdDelete(file.file_id).catch(_ => {
+      await FilesService.deleteFileApiFilesDeleteIdGet(file.file_id).catch((_:any) => {
         enqueueSnackbar("we have some problem with deleting files", { variant: "error"});
       });
     }
-    DataService.deleteMeasurementApiDataIdDelete(pathVariable.id).then(_ => {
+    DataService.deleteMeasurementApiDataDeleteIdGet(pathVariable.id).then((_:any) => {
       enqueueSnackbar("The measurement was deleted", {
         variant: "success",
       });
       window.history.pushState({}, "", "/editor/pc");
       window.dispatchEvent(new PopStateEvent("popstate"));
-    }).catch(_ => {
+    }).catch((_:any) => {
       enqueueSnackbar("Please delete file first! Or check your internet connection or login again", {
         variant: "error",
       });
