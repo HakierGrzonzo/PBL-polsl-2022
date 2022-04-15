@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Box, IconButton, Typography, Link } from "@mui/material";
+import { AppBar, Toolbar, Box, IconButton, Typography, Button } from "@mui/material";
 import Section from './Section';
 import CloseIcon from '@mui/icons-material/Close';
 import { Measurement } from "../api";
@@ -11,8 +11,17 @@ interface PaneProps {
 export default function MarkerPane(props : PaneProps) {
   const {measurement, closeCallback} = props;
   const image = getImageLink(measurement.files);
-  return <Box sx={{flexGrow: 1}} className="sidePane">
-    <AppBar position="static">
+  const audioFiles = measurement.files.filter((file) => file.mime.startsWith("audio"));
+  console.log(audioFiles)
+  return <Box sx={{
+    flexGrow: 1,
+    height: {
+      xs: '50vh',
+      sm: '100vh',
+    },
+    overflow: 'auto',
+  }} className="sidePane">
+    <AppBar position="sticky">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           {measurement.title}
@@ -59,14 +68,33 @@ export default function MarkerPane(props : PaneProps) {
           </Section>
         </Section>
       }
-      { measurement.files.length && 
+      { audioFiles.length > 0 && 
+        <Section title="Nagrania:" level="h5">
+          <>
+            {audioFiles.map((file) => 
+              <Section title={file.original_name} level="body1" key={file.file_id}>
+                <audio controls> 
+                  <source src={file.link} type={file.optimized_mime || file.mime}/>
+                </audio>
+              </Section>
+            )}
+          </>
+        </Section>
+      }
+      { measurement.files.length > 0 && 
         <Section title="Pliki:" level="h5">
           <ul>
             {measurement.files.map((file) => 
               <li key={file.file_id}>
-                <Link variant="body1" href={file.link + "?isDownload=true"}>
-                  {file.original_name}
-                </Link>
+                <Section title={file.mime.split('/')[0]} level="body1"> 
+                  {/* TODO: group by type */}
+                  <Typography variant="body2"> 
+                    {file.original_name} 
+                    <Button href={file.link + "?isDownload=true&optimized=false"}>
+                      Pobierz
+                    </Button>
+                  </Typography>
+                </Section>
               </li>
             )}
           </ul>
