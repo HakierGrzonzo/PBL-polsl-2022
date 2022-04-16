@@ -17,7 +17,6 @@ export default function LeafletMap() {
   
   const onMarkerClick = useCallback((m: Measurement) => {
     if (m.measurement_id !== activeMeasurement?.measurement_id) {
-      console.log(m)
       setActiveMeasurment(m)
     }
   }, [activeMeasurement, setActiveMeasurment])

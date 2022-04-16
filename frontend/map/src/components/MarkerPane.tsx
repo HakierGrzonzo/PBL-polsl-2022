@@ -12,7 +12,6 @@ export default function MarkerPane(props : PaneProps) {
   const {measurement, closeCallback} = props;
   const image = getImageLink(measurement.files);
   const audioFiles = measurement.files.filter((file) => file.mime.startsWith("audio"));
-  console.log(audioFiles)
   return <Box sx={{
     flexGrow: 1,
     height: {
