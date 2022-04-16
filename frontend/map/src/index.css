@@ -1,7 +1,12 @@
 .fullHeight{
-  height: 100vh;
+  height: 100%;
 }
 
+.sidePane img {
+  width: 100%;
+  object-fit: cover;
+  max-height: 33vh;
+}
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,

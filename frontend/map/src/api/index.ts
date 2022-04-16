@@ -6,6 +6,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { AdminPanelMsg } from './models/AdminPanelMsg';
 export type { backend__errors__ErrorModel } from './models/backend__errors__ErrorModel';
 export type { BearerResponse } from './models/BearerResponse';
 export type { Body_auth_cookie_login_api_cookie_login_post } from './models/Body_auth_cookie_login_api_cookie_login_post';
@@ -22,6 +23,7 @@ export type { User } from './models/User';
 export type { UserCreate } from './models/UserCreate';
 export type { UserUpdate } from './models/UserUpdate';
 export type { ValidationError } from './models/ValidationError';
+export type { Weather } from './models/Weather';
 
 export { AuthService } from './services/AuthService';
 export { DataService } from './services/DataService';

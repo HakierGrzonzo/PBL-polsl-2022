@@ -1,29 +1,31 @@
+import { useMemo } from 'react';
 import { LatLng } from 'leaflet';
-import { Marker, Popup } from 'react-leaflet'
+import { Marker, Tooltip, useMap } from 'react-leaflet'
 import { Measurement } from '../api';
-import { getImageLink } from '../utils/fileUtils';
+import { BlueIcon, GoldIcon } from '../utils/icons';
 
-export default function LeafletMarker({measurement}:{measurement:Measurement}) {
-  const {location, description, title, laeq, tags, files, measurement_id} = measurement;
+interface MarkerProps {
+  measurement: Measurement;
+  clickCallback: (_: Measurement) => void;
+  isSelected: boolean
+}
+
+
+export default function LeafletMarker(props: MarkerProps) {
+  const {measurement, clickCallback, isSelected} = props;
+  const {location, title, measurement_id} = measurement;
+  const map = useMap()
   const loc:LatLng = new LatLng(location.latitude, location.longitude);
-  const image = getImageLink(files)
+  const eventHandlers = useMemo(
+    () => ({
+      click() {
+        map.panTo(loc)
+        clickCallback(measurement)
+      }
+    }), [clickCallback, loc, map])
   return(
-    <Marker position={loc} key={measurement_id+"M"}>
-      <Popup>
-        <div>
-          <h3>{title}</h3>
-          <p>{description}</p>
-          <p>{laeq}</p>
-          <p>{tags}</p>
-          {( image !== null ?
-            <figure className='wi'>
-              <img src={`${image}?optimized=true`} alt={title}/>
-            </figure>
-            :
-            <p>no image</p>
-          )}
-        </div>
-      </Popup>
+    <Marker eventHandlers={eventHandlers} position={loc} key={measurement_id+"M"} icon={isSelected ? BlueIcon : GoldIcon}>
+      <Tooltip>{title}</Tooltip>
     </Marker>
   );
 }
