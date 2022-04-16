@@ -6,6 +6,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { AdminPanelMsg } from './models/AdminPanelMsg';
 export type { backend__errors__ErrorModel } from './models/backend__errors__ErrorModel';
 export type { BearerResponse } from './models/BearerResponse';
 export type { Body_auth_cookie_login_api_cookie_login_post } from './models/Body_auth_cookie_login_api_cookie_login_post';

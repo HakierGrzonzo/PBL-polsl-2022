@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Autocomplete, Button, CircularProgress, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
-import { CreateMeasurement, DataService, Measurement } from "../api";
+import { CreateMeasurement, DataService, FilesService, Measurement } from "../api";
 import AlertDialogSlide from "../components/dialog";
 import { tags } from "../interfaces/tags";
 import { getImageLink } from "../utils/fileUtils";
@@ -31,11 +31,11 @@ export default function MobileEdit() {
         time: String(measurement?.location.time)
       }
     };
-    DataService.editMeasurementApiDataIdPatch(pathVariable.id, measurementBody).then(_ => {
+    DataService.editMeasurementApiDataIdPatch(pathVariable.id, measurementBody).then((_:any) => {
       enqueueSnackbar("The measurement was edited", {
         variant: "success",
       });
-    }).catch(_ => {
+    }).catch((_:any) => {
       enqueueSnackbar("Ops! We have some error with measurement edit check your internet connection or login again", {
         variant: "error",
       });
@@ -59,15 +59,23 @@ export default function MobileEdit() {
   }, [pathVariable.id]);
 
 
-  function deleteMeasurement() {
-    DataService.deleteMeasurementApiDataIdDelete(pathVariable.id).then(_ => {
+  async function deleteMeasurement() {
+    if(!measurement) {
+      return;
+    }
+    for(const file of measurement.files) {
+      await FilesService.deleteFileApiFilesDeleteIdGet(file.file_id).catch((_:any) => {
+        enqueueSnackbar("we have some problem with deleting files", { variant: "error"});
+      });
+    }
+    DataService.deleteMeasurementApiDataDeleteIdGet(pathVariable.id).then((_:any) => {
       enqueueSnackbar("The measurement was deleted", {
         variant: "success",
       });
       window.history.pushState({}, "", "/editor/pc");
       window.dispatchEvent(new PopStateEvent("popstate"));
-    }).catch(_ => {
-      enqueueSnackbar("Ops! We have some error check your internet connection or login again", {
+    }).catch((_:any) => {
+      enqueueSnackbar("Please delete file first! Or check your internet connection or login again", {
         variant: "error",
       });
     });

@@ -14,6 +14,8 @@ export default function Mobile() {
     document.querySelector(".image-input")?.classList.add("green");
   }
 
+  
+
   function handleSubmit(e: any) {
     e.preventDefault();
     if (!e.target.elements.title.value) {
@@ -21,7 +23,15 @@ export default function Mobile() {
       return;
     }
 
-    navigator.geolocation.getCurrentPosition((position) => {
+    navigator.geolocation.getCurrentPosition(success, error, {enableHighAccuracy: true });
+
+    function error(_error: any) {
+      enqueueSnackbar("Ops! We have some error with measurement upload check your internet connection or login again", {
+        variant: "error",
+      });
+    }
+    
+    function success(position: GeolocationPosition) {
       let latitude = position.coords.latitude;
       let longitude = position.coords.longitude;
       if (latitude && longitude && window) {
@@ -43,29 +53,28 @@ export default function Mobile() {
           enqueueSnackbar("The measurement was added", {
             variant: "success",
           });
-          let body = {
-            uploaded_file: e.target.elements.file.files[0],
+          if(e.target.elements.file.files[0]){
+            let body = {
+              uploaded_file: e.target.elements.file.files[0],
+            }
+            FilesService.uploadNewFileApiFilesPost(res.measurement_id, body).then(() => {
+              enqueueSnackbar("The file was added", {
+                variant: "success",
+              });
+            }).catch(() => {
+              enqueueSnackbar(`Ops! We have some error with file upload check your internet connection or login again`, {
+                variant: "error",
+              });
+            });
+            // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
+            window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, "_blank"); // for google maps
+            setPreviousId(res.measurement_id);
           }
-          FilesService.uploadNewFileApiFilesPost(res.measurement_id, body).then(() => {
-            enqueueSnackbar("The file was added", {
-              variant: "success",
-            });
-          }).catch(() => {
-            enqueueSnackbar(`Ops! We have some error with file upload check your internet connection or login again`, {
-              variant: "error",
-            });
-          });
-          // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
-          window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, "_blank"); // for google maps
-          setPreviousId(res.measurement_id);
-        }).catch(() => {
-          enqueueSnackbar("Ops! We have some error with measurement upload check your internet connection or login again", {
-            variant: "error",
-          });
         });
       }
-    });
+    }
   }
+    
 
   function report() {
     window.history.pushState({}, "", `/editor/mobile_edit/${previousId}`);
