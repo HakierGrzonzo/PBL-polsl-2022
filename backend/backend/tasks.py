@@ -1,9 +1,10 @@
 import dramatiq
+import math
 import os
 from pyowm import OWM
 from dramatiq.brokers.redis import RedisBroker
 from sqlalchemy.sql.expression import select
-from .utils import run_as_sync
+from .utils import parse_exif_to_location
 from .database import Files, Measurements, get_sync_session
 from backend.models import FileReference
 import ffmpeg
@@ -21,6 +22,7 @@ else:
 redis_broker = RedisBroker(host="redis")
 dramatiq.set_broker(redis_broker)
 
+
 @dramatiq.actor
 def hello_queue():
     os.system("ffmpeg -version")
@@ -32,11 +34,16 @@ def on_new_location(measurement):
     # TODO add redis time lat long cache
     mgr = owm.weather_manager()
     for session in get_sync_session():
-        old = session.execute(
-            select(Measurements).filter(
-                Measurements.id == measurement["measurement_id"]
-            ) 
-        ).unique().scalars().all()
+        old = (
+            session.execute(
+                select(Measurements).filter(
+                    Measurements.id == measurement["measurement_id"]
+                )
+            )
+            .unique()
+            .scalars()
+            .all()
+        )
         if len(old) != 1:
             raise Exception("Failed to get measurement from db to set weather")
         target = old[0]
@@ -53,6 +60,50 @@ def on_new_location(measurement):
         target.wind_speed = w.weather.wind()["speed"]
         session.commit()
     print(f"Got weather for {measurement['measurement_id']}")
+
+
+@dramatiq.actor
+def try_get_location_from_image(picture_uuid):
+    try:
+        img = Image(filename=os.path.join(FILE_PATH_PREFIX, picture_uuid))
+    except:
+        print(f"Picture {picture_uuid} is unopenable!")
+        return
+    GPS_KEYS = [
+        "exif:GPSLatitude",
+        "exif:GPSLatitudeRef",
+        "exif:GPSLongitude",
+        "exif:GPSLongitudeRef",
+    ]
+    if not all(key in img.metadata.keys() for key in GPS_KEYS):
+        print(f"[WARN] No GPS EXIF data in {picture_uuid}")
+        return
+    lat, long = parse_exif_to_location(img.metadata)
+    for session in get_sync_session():
+        measurements = (
+            session.execute(
+                select(Measurements).join(Files).filter(Files.id == picture_uuid)
+            )
+            .unique()
+            .scalars()
+            .all()
+        )
+        if len(measurements) != 1:
+            raise Exception(
+                f"Error while getting file infromation from DB for {picture_uuid}"
+            )
+        measurement = measurements[0]
+        distance = (
+            math.sqrt(
+                (measurement.location_longitude - long) ** 2
+                + (measurement.location_latitude - lat) ** 2
+            )
+            * 111
+        )
+        print(f"[info] location error of {distance}km in {measurement.title}")
+        measurement.location_longitude = long
+        measurement.location_latitude = lat
+        session.commit()
 
 
 @dramatiq.actor
@@ -90,18 +141,8 @@ def magick_compress_picture(picture_uuid):
         orientation = int(orientation)
         # https://sirv.com/help/articles/rotate-photos-to-be-upright/
         # maps mirrored rotations to normal ones
-        mirrored_dict = {
-            2: 1,
-            4: 3,
-            5: 6,
-            7: 8
-        }
-        rotation_dict = {
-            1: 0,
-            3: 180,
-            6: 90,
-            8: 270
-        }
+        mirrored_dict = {2: 1, 4: 3, 5: 6, 7: 8}
+        rotation_dict = {1: 0, 3: 180, 6: 90, 8: 270}
         # try to get rotation
         rotation = rotation_dict[mirrored_dict.get(orientation, orientation)]
         if rotation != 0:
@@ -110,7 +151,7 @@ def magick_compress_picture(picture_uuid):
         if orientation in mirrored_dict.keys():
             img.flop()
     img.resize(img.width // 10, img.height // 10)
-    img_webp = img.convert('webp')
+    img_webp = img.convert("webp")
     img_webp.save(filename=os.path.join(FILE_PATH_PREFIX, picture_uuid + "_opt"))
     for session in get_sync_session():
         f_query = session.execute(select(Files).filter(Files.id == picture_uuid))
@@ -125,6 +166,7 @@ def magick_compress_picture(picture_uuid):
         session.commit()
     print(f"Converted {picture_uuid} successfully")
 
+
 def send_file_to_be_optimized(file: FileReference) -> bool:
     if "audio" in file.mime.lower():
         ffmpeg_compress_audio.send(str(file.file_id))
@@ -133,4 +175,3 @@ def send_file_to_be_optimized(file: FileReference) -> bool:
         magick_compress_picture.send(str(file.file_id))
         return True
     return False
-

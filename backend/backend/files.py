@@ -9,7 +9,7 @@ from starlette.responses import FileResponse, Response
 from typing import Tuple
 from fastapi_redis_cache import cache
 
-from backend.tasks import send_file_to_be_optimized
+from backend.tasks import send_file_to_be_optimized, try_get_location_from_image
 from .models import AdminPanelMsg, FileReference, User
 from .database import get_async_session, Files, Measurements
 from fastapi.routing import APIRouter
@@ -146,6 +146,8 @@ class FileRouter:
                         await f.write(content)
                 await session.commit()
                 send_file_to_be_optimized(file_refrence)
+                if "image" in file_refrence.mime.lower():
+                    try_get_location_from_image.send(str(file_refrence.file_id))
                 return file_refrence
             except Exception as e:
                 raise e
