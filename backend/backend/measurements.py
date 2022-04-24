@@ -3,6 +3,7 @@ from fastapi.param_functions import Depends
 from fastapi_users.fastapi_users import FastAPIUsers
 from sqlalchemy.sql import select, delete
 from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.sql.expression import desc
 from starlette.responses import Response
 from fastapi_redis_cache import cache
 from .tasks import on_new_location
@@ -71,7 +72,7 @@ class MeasurementRouter:
     async def get_all_measurements(
         self, session: AsyncSession
     ) -> list[Measurement]:
-        result = await session.execute(select(Measurements))
+        result = await session.execute(select(Measurements).order_by(Measurements.title))
         return [
             self._table_to_model(x) for x in result.unique().scalars().all()
         ]
@@ -141,7 +142,7 @@ class MeasurementRouter:
         result = await session.execute(
             select(Measurements).filter(
                 Measurements.author_id == current_user.id
-            )
+            ).order_by(desc(Measurements.location_time))
         )
         return [
             self._table_to_model(x) for x in result.unique().scalars().all()
