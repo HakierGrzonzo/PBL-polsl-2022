@@ -64,6 +64,9 @@ export default function Mobile() {
             let body = {
               uploaded_file: e.target.elements.file.files[0],
             }
+            // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
+            window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, "_blank"); // for google maps
+            setPreviousId(res.measurement_id);
             FilesService.uploadNewFileApiFilesPost(res.measurement_id, body).then(() => {
               enqueueSnackbar("The file was added", {
                 variant: "success",
@@ -73,9 +76,6 @@ export default function Mobile() {
                 variant: "error",
               });
             });
-            // window.open(`https://www.google.com/search?q=${latitude} ${longitude}`, '_blank'); // for google search
-            window.open(`https://www.google.com/maps/place/${latitude} ${longitude}`, "_blank"); // for google maps
-            setPreviousId(res.measurement_id);
           }
         });
       }
@@ -119,7 +119,7 @@ export default function Mobile() {
         className='w-full'
         defaultValue={1.0}
         inputProps={{
-          step: "0.00001"
+          step: "0.1"
         }}
       />
       <input 

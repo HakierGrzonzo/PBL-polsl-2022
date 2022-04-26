@@ -123,6 +123,9 @@ export default function MobileEdit() {
             type={"number"}
             className='w-full'
             defaultValue={measurement.laeq}
+            inputProps={{
+              step: "0.1"
+            }}
           />
           <TextField
             id="latitude"
@@ -143,7 +146,7 @@ export default function MobileEdit() {
             label="position from google"
             margin="normal"
             className='w-full'
-            defaultValue={measurement.location.longitude}
+            defaultValue={measurement.location.latitude + ", " + measurement.location.longitude}
           />
           <TextField
             id="time"
