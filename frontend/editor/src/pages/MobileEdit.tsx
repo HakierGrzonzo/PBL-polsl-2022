@@ -18,7 +18,12 @@ export default function MobileEdit() {
       enqueueSnackbar("Please fill at least laeq, latitude and longitude", { variant: "error" });
       return;
     }
-  
+    let latitude = e.target.elements.latitude.value;
+    let longitude = e.target.elements.longitude.value;
+    if(e.target.elements.google.value){
+      latitude = e.target.elements.google.value.split(",")[0];
+      longitude = e.target.elements.google.value.split(",")[1].trim();
+    }
     const measurementBody: CreateMeasurement = {
       title: e.target.elements.title.value,
       description: e.target.elements.description.value,
@@ -26,8 +31,8 @@ export default function MobileEdit() {
       laeq: e.target.elements.laeq.value || 0,
       tags: chosenTags || [],
       location: {
-        latitude: e.target.elements.latitude.value,
-        longitude: e.target.elements.longitude.value,
+        latitude: latitude,
+        longitude: longitude,
         time: String(measurement?.location.time)
       }
     };
@@ -127,19 +132,26 @@ export default function MobileEdit() {
             defaultValue={measurement.location.latitude}
           />
           <TextField
+            id="longitude"
+            label="longitude"
+            margin="normal"
+            className='w-full'
+            defaultValue={measurement.location.longitude}
+          />
+          <TextField
+            id="google"
+            label="position from google"
+            margin="normal"
+            className='w-full'
+            defaultValue={measurement.location.longitude}
+          />
+          <TextField
             id="time"
             label="time"
             margin="normal"
             className='w-full'
             disabled={true}
             defaultValue={measurement.location.time}
-          />
-          <TextField
-            id="longitude"
-            label="longitude"
-            margin="normal"
-            className='w-full'
-            defaultValue={measurement.location.longitude}
           />
           {getImageLink(measurement.files) ?
             <figure className='flex flex-col items-center justify-center'>
