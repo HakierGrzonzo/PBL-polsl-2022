@@ -9,6 +9,7 @@ export default function Mobile() {
   const { enqueueSnackbar } = useSnackbar();
   const [chosenTags, setChosenTags] = useState<string[]>();
   const [previousId, setPreviousId] = useState<number>(0);
+  const [attemptCount, setAttemptCount] = useState<number>(0);
 
   function changeColor(){
     document.querySelector(".image-input")?.classList.add("green");
@@ -32,6 +33,12 @@ export default function Mobile() {
     }
     
     function success(position: GeolocationPosition) {
+      if(position.coords.accuracy > 5 && attemptCount < 3){
+        setAttemptCount(attemptCount + 1);
+        enqueueSnackbar("Please wait while we get your location", { variant: "info" });
+        return;
+      }
+      setAttemptCount(0);
       let latitude = position.coords.latitude;
       let longitude = position.coords.longitude;
       if (latitude && longitude && window) {
