@@ -15,8 +15,6 @@ export default function Mobile() {
     document.querySelector(".image-input")?.classList.add("green");
   }
 
-  
-
   function handleSubmit(e: any) {
     e.preventDefault();
     if (!e.target.elements.title.value) {
@@ -33,7 +31,7 @@ export default function Mobile() {
     }
     
     function success(position: GeolocationPosition) {
-      if(position.coords.accuracy > 5 && attemptCount < 3){
+      if(position.coords.accuracy > 5 && attemptCount < 2){
         setAttemptCount(attemptCount + 1);
         enqueueSnackbar("Please wait while we get your location", { variant: "info" });
         return;
@@ -77,6 +75,12 @@ export default function Mobile() {
               });
             });
           }
+        }).catch(() => {
+          enqueueSnackbar(`Ops! We have some error with measurement upload check your internet connection or login again`, {
+            variant: "error",
+          });
+          window.history.pushState({}, "", `/editor`);
+          window.dispatchEvent(new PopStateEvent("popstate"));
         });
       }
     }

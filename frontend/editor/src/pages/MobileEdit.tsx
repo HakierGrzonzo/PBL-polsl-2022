@@ -48,12 +48,21 @@ export default function MobileEdit() {
   }
 
   async function fetchData() {
-    const mess = await DataService.getOneMeasurementApiDataIdGet(pathVariable.id);
-    if (!mess) {
-      enqueueSnackbar("Measurement not found", { variant: "error" });
-      return;
+    try {
+      const mess = await DataService.getOneMeasurementApiDataIdGet(pathVariable.id);
+      if (!mess) {
+        enqueueSnackbar("Measurement not found", { variant: "error" });
+        return;
+      }
+      setMeasurement(mess);
     }
-    setMeasurement(mess);
+    catch(e){
+      enqueueSnackbar("Ops! We have some error with measurement edit check your internet connection or login again", {
+        variant: "error",
+      });
+      window.history.pushState({}, "", `/editor`);
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    }
   }
 
 

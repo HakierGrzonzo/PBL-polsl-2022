@@ -62,9 +62,8 @@ export default function MobileEdit() {
   }
 
   async function fetchData() {
-    let measures = [];
     try {
-      measures = await DataService.getUsersMeasurementsApiDataMineGet();
+      const measures = await DataService.getUsersMeasurementsApiDataMineGet();
       if (measures.length === 0 || !measures) {
         enqueueSnackbar("Measurement not found", { variant: "error" });
         return;
