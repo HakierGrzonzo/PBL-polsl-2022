@@ -62,12 +62,18 @@ export default function MobileEdit() {
   }
 
   async function fetchData() {
-    const measures = await DataService.getUsersMeasurementsApiDataMineGet();
-    if (measures.length === 0 || !measures) {
-      enqueueSnackbar("Measurement not found", { variant: "error" });
-      return;
+    let measures = [];
+    try {
+      measures = await DataService.getUsersMeasurementsApiDataMineGet();
+      if (measures.length === 0 || !measures) {
+        enqueueSnackbar("Measurement not found", { variant: "error" });
+        return;
+      }
+      setMeasurements(measures);
     }
-    setMeasurements(measures);
+    catch { 
+      window.history.pushState({}, "", "/editor/mobile");
+    }
   }
 
   async function deleteFile(file: FileReference, e: Event) {
