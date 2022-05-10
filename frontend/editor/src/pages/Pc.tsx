@@ -72,7 +72,8 @@ export default function MobileEdit() {
       setMeasurements(measures);
     }
     catch { 
-      window.history.pushState({}, "", "/editor/mobile");
+      window.history.pushState({}, "", "/editor/");
+      window.dispatchEvent(new PopStateEvent("popstate"));
     }
   }
 
