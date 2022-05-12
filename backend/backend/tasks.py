@@ -12,6 +12,7 @@ from wand.image import Image
 
 
 FILE_PATH_PREFIX = os.environ["FILE_PATH"]
+SCALE_FACTOR = 5
 
 owm_token = os.environ.get("OPEN_WEATHER_MAP")
 if owm_token:
@@ -150,7 +151,7 @@ def magick_compress_picture(picture_uuid):
             img.rotate(rotation)
         if orientation in mirrored_dict.keys():
             img.flop()
-    img.resize(img.width // 10, img.height // 10)
+    img.resize(img.width // SCALE_FACTOR, img.height // SCALE_FACTOR)
     img_webp = img.convert("webp")
     img_webp.save(filename=os.path.join(FILE_PATH_PREFIX, picture_uuid + "_opt"))
     for session in get_sync_session():
