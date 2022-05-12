@@ -1,5 +1,5 @@
 .fullHeight{
-  height: 100%;
+  flex: 1;
 }
 
 .sidePane img {

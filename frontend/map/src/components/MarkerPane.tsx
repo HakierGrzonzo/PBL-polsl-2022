@@ -1,35 +1,20 @@
-import { AppBar, Toolbar, Box, IconButton, Typography, Button } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import Section from './Section';
-import CloseIcon from '@mui/icons-material/Close';
 import { Measurement } from "../api";
 import { getImageLink } from "../utils/fileUtils";
 interface PaneProps {
   measurement: Measurement;
-  closeCallback: () => void;
 }
 
 export default function MarkerPane(props : PaneProps) {
-  const {measurement, closeCallback} = props;
+  const {measurement} = props;
   const image = getImageLink(measurement.files);
   const audioFiles = measurement.files.filter((file) => file.mime.startsWith("audio"));
   return <Box sx={{
     flexGrow: 1,
-    height: {
-      xs: '50vh',
-      sm: '100vh',
-    },
+    height: '100vh',
     overflow: 'auto',
   }} className="sidePane">
-    <AppBar position="sticky">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          {measurement.title}
-        </Typography>
-        <IconButton onClick={closeCallback} size="large">
-          <CloseIcon/>
-        </IconButton>
-      </Toolbar>
-    </AppBar>
     { image &&
       <img src={image}/>
     }
@@ -87,12 +72,18 @@ export default function MarkerPane(props : PaneProps) {
               <li key={file.file_id}>
                 <Section title={file.mime.split('/')[0]} level="body1"> 
                   {/* TODO: group by type */}
-                  <Typography variant="body2"> 
-                    {file.original_name} 
-                    <Button href={file.link + "?isDownload=true&optimized=false"}>
+                  <Box sx={{
+                    display: 'grid', 
+                    gridTemplateColumns: '1fr 8ex', 
+                    alignItems: 'baseline'}}
+                  >
+                    <Typography variant="body2"> 
+                      {file.original_name} 
+                    </Typography>
+                    <Button variant='contained' href={file.link + "?isDownload=true&optimized=false"}>
                       Pobierz
                     </Button>
-                  </Typography>
+                  </Box>
                 </Section>
               </li>
             )}
