@@ -12,7 +12,7 @@ export default function MarkerPane(props : PaneProps) {
   const audioFiles = measurement.files.filter((file) => file.mime.startsWith("audio"));
   return <Box sx={{
     flexGrow: 1,
-    height: '100vh',
+    height: 'calc(100vh - 64px)',
     overflow: 'auto',
   }} className="sidePane">
     { image &&

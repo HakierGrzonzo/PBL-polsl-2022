@@ -4,15 +4,19 @@ import { useState, useEffect, useCallback } from "react";
 import { DataService, Measurement } from "../api";
 import { useSnackbar } from "notistack";
 import LeafletMarker from '../components/LeafletMarker';
+import About from '../components/about';
 import CloseIcon from '@mui/icons-material/Close';
-import { Grid, Box, AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
+import { Grid, Box, AppBar, Toolbar, Typography, IconButton, Button, Skeleton, Modal } from '@mui/material';
 import MarkerPane from '../components/MarkerPane';
-
-const localization = new LatLng(50.30016, 18.65059)
+import Section from '../components/Section';
 
 export default function LeafletMap() {
+  const [localization, setLocalization] = useState<LatLng|null>(null);
   const [measurements, setMeasurements] = useState<Measurement[]>();
   const [activeMeasurement, setActiveMeasurment] = useState<Measurement | null>(null);
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const handleOpen = () => setAboutOpen(true);
+  const handleClose = () => setAboutOpen(false);
   const { enqueueSnackbar } = useSnackbar();
   
   const onMarkerClick = useCallback((m: Measurement) => {
@@ -31,6 +35,8 @@ export default function LeafletMap() {
       enqueueSnackbar("Measurement not found", { variant: "error" });
       return;
     }
+    const point = measures[0].location
+    setLocalization(new LatLng(point.latitude, point.longitude))
     setMeasurements(measures);
   }
   
@@ -44,10 +50,10 @@ export default function LeafletMap() {
       flexDirection: 'column',
       height: '100vh',
     }}>
-      <AppBar position="sticky">
+      <AppBar position="static">
         <Toolbar>
-          <Button variant='text' color='inherit'> 
-            About
+          <Button variant='text' color='inherit' onClick={handleOpen}> 
+            O Aplikacji
           </Button>
           <Box sx={{ flexGrow: 1}}/>
           <Typography variant="h6" component="div">
@@ -60,6 +66,14 @@ export default function LeafletMap() {
           }
         </Toolbar>
       </AppBar>
+      <Modal
+        open={aboutOpen}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <About/>
+      </Modal>
       <Grid container spacing={0} sx={{
         flexGrow: 1,
       }}> 
@@ -74,23 +88,38 @@ export default function LeafletMap() {
             }
           }}
         >
-          <MapContainer className="fullHeight" center={localization} zoom={13}>
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {measurements &&
-            measurements.map((measurement: Measurement) => {
-              return (
-                <LeafletMarker 
-                  isSelected={measurement.measurement_id === activeMeasurement?.measurement_id}
-                  clickCallback={onMarkerClick}
-                  measurement={measurement}
-                  key={measurement.measurement_id}
-                />
-              );
-            })}
-          </MapContainer>
+          {measurements && localization ?
+            <MapContainer className="fullHeight" center={localization} zoom={13}>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {measurements.map((measurement: Measurement) => {
+                return (
+                  <LeafletMarker 
+                    isSelected={measurement.measurement_id === activeMeasurement?.measurement_id}
+                    clickCallback={onMarkerClick}
+                    measurement={measurement}
+                    key={measurement.measurement_id}
+                  />
+                );
+              })}
+            </MapContainer>
+            :
+            <Box sx={{
+              flex: 1,
+              display: 'grid',
+              m: '1em',
+              gridTemplateColumns: '1fr 2fr',
+              gridGap: '1em',
+              gridTemplateRows: '1fr 3fr'
+            }}>
+              <Skeleton variant="circular" height={'inherit'}/>
+              <Skeleton variant="rectangular" height={'inherit'}/>
+              <Skeleton variant="rectangular" height={'inherit'}/>
+              <Skeleton variant="rectangular" height={'inherit'}/>
+            </Box>
+          }
         </Grid>
         { activeMeasurement !== null ? 
           <Grid item xs={12} sm={4}>
@@ -104,9 +133,11 @@ export default function LeafletMap() {
             }
           }}>
             <Box sx={{margin: '1em'}}>
-              <Typography variant="h5">
-                Click on map to select or something
-              </Typography>
+              <Section level="h5" title="Tutaj zrobimy jakieś filtry, ale na razie klikamy samemu na mapie.">
+                <Typography variant="body1">
+                  Mamy na razie {measurements?.length ?? '????'} pomiarów.
+                </Typography>
+              </Section>
             </Box>
           </Grid>
         }
