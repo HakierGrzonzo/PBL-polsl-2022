@@ -72,10 +72,10 @@ export default function About() {
         <Typography variant="body1">
           <ul> 
             <li>
-              dr. Marcin Sobota
+              dr. inż. Marcin Sobota
             </li>
             <li>
-              dr. Waldemar Paszkowski
+              dr. hab. inż. Waldemar Paszkowski
             </li>
             <li>
               dr. inż. Artur Kuboszek
