@@ -68,6 +68,21 @@ export default function About() {
           </ul>
         </Typography>
       </Section>
+      <Section level="h6" title="Kierownictwo wojskowe">
+        <Typography variant="body1">
+          <ul> 
+            <li>
+              dr. Marcin Sobota
+            </li>
+            <li>
+              dr. Waldemar Paszkowski
+            </li>
+            <li>
+              dr. inż. Artur Kuboszek
+            </li>
+          </ul>
+        </Typography>
+      </Section>
     </Box>
   );
 }
