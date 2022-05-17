@@ -1,0 +1,1043 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{inputenc}[utf8]
+\usepackage[margin=2cm, headheight=140pt, tmargin=180pt]{geometry}
+\usepackage[polish]{babel}
+
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{fancyhdr}
+\usepackage{mdframed}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage[section]{placeins}
+
+\usepackage{multirow}
+\usepackage[table,xcdraw]{xcolor}
+
+
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\urlstyle{same}
+\graphicspath{ {./ilustracje/} }
+\title{Wyznaczanie wartości przyspieszenia ziemskiego metodą spadku swobodnego}
+\author{Grzegorz Koperwas}
+\date{\today}
+
+
+\usepackage{polski}
+\usepackage[polish]{babel} 
+\usepackage{indentfirst}
+\usepackage{icomma} 
+
+\brokenpenalty=1000
+\clubpenalty=1000
+\widowpenalty=1000    
+
+\renewcommand\thesection{\arabic{section}.}
+\renewcommand\thesubsection{\arabic{section}.\arabic{subsection}.}
+\renewcommand\thesubsubsection{\arabic{subsubsection}.}
+
+
+\newcommand{\stopnie}{\ensuremath{^{\circ}}}
+
+\newcommand{\twierdzonko}[1]{
+    \begin{center}
+    \begin{mdframed}
+    #1
+    \end{mdframed}          
+    \end{center}
+} 
+
+\newcommand{\dwanajeden}[2]{
+\ensuremath \left( \begin{array}{c}
+    #1\\
+    #2
+\end{array} \right)
+}  
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+
+\rfoot{}
+\lfoot{}
+\lhead{}
+\rhead{}
+\chead{
+    \includegraphics[width=\linewidth]{banner.png}
+    \scriptsize{\textbf{Politechnika Śląska jako Centrum Nowoczesnego
+    Kształcenia opartego o badania i innowacje}}
+
+    \scriptsize{\texttt{POWR-03.05.00-00-Z098/17/00foobar}}
+
+    \vspace{1pt}
+    \hrule
+    
+    \begin{flushleft}
+        \begin{tabular}{ r L }
+            Nazwa projektu PBL: & Projektowanie komponentu akustycznego inteligentnego miasta z zastosowaniem koncepcji krajobrazu dźwiękowego i technologii mobilnych \\
+            Imię i nazwisko studenta: & Grzegorz Koperwas \\
+            Wydział / Kierunek / Specjalność: & Matematyka Stosowana / Informatyka /
+            brak \\
+            Rok akademicki / semestr: & 2021-2022 / 4 \\
+            Opiekun główny projektu: & foobar
+        \end{tabular}
+    \end{flushleft}
+}
+\cfoot{\scriptsize\bfseries Projekt współfinansowany przez Unię Europejską ze środków Europejskiego Funduszu Społecznego}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{1pt}
+
+\usepackage{array}
+\newcolumntype{L}{>{\arraybackslash}m{10cm}}
+
+\begin{document}
+
+
+
+\begin{center}
+    \textbf{Karta ewidencji czasu pracy studenta za miesiąc Marzec }
+\end{center}
+\vspace{-5mm}
+
+\vfill
+
+\begin{table}[H]
+\centering
+\scriptsize
+\begin{tabular}{|cllc|L|}
+\hline
+\rowcolor[HTML]{F1F1CE} 
+\multicolumn{4}{|c|}{\cellcolor[HTML]{F1F1CE}{\color[HTML]{333333} \textbf{Harmonogram czasu pracy}}} &
+    \multicolumn{1}{c|}{\textbf{Wykonanie}} \\ \hline
+\rowcolor[HTML]{F1F1CE} 
+\multicolumn{1}{|c|}{\cellcolor[HTML]{F1F1CE}} &
+  \multicolumn{2}{c|}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}rozkład czasu\\ pracy\end{tabular}}} &
+  \cellcolor[HTML]{F1F1CE} &
+  \cellcolor[HTML]{F1F1CE} \\ \cline{2-3}
+\multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}Dzień\\ miesiąca\end{tabular}}}} &
+  \multicolumn{1}{c|}{\textbf{od}} &
+  \multicolumn{1}{c|}{\textbf{do}} &
+  \multirow{-3}{*}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}Razem\\ liczba\\ godzin\\ pracy\end{tabular}}} &
+      \multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{Zakres
+    czynności}}} \\[1.2em] \hline
+
+    \multicolumn{1}{|l|}{ 1 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 2 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 3 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 11:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Pierwsze eksperymenty backendowe z fastAPI \\ \hline
+
+    \multicolumn{1}{|l|}{ 4 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 5 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 12:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Implementacja podstawowej autoryzacji \\ \hline
+
+    \multicolumn{1}{|l|}{ 6 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 11:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Generowanie openapi dla autoryzacji \\ \hline
+
+    \multicolumn{1}{|l|}{ 7 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 8 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 9 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 10 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 6 } &
+    Podstawy CRUD dla przechowywania pomiarów \\ \hline
+
+    \multicolumn{1}{|l|}{ 11 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Operacje CRUD oraz zastosowanie programu black do formatowania kodu backendu \\ \hline
+
+    \multicolumn{1}{|l|}{ 12 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{c|}{ 12:00 } &
+    \multicolumn{1}{l|}{ 2 } &
+    Stworzenie części CR CRUD'a do pomiarów \\ \hline
+
+    \multicolumn{1}{|l|}{ 13 } &
+    \multicolumn{1}{c|}{ 11:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 2 } &
+    Spisanie wykożystywanych bibliotek w backendzie \\ \hline
+
+    \multicolumn{1}{|l|}{ 14 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Implementacja elementu U schematu CRUD \\ \hline
+
+    \multicolumn{1}{|l|}{ 15 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 16 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 17 } &
+    \multicolumn{1}{c|}{ 11:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Implementacja metody PATCH dla dannych \\ \hline
+
+    \multicolumn{1}{|l|}{ 18 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 8 } &
+    Tworzenie schemy tabelki przechowującej informacje o plikach \\ \hline
+
+    \multicolumn{1}{|l|}{ 19 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{l|}{ 7 } &
+    Konfiguracja migracji za pomocą narzędzia Alembic \\ \hline
+
+    \multicolumn{1}{|l|}{ 20 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 21 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 6 } &
+    Stworzenie systemu przesyłania plików \\ \hline
+
+    \multicolumn{1}{|l|}{ 22 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 23 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 24 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Stworzenie systemu pobierania plików \\ \hline
+
+    \multicolumn{1}{|l|}{ 25 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Stworzenie lepszej dokumentacji błędów \\ \hline
+
+    \multicolumn{1}{|l|}{ 26 } &
+    \multicolumn{1}{c|}{ 11:00 } &
+    \multicolumn{1}{c|}{ 12:00 } &
+    \multicolumn{1}{l|}{ 1 } &
+    Refactor systemu przypisywania plików \\ \hline
+
+    \multicolumn{1}{|l|}{ 27 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 28 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Zabezpieczenie przed dodawaniem plików dla nieistniejących pomiarów \\ \hline
+
+    \multicolumn{1}{|l|}{ 29 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 30 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 31 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{l|}{ 2 } &
+    Implementacja mechaniki usuwania plików \\ \hline
+
+\end{tabular}
+\end{table}
+
+\vfill
+
+\begin{minipage}{4cm}
+............................
+
+\scriptsize{(Data i podpis studenta)}
+\end{minipage}
+\hfill
+\begin{minipage}{4cm}
+................................
+
+\scriptsize{(podpis opiekuna głównego)}
+\end{minipage}
+
+\vspace{5mm}
+
+\clearpage
+
+
+
+\begin{center}
+    \textbf{Karta ewidencji czasu pracy studenta za miesiąc Kwiecień }
+\end{center}
+\vspace{-5mm}
+
+\vfill
+
+\begin{table}[H]
+\centering
+\scriptsize
+\begin{tabular}{|cllc|L|}
+\hline
+\rowcolor[HTML]{F1F1CE} 
+\multicolumn{4}{|c|}{\cellcolor[HTML]{F1F1CE}{\color[HTML]{333333} \textbf{Harmonogram czasu pracy}}} &
+    \multicolumn{1}{c|}{\textbf{Wykonanie}} \\ \hline
+\rowcolor[HTML]{F1F1CE} 
+\multicolumn{1}{|c|}{\cellcolor[HTML]{F1F1CE}} &
+  \multicolumn{2}{c|}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}rozkład czasu\\ pracy\end{tabular}}} &
+  \cellcolor[HTML]{F1F1CE} &
+  \cellcolor[HTML]{F1F1CE} \\ \cline{2-3}
+\multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}Dzień\\ miesiąca\end{tabular}}}} &
+  \multicolumn{1}{c|}{\textbf{od}} &
+  \multicolumn{1}{c|}{\textbf{do}} &
+  \multirow{-3}{*}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}Razem\\ liczba\\ godzin\\ pracy\end{tabular}}} &
+      \multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{Zakres
+    czynności}}} \\[1.2em] \hline
+
+    \multicolumn{1}{|l|}{ 1 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 2 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Ulepszenie wbudowanej dokumentacji API \\ \hline
+
+    \multicolumn{1}{|l|}{ 3 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 4 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Stworzenie klienta api \\ \hline
+
+    \multicolumn{1}{|l|}{ 5 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 6 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 7 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Wstępna konteneryzacja backendu \\ \hline
+
+    \multicolumn{1}{|l|}{ 8 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Dokeryzacja backendu w wersji developerskiej \\ \hline
+
+    \multicolumn{1}{|l|}{ 9 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 10 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 11:00 } &
+    \multicolumn{1}{l|}{ 2 } &
+    Wstępna konfiguracja nginx \\ \hline
+
+    \multicolumn{1}{|l|}{ 11 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Przygotowywanie edytora do konteneryzacji \\ \hline
+
+    \multicolumn{1}{|l|}{ 12 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 13 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 14 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Finalizacja procesu konteneryzacji frontendu \\ \hline
+
+    \multicolumn{1}{|l|}{ 15 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 16 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Wstępna publikacja kontenerów na platformie hub.docker.io \\ \hline
+
+    \multicolumn{1}{|l|}{ 17 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 11:00 } &
+    \multicolumn{1}{l|}{ 2 } &
+    Poprawienie implementacji CORS \\ \hline
+
+    \multicolumn{1}{|l|}{ 18 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 19 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 20 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 21 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 12:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Modyfikacja schemy lokalizacji \\ \hline
+
+    \multicolumn{1}{|l|}{ 22 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 23 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Stworzenie deweloperskiego proxy \\ \hline
+
+    \multicolumn{1}{|l|}{ 24 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 12:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Dodanie statycznych stron do rejestracji użytkowników \\ \hline
+
+    \multicolumn{1}{|l|}{ 25 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 11:00 } &
+    \multicolumn{1}{l|}{ 2 } &
+    Dodanie statycznych stron do rejestracji użytkowników \\ \hline
+
+    \multicolumn{1}{|l|}{ 26 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 27 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 28 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 29 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 30 } &
+    \multicolumn{1}{c|}{ 11:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 2 } &
+    Zmiana rozmiaru maksymalneg plików i nowy endpoint pobierania pomiarów \\ \hline
+
+\end{tabular}
+\end{table}
+
+\vfill
+
+\begin{minipage}{4cm}
+............................
+
+\scriptsize{(Data i podpis studenta)}
+\end{minipage}
+\hfill
+\begin{minipage}{4cm}
+................................
+
+\scriptsize{(podpis opiekuna głównego)}
+\end{minipage}
+
+\vspace{5mm}
+
+\clearpage
+
+
+
+\begin{center}
+    \textbf{Karta ewidencji czasu pracy studenta za miesiąc Maj }
+\end{center}
+\vspace{-5mm}
+
+\vfill
+
+\begin{table}[H]
+\centering
+\scriptsize
+\begin{tabular}{|cllc|L|}
+\hline
+\rowcolor[HTML]{F1F1CE} 
+\multicolumn{4}{|c|}{\cellcolor[HTML]{F1F1CE}{\color[HTML]{333333} \textbf{Harmonogram czasu pracy}}} &
+    \multicolumn{1}{c|}{\textbf{Wykonanie}} \\ \hline
+\rowcolor[HTML]{F1F1CE} 
+\multicolumn{1}{|c|}{\cellcolor[HTML]{F1F1CE}} &
+  \multicolumn{2}{c|}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}rozkład czasu\\ pracy\end{tabular}}} &
+  \cellcolor[HTML]{F1F1CE} &
+  \cellcolor[HTML]{F1F1CE} \\ \cline{2-3}
+\multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}Dzień\\ miesiąca\end{tabular}}}} &
+  \multicolumn{1}{c|}{\textbf{od}} &
+  \multicolumn{1}{c|}{\textbf{do}} &
+  \multirow{-3}{*}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}Razem\\ liczba\\ godzin\\ pracy\end{tabular}}} &
+      \multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{Zakres
+    czynności}}} \\[1.2em] \hline
+
+    \multicolumn{1}{|l|}{ 1 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{c|}{ 12:00 } &
+    \multicolumn{1}{l|}{ 2 } &
+    Dodanie kolumny dla F_aeq \\ \hline
+
+    \multicolumn{1}{|l|}{ 2 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 3 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 4 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 5 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 6 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 7 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Próba dodania szybszego CI/CD \\ \hline
+
+    \multicolumn{1}{|l|}{ 8 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Finalizacja dodawania nowej kolumny F_aeq \\ \hline
+
+    \multicolumn{1}{|l|}{ 9 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{l|}{ 1 } &
+    Dodanie mechanizmu usuwania pomiarów \\ \hline
+
+    \multicolumn{1}{|l|}{ 10 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 11 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 12 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 6 } &
+    Prace nad cachowaniem za pomocą redis'a \\ \hline
+
+    \multicolumn{1}{|l|}{ 13 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Dodanie autoryzacji w oparciu o tokeny \\ \hline
+
+    \multicolumn{1}{|l|}{ 14 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{l|}{ 2 } &
+    Konfiguracja eslint \\ \hline
+
+    \multicolumn{1}{|l|}{ 15 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{l|}{ 2 } &
+    Eksperymenty z lintowaniem frontendu \\ \hline
+
+    \multicolumn{1}{|l|}{ 16 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Konfiguracja automatycznego lintowania dla frontendu \\ \hline
+
+    \multicolumn{1}{|l|}{ 17 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 18 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 19 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 12:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Dalsza konfiguracja lintowania \\ \hline
+
+    \multicolumn{1}{|l|}{ 20 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 12:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Zmiana stylu backendu na 80 kolumn \\ \hline
+
+    \multicolumn{1}{|l|}{ 21 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 12:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Automatyczne publikowanie kontenerów \\ \hline
+
+    \multicolumn{1}{|l|}{ 22 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{l|}{ 1 } &
+    Dodanie testów automatycznych do backendu \\ \hline
+
+    \multicolumn{1}{|l|}{ 23 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 24 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 25 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 26 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 6 } &
+    Dodanie automatycznego oznaczania wersji \\ \hline
+
+    \multicolumn{1}{|l|}{ 27 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 8 } &
+    Dodanie automatycznego oznaczania wersji \\ \hline
+
+    \multicolumn{1}{|l|}{ 28 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Dodanie systemu pomagającego tworzyć dokumentacje \\ \hline
+
+    \multicolumn{1}{|l|}{ 29 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 30 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Poprawki w modelach openapi \\ \hline
+
+    \multicolumn{1}{|l|}{ 31 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+\end{tabular}
+\end{table}
+
+\vfill
+
+\begin{minipage}{4cm}
+............................
+
+\scriptsize{(Data i podpis studenta)}
+\end{minipage}
+\hfill
+\begin{minipage}{4cm}
+................................
+
+\scriptsize{(podpis opiekuna głównego)}
+\end{minipage}
+
+\vspace{5mm}
+
+\clearpage
+
+
+
+\begin{center}
+    \textbf{Karta ewidencji czasu pracy studenta za miesiąc Czerwiec }
+\end{center}
+\vspace{-5mm}
+
+\vfill
+
+\begin{table}[H]
+\centering
+\scriptsize
+\begin{tabular}{|cllc|L|}
+\hline
+\rowcolor[HTML]{F1F1CE} 
+\multicolumn{4}{|c|}{\cellcolor[HTML]{F1F1CE}{\color[HTML]{333333} \textbf{Harmonogram czasu pracy}}} &
+    \multicolumn{1}{c|}{\textbf{Wykonanie}} \\ \hline
+\rowcolor[HTML]{F1F1CE} 
+\multicolumn{1}{|c|}{\cellcolor[HTML]{F1F1CE}} &
+  \multicolumn{2}{c|}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}rozkład czasu\\ pracy\end{tabular}}} &
+  \cellcolor[HTML]{F1F1CE} &
+  \cellcolor[HTML]{F1F1CE} \\ \cline{2-3}
+\multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}Dzień\\ miesiąca\end{tabular}}}} &
+  \multicolumn{1}{c|}{\textbf{od}} &
+  \multicolumn{1}{c|}{\textbf{do}} &
+  \multirow{-3}{*}{\cellcolor[HTML]{F1F1CE}\textbf{\begin{tabular}[c]{@{}c@{}}Razem\\ liczba\\ godzin\\ pracy\end{tabular}}} &
+      \multicolumn{1}{|c|}{\multirow{-2}{*}{\cellcolor[HTML]{F1F1CE}\textbf{Zakres
+    czynności}}} \\[1.2em] \hline
+
+    \multicolumn{1}{|l|}{ 1 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 2 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{l|}{ 2 } &
+    Poprawienie konfiguracji nagłówka Cache-Control dla plików \\ \hline
+
+    \multicolumn{1}{|l|}{ 3 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 4 } &
+    \multicolumn{1}{c|}{ 11:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Poprawienie systemu zbierania informacji o czasie pracy \\ \hline
+
+    \multicolumn{1}{|l|}{ 5 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Dalsze poprawki dokumentacji \\ \hline
+
+    \multicolumn{1}{|l|}{ 6 } &
+    \multicolumn{1}{c|}{ 09:00 } &
+    \multicolumn{1}{c|}{ 12:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Przygotowanie mapy do wystawienia na produkcji \\ \hline
+
+    \multicolumn{1}{|l|}{ 7 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 8 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 9 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 6 } &
+    Rozwiązanie problemów znalezionych przez dependabota w edytorze \\ \hline
+
+    \multicolumn{1}{|l|}{ 10 } &
+    \multicolumn{1}{c|}{ 10:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Aktualizacja wszystkich bibliotek frontendowych \\ \hline
+
+    \multicolumn{1}{|l|}{ 11 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 12 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Podstawowa konfiguracja dramatiq z FFmpeg'iem \\ \hline
+
+    \multicolumn{1}{|l|}{ 13 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 14 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 15 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 16 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Wstępne podłączenie z API pogodowym \\ \hline
+
+    \multicolumn{1}{|l|}{ 17 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 14:00 } &
+    \multicolumn{1}{l|}{ 6 } &
+    Dodanie zapisywania informacji pogodowych w bazie danych \\ \hline
+
+    \multicolumn{1}{|l|}{ 18 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 19 } &
+    \multicolumn{1}{c|}{ 11:00 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{l|}{ 4 } &
+    Konfiguracja CI/CD dla dramatiq \\ \hline
+
+    \multicolumn{1}{|l|}{ 20 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 21 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 22 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 23 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 24 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+    \multicolumn{1}{|l|}{ 25 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Dodanie dokumentacji kluczy API zewnętrznych \\ \hline
+
+    \multicolumn{1}{|l|}{ 26 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{l|}{ 7 } &
+    Dodanie licencji do repozytorium \\ \hline
+
+    \multicolumn{1}{|l|}{ 27 } &
+    \multicolumn{1}{c|}{ 08:00 } &
+    \multicolumn{1}{c|}{ 13:00 } &
+    \multicolumn{1}{l|}{ 5 } &
+    Poprawienie systemu dokumentacji \\ \hline
+
+    \multicolumn{1}{|l|}{ 28 } &
+    \multicolumn{1}{c|}{ 15:00 } &
+    \multicolumn{1}{c|}{ 18:00 } &
+    \multicolumn{1}{l|}{ 3 } &
+    Spotkanie projektowe \\ \hline
+
+    \multicolumn{1}{|l|}{ 29 } &
+    \multicolumn{1}{c|}{ 14:30 } &
+    \multicolumn{1}{c|}{ 16:00 } &
+    \multicolumn{1}{l|}{ 1.5 } &
+    Spotkanie z doktorem Sobotą \\ \hline
+
+    \multicolumn{1}{|l|}{ 30 } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{c|}{  } &
+    \multicolumn{1}{l|}{  } &
+     \\ \hline
+
+\end{tabular}
+\end{table}
+
+\vfill
+
+\begin{minipage}{4cm}
+............................
+
+\scriptsize{(Data i podpis studenta)}
+\end{minipage}
+\hfill
+\begin{minipage}{4cm}
+................................
+
+\scriptsize{(podpis opiekuna głównego)}
+\end{minipage}
+
+\vspace{5mm}
+
+\clearpage
+
+
+
+\end{document}
