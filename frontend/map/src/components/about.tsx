@@ -68,7 +68,7 @@ export default function About() {
           </ul>
         </Typography>
       </Section>
-      <Section level="h6" title="Kierownictwo wojskowe">
+      <Section level="h6" title="Kierownictwo naukowe">
         <Typography variant="body1">
           <ul> 
             <li>
