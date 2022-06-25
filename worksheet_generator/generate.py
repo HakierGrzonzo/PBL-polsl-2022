@@ -11,7 +11,7 @@ import random
 def format_time_string(hour: int, minutes: int = 0):
     return Time(hour=hour, minute=minutes).isoformat("minutes")
 
-badwords = ["create", "update", "merge", "initial"]
+badwords = ["create", "update", "merge", "initial", 'new']
 
 months = ["Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec"]
 
@@ -54,11 +54,21 @@ def get_time_in_meetings():
         elif day.weekday() == 1:
             time += 3
         elif day.weekday() == 2:
-            time += 1.5
+            time += 2
         day += timedelta(days=1)
     return time
 
 hours = (320) - get_time_in_meetings()
+
+hardcoded_logs = {
+        date(2022, 4, 5): ('Spotkanie: Krajobraz dźwiękowy - percepcja wrażeń dźwiękowych w środowisku. Fizyczne i subiektywne cechy dźwięku.', '15:00', '18:00'),
+        date(2022, 4, 6): ('Spotkanie: Klient api. Wstępna konteneryzacja backendu. Dodawanie panelu wyświetlania wyników pomiarów.', '14:30', '16:30'),
+        date(2022, 4, 12): ('Spotkanie: Gromadzenie danych akustycznych. Pomiary w terenie. Testy aplikacji do gromadzenia i przetwarzania danych akustycznych.', '15:00', '18:00'),
+        date(2022, 4, 13): ('Spotkanie: Przygotowanie frontendu do backendu do wersji 0.10. Przygotowanie edytora do konteneryzacji.', '14:30', '16:30'),
+        date(2022, 4, 20): ('Spotkanie: Finalizacja procesu konteneryzacji frontendu.', '14:30', '16:30'),
+        date(2022, 4, 26): ('Spotkanie: Środowisko bazoodanowe wykorzystywane do gromadzenia danych akustycznych.', '15:00', '18:00'),
+        date(2022, 4, 27): ('Spotkanie: Tworzenie deweloperskiego proxy. Implementacja elementów lokalizacyjnych.', '14:30', '16:30'),
+}
 
 for author, commits in commits_by_author.items():
     dir_name = author.replace(" ", "_")
@@ -102,23 +112,25 @@ for author, commits in commits_by_author.items():
                 }
             )
         elif day.weekday() == 1:
+            msg, _start, _stop = hardcoded_logs.get(day, ('Spotkanie projektowe', format_time_string(15), format_time_string(18)))
             last_month["commits"].append(
                 {
                     "day": day.day,
-                    "start": format_time_string(15),
-                    "stop": format_time_string(18),
+                    "start": _start,
+                    "stop": _stop,
                     "hours": "3",
-                    "msg": "Spotkanie projektowe",
+                    "msg": msg,
                 }
             )
         elif day.weekday() == 2:
+            msg, _start, _stop = hardcoded_logs.get(day, ('Spotkanie z doktorem Sobotą', format_time_string(14, 30), format_time_string(16, 30)))
             last_month["commits"].append(
                 {
                     "day": day.day,
-                    "start": format_time_string(14, 30),
-                    "stop": format_time_string(16),
-                    "hours": "1.5",
-                    "msg": "Spotkanie z doktorem Sobotą",
+                    "start": _start,
+                    "stop": _stop,
+                    "hours": "2",
+                    "msg": msg,
                 }
             )
         else:
