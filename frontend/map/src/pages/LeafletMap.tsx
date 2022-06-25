@@ -55,6 +55,9 @@ export default function LeafletMap() {
           <Button variant='text' color='inherit' onClick={handleOpen}> 
             O Aplikacji
           </Button>
+          <Button variant='text' color='inherit' href='/api/geojson/'>
+            GeoJSON
+          </Button>
           <Box sx={{ flexGrow: 1}}/>
           <Typography variant="h6" component="div">
             {activeMeasurement?.title ?? "PBL 2022"}
