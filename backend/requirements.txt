@@ -13,3 +13,4 @@ dramatiq
 pyowm
 ffmpeg-python
 wand
+geojson
