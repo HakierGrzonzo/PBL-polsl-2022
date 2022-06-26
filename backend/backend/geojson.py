@@ -33,9 +33,20 @@ class GeoJsonRouter:
                     }
                     for f in m.files
                 ],
+                "create-time": m.location.time.isoformat(),
                 # This is an ugly hack, we convert stuff
                 # to a json string then convert it back
-                "weather": json.loads(m.weather.json()) if m.weather else None,
+                **(
+                    json.loads(m.weather.json())
+                    if m.weather
+                    else {
+                        "temperature": None,
+                        "wind_speed": None,
+                        "pressure": None,
+                        "humidity": None,
+                        "status": None,
+                    }
+                ),
             },
         )
 
