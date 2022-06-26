@@ -19,6 +19,9 @@ export default function MarkerPane(props : PaneProps) {
       <img src={image}/>
     }
     <Box sx={{margin: '1em'}}>
+      <Button variant='contained' href={`/api/geojson/${measurement.measurement_id}`}>
+        GeoJson
+      </Button>
       { measurement.description &&
         <Section level="h5" title="Opis:">
           <Typography variant="body1" component="div">

@@ -23,7 +23,7 @@ services:
       - api-keys.env
     environment:
       - "DATABASE=postgresql+asyncpg://postgres:postgres@db:5432/pbl"
-      - "HOSTNAME=https://pbl.grzegorzkoperwas.site/"
+      - "HOSTNAME=https://pbl.grzegorzkoperwas.site"
     depends_on:
       - db
       - redis
