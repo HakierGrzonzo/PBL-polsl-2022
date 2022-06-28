@@ -3,6 +3,8 @@ from fastapi_users import FastAPIUsers
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.requests import Request
 from starlette.responses import Response
+
+from backend.geojson import GeoJsonRouter
 from .user_manager import get_user_manager
 from .models import User, UserCreate, UserDB, UserUpdate
 from .auth import cookie_backend, token_backend
@@ -83,8 +85,9 @@ app.include_router(
 
 FILE_PREFIX = "/api/files"
 
+measurement_router = MeasurementRouter(fastapi_users, FILE_PREFIX)
 app.include_router(
-    MeasurementRouter(fastapi_users, FILE_PREFIX).get_router(),
+    measurement_router.get_router(),
     prefix="/api/data",
     tags=["data"],
 )
@@ -95,10 +98,16 @@ app.include_router(
     prefix=FILE_PREFIX,
     tags=["files"],
 )
+
 app.include_router(
-    file_router.get_admin_router(),
-    prefix="/local",
-    tags=["local", "files"]
+    GeoJsonRouter(measurement_router).get_router(),
+    prefix="/api/geojson",
+    tags=["data", "geojson"],
+)
+
+
+app.include_router(
+    file_router.get_admin_router(), prefix="/local", tags=["local", "files"]
 )
 
 app.include_router(tea, prefix="/api/auth", tags=["auth"])
