@@ -17,7 +17,7 @@ months = ["Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec"]
 
 start = date(2022, 3, 1)
 end = date(2022, 6, 30)
-celebrations = [date(2022, 5, 3)]
+celebrations = [date(2022, 5, 3), date(2022, 6, 1), date(2022, 6, 28), date(2022, 6, 29)]
 
 days = (end - start).days + 1
 
@@ -61,6 +61,16 @@ def get_time_in_meetings():
 hours = (320) - get_time_in_meetings()
 
 hardcoded_logs = {
+        date(2022, 3, 1): ('Wprowadzenie do tematyki akustyki i pomiarów akustycznych.', '15:00', '18:00'),
+        date(2022, 3, 2): ('Wprowadzenie do możliwego do zastosowania stosu technologicznego.', '14:30', '16:30'),
+        date(2022, 3, 8): ('Omówienie uwarunkowań pomiarów w środowisku miejskim. Sposoby rejestracji sygnałów fonicznych.', '15:00', '18:00'),
+        date(2022, 3, 9): ('Dobór narzędzi i środowisk niezbędnych do realizacji projektu.', '14:30', '16:00'),
+        date(2022, 3, 15): ('Wprowadzenie do technologii Mobile GIS. Opracowanie karty pomiarowej.', '15:00', '18:00'),
+        date(2022, 3, 16): ('Przygotowanie środowiska bazodanowego do zbierania danych pomiarowych.', '14:30', '16:00'),
+        date(2022, 3, 22): ('Zapoznanie się ze sprzętem pomiarowym', '15:00', '18:00'),
+        date(2022, 3, 23): ('Dostosowanie środowiska gromadzenia i przetwarzania danych do warunków technicznych sprzętu pomiarowego.', '14:30', '16:00'),
+        date(2022, 3, 29): ('Określenie warunków środowiskowych umożliwiających realizację badań środowiskowych. Opracowanie harmonogramu realizacji badań środowiskowych.', '15:00', '18:00'),
+        date(2022, 3, 30): ('Testy środowiska informatycznego.', '14:30', '16:30'),
         date(2022, 4, 5): ('Spotkanie: Krajobraz dźwiękowy - percepcja wrażeń dźwiękowych w środowisku. Fizyczne i subiektywne cechy dźwięku.', '15:00', '18:00'),
         date(2022, 4, 6): ('Spotkanie: Klient api. Wstępna konteneryzacja backendu. Dodawanie panelu wyświetlania wyników pomiarów.', '14:30', '16:30'),
         date(2022, 4, 12): ('Spotkanie: Gromadzenie danych akustycznych. Pomiary w terenie. Testy aplikacji do gromadzenia i przetwarzania danych akustycznych.', '15:00', '18:00'),
@@ -68,6 +78,19 @@ hardcoded_logs = {
         date(2022, 4, 20): ('Spotkanie: Finalizacja procesu konteneryzacji frontendu.', '14:30', '16:30'),
         date(2022, 4, 26): ('Spotkanie: Środowisko bazoodanowe wykorzystywane do gromadzenia danych akustycznych.', '15:00', '18:00'),
         date(2022, 4, 27): ('Spotkanie: Tworzenie deweloperskiego proxy. Implementacja elementów lokalizacyjnych.', '14:30', '16:30'),
+        date(2022, 5, 10): ('Wprowadzenie do technologii GIS. Przedstawienie zasad budowy warstw tematycznych w oprogramowaniu QGIS. Podłączenie podkładów mapowych z geoportalu. Przygotowanie warstw tematycznych dla wytypowanego obszaru badań. Eksport punktów pomiarowych z oprogramowania Mobile GIS i wykorzystanie ich do budowy mapy webowej.', '15:00', '18:00'),
+        date(2022, 5, 11): (' Podstawowe, podbudowane teoretycznie, metody, techniki i narzędzia stosowane w rozwiązywaniu zadań informatycznych w oparciu o bazy danych.', '14:30', '16:30'),
+        date(2022, 5, 17): ('Opracowanie modelu oceny krajobrazu dźwiękowego. Testy psychoakustyczne. Ekstrakcja cech dźwięku z sygnału akustycznego.', '15:00', '18:00'),
+        date(2022, 5, 18): ('Teoretyczne podstawy reprezentacji obrazów cyfrowych, a także różne metody ich analizy i przetwarzania (bezkontekstowe, kontekstowe).', '14:30', '16:30'),
+        date(2022, 5, 24): ('Opracowanie sposobu przeprowadzenia ocen wrażeń dźwiękowych', '15:00', '18:00'),
+        date(2022, 5, 25): ('Podstawowe założenia programowania obiektowego, hermetyzację, dziedziczeni i polimorfizm.', '14:30', '16:30'),
+        date(2022, 5, 31): ('Konfiguracja okienek \'Pop-Up\' pojawiających się na mapie webowej po najechaniu kursorem. Opracowanie gotowej mapy - przystosowanej do publikacji w sieci oraz do wydruku w formie papierowej.', '15:00', '18:00'),
+        date(2022, 6, 7): ('Analiza otrzymanych wyników z przeprowadzonych pomiarów i testów psychoakustycznych.', '15:00', '18:00'),
+        date(2022, 6, 8): ('Tworzenie klas zgodnie z zasadą hermetyzacji, wykorzystanie polimorfizmu i dziedziczenia. Interaktywny interfejs graficzny użytkownika.', '14:30', '16:30'),
+        date(2022, 6, 14): ('Opis środowiska przygotowanego do gromadzenia, przetwarzania i prezentacji danych akustycznych. Testy.', '15:00', '18:00'),
+        date(2022, 6, 15): ('Implementacja w środowisku MATLAB prostych przekształceń obrazów cyfrowych, budowa prostych algorytmów ich przetwarzania.', '14:30', '16:30'),
+        date(2022, 6, 21): ('Integracja webowego portalu map cyfrowych z portalem udostępniającym wyniku projektu (to wymaga obgadania wcześniej szczegółów technicznych). Podsumowanie oraz ocena osiągniętych celów i wyników projektu.', '15:00', '18:00'),
+        date(2022, 6, 22): ('Interpretacja wyników otrzymanych podczas analizy i przetwarzania obrazów cyfrowych.', '14:30', '16:30'),
 }
 
 for author, commits in commits_by_author.items():
@@ -81,7 +104,10 @@ for author, commits in commits_by_author.items():
     days_to_log = {
         x: (commit_msg, time)
         for x, commit_msg, time in zip(
-            sorted(random.sample(get_allowed_days(), len(commits))),
+            sorted(random.sample(get_allowed_days(), min(
+                len(commits),
+                len(get_allowed_days()),
+            ))),
             reversed(commits),
             time_per_commit,
         )
