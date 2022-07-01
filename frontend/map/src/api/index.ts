@@ -28,5 +28,6 @@ export type { Weather } from './models/Weather';
 export { AuthService } from './services/AuthService';
 export { DataService } from './services/DataService';
 export { FilesService } from './services/FilesService';
+export { GeojsonService } from './services/GeojsonService';
 export { LocalService } from './services/LocalService';
 export { UsersService } from './services/UsersService';

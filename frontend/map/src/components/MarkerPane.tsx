@@ -29,6 +29,13 @@ export default function MarkerPane(props : PaneProps) {
           </Typography>
         </Section>
       }
+      { measurement.score !== null && measurement.score !== undefined && (
+        <Section level="h5" title="Punkty:">
+          <Typography variant="body1" component="div">
+            {measurement.score.toFixed(1)}
+          </Typography>
+        </Section>
+      )}
       { measurement.laeq &&
         <Section level="h5" title="Laeq:">
           <Typography variant="body1" component="div">

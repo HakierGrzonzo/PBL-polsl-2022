@@ -16,4 +16,5 @@ export type Measurement = {
     measurement_id: number;
     files: Array<FileReference>;
     weather?: Weather;
+    score?: number;
 };
