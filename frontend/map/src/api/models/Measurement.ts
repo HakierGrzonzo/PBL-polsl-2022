@@ -17,4 +17,5 @@ export type Measurement = {
     files: Array<FileReference>;
     weather?: Weather;
     score?: number;
+    deviation?: number;
 };

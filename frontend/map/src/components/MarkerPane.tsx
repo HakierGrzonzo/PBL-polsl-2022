@@ -2,6 +2,7 @@ import { Box, Typography, Button } from "@mui/material";
 import Section from './Section';
 import { Measurement } from "../api";
 import { getImageLink } from "../utils/fileUtils";
+import { ScoreBar } from "./scoreBar";
 interface PaneProps {
   measurement: Measurement;
 }
@@ -29,11 +30,10 @@ export default function MarkerPane(props : PaneProps) {
           </Typography>
         </Section>
       }
-      { measurement.score !== null && measurement.score !== undefined && (
-        <Section level="h5" title="Punkty:">
-          <Typography variant="body1" component="div">
-            {measurement.score.toFixed(1)}
-          </Typography>
+      { measurement.score !== null && measurement.score !== undefined &&
+        measurement.deviation !== null && measurement.deviation !== undefined && (
+        <Section level="h5" title="Opinie">
+          <ScoreBar min={1} max={7} deviation={measurement.deviation} score={measurement.score}/>
         </Section>
       )}
       { measurement.laeq &&
