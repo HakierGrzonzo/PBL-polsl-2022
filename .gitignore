@@ -9,6 +9,7 @@
 *.aux
 *.out
 api-keys.env
+/scripts/raw_data.txt
 
 /shelf/
 /workspace.xml
