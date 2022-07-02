@@ -64,6 +64,7 @@ class MeasurementRouter:
             if source.temperature is not None
             else None,
             score=source.score,
+            deviation=source.deviation,
         )
 
     def _check_tags(

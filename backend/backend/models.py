@@ -67,6 +67,7 @@ class Measurement(_protoMeasurement):
     files: list[FileReference]
     weather: Optional[Weather]
     score: Optional[float]
+    deviation: Optional[float]
 
 
 class AdminPanelMsg(BaseModel):

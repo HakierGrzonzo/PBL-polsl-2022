@@ -71,6 +71,7 @@ class Measurements(Base):
     weather_status = Column(String(128))
     # results
     score = Column(Float())
+    deviation = Column(Float())
 
 
 engine = create_async_engine(DATABASE_URL)
