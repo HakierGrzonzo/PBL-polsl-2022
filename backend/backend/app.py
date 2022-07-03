@@ -5,6 +5,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from backend.geojson import GeoJsonRouter
+from backend.markers import Markers
 from .user_manager import get_user_manager
 from .models import User, UserCreate, UserDB, UserUpdate
 from .auth import cookie_backend, token_backend
@@ -111,3 +112,5 @@ app.include_router(
 )
 
 app.include_router(tea, prefix="/api/auth", tags=["auth"])
+
+app.include_router(Markers(1, 7).get_router(), prefix="/api/markers", tags=['svg'])
