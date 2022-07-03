@@ -31,15 +31,15 @@ class Markers:
         self.max = max
         template_path = path.join(path.dirname(__file__), "pin.svg")
         self.template = Template(open(template_path).read())
-        self.min_color = Color(rgb=(0, 1, 0))
-        self.max_color = Color(rgb=(1, 0, 0))
+        self.min_color = Color(rgb=(1, 0, 0))
+        self.max_color = Color(rgb=(0, 1, 0))
 
     def get_router(self) -> APIRouter:
         router = APIRouter()
 
         @router.get("/{score}", response_class=SvgResponse, status_code=200)
         def get_marker(score: float):
-            factor = score / (self.max - self.min)
+            factor = score / (self.max - self.min + 1)
             response = SvgResponse(
                 content=self.template.render(
                     {
