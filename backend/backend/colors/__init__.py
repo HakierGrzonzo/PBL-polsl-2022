@@ -2,6 +2,9 @@ from typing import Tuple, Optional
 
 
 class Color:
+    """
+        Class representing colors, doing color calculations in HSV color space
+    """
     def __init__(
         self,
         rgb: Optional[Tuple[float, float, float]] = None,
@@ -38,9 +41,15 @@ class Color:
             raise Exception("No colors given!")
 
     def to_HSV(self) -> Tuple[float, float, float]:
+        """
+        Returns the color value in a [H, S, V] format, where:
+            0 <= H < 360
+            0 <= S, V <= 1
+        """
         return self._h, self._s, self._v
 
     def __sub__(self, other):
+        """Returns the diffrence of colors in HSV color space"""
         return Color(
             hsv=tuple(
                 old - new
@@ -49,11 +58,14 @@ class Color:
         )
 
     def to_RGB(self) -> Tuple[float, float, float]:
+        """
+        Returns Color as a [R, G, B] value, where:
+            0 <= r, g, b <= 1
+        """
         # https://www.rapidtables.com/convert/color/hsv-to-rgb.html
         c = self._v * self._s
         x = c * (1 - abs((self._h / 60) % 2 - 1))
         m = self._v - c
-        print(c, x, m)
         if self._h < 60:
             r, g, b = c, x, 0
         elif self._h < 120:
@@ -70,8 +82,11 @@ class Color:
         return r + m, g + m, b + m
 
     def lerp(self, target, factor: float):
+        """
+        Returns a mixed color from `self` and `target`, in such a way where
+        factor of zero would return `self` and factor of 1 would return `target`
+        """
         source = self.to_HSV()
-        print(factor)
         target = (self - target).to_HSV()
         return Color(
             hsv=tuple(
@@ -85,6 +100,8 @@ class Color:
         return f"<Color r={r} g={g} b={b} h={self._h} s={self._s} v={self._v}/>"
 
     def get_css_color(self) -> str:
+        """
+        Returns the color as a `#rrggbb` value suitable for css
+        """
         r, g, b = [round(255 * c) for c in self.to_RGB()]
-        print(self)
         return "#{:02X}{:02X}{:02X}".format(r, g, b)

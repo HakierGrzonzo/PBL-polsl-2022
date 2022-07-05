@@ -2,28 +2,13 @@ from .colors import Color
 from fastapi import APIRouter, Response
 from jinja2 import Template
 from os import path
-from fastapi_redis_cache.cache import cache_one_day
 
 
 class SvgResponse(Response):
-    media_type = "image/svg_xml"
+    media_type = "image/svg+xml"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(media_type="image/svg+xml", *args, **kwargs)
-
-
-def change_mime(mime=SvgResponse.media_type):
-    def outer(f):
-        def inner(*args, **kwargs):
-            response = f(*args, **kwargs)
-            response.media_type = mime
-            print(response)
-            return response
-
-        return inner
-
-    return outer
-
 
 class Markers:
     def __init__(self, min: float, max: float) -> None:
