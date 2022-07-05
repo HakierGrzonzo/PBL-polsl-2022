@@ -54,13 +54,17 @@ class MeasurementRouter:
                     for x in source.files
                 ]
             ),
-            weather = Weather(
-                temperature = source.temperature,
-                wind_speed = source.wind_speed,
-                pressure = source.pressure,
-                humidity = source.humidity,
-                status = source.weather_status
-            ) if source.temperature is not None else None
+            weather=Weather(
+                temperature=source.temperature,
+                wind_speed=source.wind_speed,
+                pressure=source.pressure,
+                humidity=source.humidity,
+                status=source.weather_status,
+            )
+            if source.temperature is not None
+            else None,
+            score=source.score,
+            deviation=source.deviation,
         )
 
     def _check_tags(
@@ -72,7 +76,9 @@ class MeasurementRouter:
     async def get_all_measurements(
         self, session: AsyncSession
     ) -> list[Measurement]:
-        result = await session.execute(select(Measurements).order_by(Measurements.title))
+        result = await session.execute(
+            select(Measurements).order_by(Measurements.title)
+        )
         return [
             self._table_to_model(x) for x in result.unique().scalars().all()
         ]
@@ -140,9 +146,9 @@ class MeasurementRouter:
         self, session: AsyncSession, current_user: User
     ) -> list[Measurement]:
         result = await session.execute(
-            select(Measurements).filter(
-                Measurements.author_id == current_user.id
-            ).order_by(desc(Measurements.location_time))
+            select(Measurements)
+            .filter(Measurements.author_id == current_user.id)
+            .order_by(desc(Measurements.location_time))
         )
         return [
             self._table_to_model(x) for x in result.unique().scalars().all()

@@ -13,6 +13,7 @@ class Weather(BaseModel):
     humidity: float
     status: str
 
+
 class AccessToken(BaseAccessToken):
     pass
 
@@ -65,6 +66,9 @@ class Measurement(_protoMeasurement):
     measurement_id: int
     files: list[FileReference]
     weather: Optional[Weather]
+    score: Optional[float]
+    deviation: Optional[float]
+
 
 class AdminPanelMsg(BaseModel):
     msg: str

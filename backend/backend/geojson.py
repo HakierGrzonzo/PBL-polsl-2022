@@ -47,6 +47,7 @@ class GeoJsonRouter:
                         "status": None,
                     }
                 ),
+                "score": m.score,
             },
         )
 

@@ -83,7 +83,9 @@ def try_get_location_from_image(picture_uuid):
     for session in get_sync_session():
         measurements = (
             session.execute(
-                select(Measurements).join(Files).filter(Files.id == picture_uuid)
+                select(Measurements)
+                .join(Files)
+                .filter(Files.id == picture_uuid)
             )
             .unique()
             .scalars()
@@ -153,9 +155,13 @@ def magick_compress_picture(picture_uuid):
             img.flop()
     img.resize(img.width // SCALE_FACTOR, img.height // SCALE_FACTOR)
     img_webp = img.convert("webp")
-    img_webp.save(filename=os.path.join(FILE_PATH_PREFIX, picture_uuid + "_opt"))
+    img_webp.save(
+        filename=os.path.join(FILE_PATH_PREFIX, picture_uuid + "_opt")
+    )
     for session in get_sync_session():
-        f_query = session.execute(select(Files).filter(Files.id == picture_uuid))
+        f_query = session.execute(
+            select(Files).filter(Files.id == picture_uuid)
+        )
         fs = f_query.scalars().all()
         if len(fs) != 1:
             raise Exception("Failed to process file, not found in db")

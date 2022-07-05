@@ -1,4 +1,5 @@
 from os.path import join
+
 path = "/".join(__file__.split("/")[:-1])
 version = "dev"
 try:
