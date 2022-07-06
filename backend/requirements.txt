@@ -14,3 +14,4 @@ pyowm
 ffmpeg-python
 wand
 geojson
+jinja2
